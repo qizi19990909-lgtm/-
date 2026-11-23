@@ -1,0 +1,1206 @@
+{
+  "version": 0.7,
+  "meta": {
+    "title": "修仙小队·装备系统定稿 v0.7（数值平衡）",
+    "date": "2026-11-21",
+    "timezone": "Asia/Shanghai",
+    "status": "讨论定稿，只出方案，不改游戏",
+    "replaces": "v0.6 中品质倍率 1.00～2.30、每 10 级 ×1.5、强化 +17/+30 持平自身的方案",
+    "naming": "只借鉴机制，名称与数值原创",
+    "note": "老板给出的具体数字只作方向。推荐值由模拟确定。模拟未经实装测试。"
+  },
+  "level_curve": {
+    "formula": "W(L) = (暗金倍率/橙倍率) ^ ((L-10)/10) = 1.113 ^ ((L-10)/10)",
+    "ref_level": 10,
+    "per_10_levels": 1.113,
+    "derived_from": "为使下阶段橙未强化 = 上阶段暗金未强化，令 q = 1.28/1.15",
+    "W": {
+      "10": 1.0,
+      "20": 1.113,
+      "30": 1.239,
+      "40": 1.379,
+      "50": 1.535
+    },
+    "replaces_table_v04_V": true,
+    "replaces_v06_q": 1.5
+  },
+  "base_formula": {
+    "unenhanced": "白基础(10) × W(L) × 品质倍率",
+    "enhance_flat": "强化固定值 = 该等级白装基础 × f(强化等级)。同一等级、同一强化等级，各品质加的固定值相同。",
+    "with_enhance": "未强化基础 + 强化固定值",
+    "f_plus10": 0.2,
+    "f_plus20": 0.28,
+    "f_plus1_to_plus10": "n / 10 × 0.20",
+    "f_plus11_to_plus20": "0.20 + (n-10) / 10 × 0.08",
+    "layer": "人物基础 + 各件装备未强化基础 + 各件强化固定值 + 词条/宝石固定值 = 底层。之后再乘百分比词条、天赋、套装、buff，再结算会心、技能倍率、元素和防御。",
+    "display": "强化加成为固定值，四舍五入为整数；单次跳点允许 0.9～1.1 倍波动，期望不变",
+    "boss_example_note": "人物 100 + 武器 100 + 强化 200 = 400 只说明计算顺序，不采用 200 这个幅度。按推荐，10 级白武器攻击 22 时，+10 一共加 4.4。"
+  },
+  "rarities": [
+    {
+      "name": "白",
+      "mult": 1.0,
+      "affix_count": 0,
+      "skill_exception": "衣服、武器可出 1 条技能",
+      "sockets": 0,
+      "sell_base": 2,
+      "note": "与暗金未强化只差 28%。差距主要靠强化和进阶（词条、孔槽）。"
+    },
+    {
+      "name": "绿",
+      "mult": 1.03,
+      "affix_count": 1,
+      "sockets": 0,
+      "sell_base": 5,
+      "note": ""
+    },
+    {
+      "name": "蓝",
+      "mult": 1.06,
+      "affix_count": 2,
+      "sockets": 1,
+      "sell_base": 12,
+      "note": ""
+    },
+    {
+      "name": "紫",
+      "mult": 1.1,
+      "affix_count": 3,
+      "sockets": 1,
+      "sell_base": 28,
+      "note": ""
+    },
+    {
+      "name": "橙",
+      "mult": 1.15,
+      "affix_count": 4,
+      "sockets": 2,
+      "sell_base": 60,
+      "note": ""
+    },
+    {
+      "name": "红",
+      "mult": 1.2,
+      "affix_count": 5,
+      "sockets": 2,
+      "sell_base": 130,
+      "note": "可培养顶点。未强化只比白高 20%。"
+    },
+    {
+      "name": "暗金",
+      "mult": 1.28,
+      "affix_count": 6,
+      "sockets": 3,
+      "sell_base": 280,
+      "drop_only": true,
+      "note": "掉落限定。未强化是橙的 1.113 倍，使下阶段橙正好等于本阶段暗金。"
+    }
+  ],
+  "skill_slots": {
+    "independent_max": 2,
+    "set_max": 1,
+    "only_if_slot_unlocked_for_rarity": true,
+    "unlock": {
+      "白": [
+        "chest",
+        "weapon"
+      ],
+      "绿": [
+        "chest",
+        "weapon",
+        "hands"
+      ],
+      "蓝": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt"
+      ],
+      "紫": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet"
+      ],
+      "橙": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet",
+        "legs"
+      ],
+      "红": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet",
+        "legs",
+        "inner"
+      ],
+      "暗金": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet",
+        "legs",
+        "inner",
+        "cloak",
+        "head",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ]
+    }
+  },
+  "slots": [
+    {
+      "id": "title",
+      "name": "称号",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "atk": 2,
+        "crit_pct": 1.0
+      },
+      "stat_affixes": [
+        "atk",
+        "crit",
+        "critdmg",
+        "hp"
+      ],
+      "skill_affixes": [
+        "zhenyue_ming",
+        "pojun_hao",
+        "qingxin_chi",
+        "wendao_yin"
+      ]
+    },
+    {
+      "id": "necklace",
+      "name": "项链",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "hp": 43,
+        "atk": 3.2
+      },
+      "stat_affixes": [
+        "atk",
+        "hp",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "ningshen_pei",
+        "yuanji_suo",
+        "lingchao_zhui",
+        "huichun_ling"
+      ]
+    },
+    {
+      "id": "earring",
+      "name": "耳环",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "hp": 32,
+        "crit_pct": 1.5
+      },
+      "stat_affixes": [
+        "aspd",
+        "crit",
+        "hp",
+        "ms"
+      ],
+      "skill_affixes": [
+        "wenfeng_er",
+        "xingshen_ding",
+        "kongling_er",
+        "huiyin_zhui"
+      ]
+    },
+    {
+      "id": "ring",
+      "name": "戒指",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "atk": 5.4
+      },
+      "stat_affixes": [
+        "atk",
+        "aspd",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "liekong_jie",
+        "dieren_huan",
+        "shihun_yin",
+        "shuangxin_jie"
+      ]
+    },
+    {
+      "id": "head",
+      "name": "帽子",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 36,
+        "def": 3.0
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "crit"
+      ],
+      "skill_affixes": [
+        "pangguan_chenxin",
+        "tiee",
+        "ningshen_guan",
+        "xieli_kui"
+      ]
+    },
+    {
+      "id": "chest",
+      "name": "衣服",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 108,
+        "def": 8.6
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "crit",
+        "critdmg",
+        "ms"
+      ],
+      "skill_affixes": [
+        "zhenyue_zhiyi",
+        "yufeng_zhouqi",
+        "xueqi_fenshen",
+        "jinshen_zhao",
+        "jingji_fanshi",
+        "tieyi_huajin",
+        "yishan_bu"
+      ]
+    },
+    {
+      "id": "legs",
+      "name": "裤子",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 86,
+        "def": 6.5
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "ms",
+        "crit"
+      ],
+      "skill_affixes": [
+        "panyuan_bu",
+        "liedi_huixiang",
+        "budong_rushan",
+        "fuyue_chenshen"
+      ]
+    },
+    {
+      "id": "belt",
+      "name": "腰带",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 76,
+        "def": 2.2
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "guben_shuyao",
+        "chenqi_huyuan",
+        "xuenu_shu",
+        "nahai_dai"
+      ]
+    },
+    {
+      "id": "hands",
+      "name": "护手",
+      "group": "armor",
+      "base_lv10_white": {
+        "atk": 5.4,
+        "def": 3.2
+      },
+      "stat_affixes": [
+        "atk",
+        "aspd",
+        "def",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "zhenwan_kaishan",
+        "dielang_lianji",
+        "gedang_yujin",
+        "zhaixing_tanzhua"
+      ]
+    },
+    {
+      "id": "feet",
+      "name": "鞋",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 43,
+        "def": 3.2,
+        "ms_pct": 3
+      },
+      "stat_affixes": [
+        "ms",
+        "hp",
+        "def",
+        "aspd"
+      ],
+      "skill_affixes": [
+        "talang_lv",
+        "jifeng_ta",
+        "tuixuan_bu",
+        "qianjin_zhui"
+      ]
+    },
+    {
+      "id": "inner",
+      "name": "内甲",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 48,
+        "def": 3.0
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "ruanjia_huajin",
+        "huxin_lin",
+        "fuxi_jia",
+        "cangfeng_yi"
+      ]
+    },
+    {
+      "id": "cloak",
+      "name": "披风",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 24,
+        "ms_pct": 2
+      },
+      "stat_affixes": [
+        "hp",
+        "ms",
+        "def"
+      ],
+      "skill_affixes": [
+        "fengxing_chang",
+        "yinwu_pi",
+        "yanyue",
+        "biri"
+      ]
+    },
+    {
+      "id": "weapon",
+      "name": "武器",
+      "group": "weapon",
+      "base_lv10_white": {
+        "atk": 22
+      },
+      "stat_affixes": [
+        "atk",
+        "aspd",
+        "crit",
+        "critdmg",
+        "elem"
+      ],
+      "skill_affixes": [
+        "kaishan_yubo",
+        "shuangyi_feichui",
+        "hanshuang_liedi",
+        "jinglei_za",
+        "juhun_zhenqi",
+        "bengyue_yiji",
+        "zhuihun_canxiang"
+      ],
+      "note": "不进套装。元素只出在武器和宝石上。"
+    }
+  ],
+  "slot_count": {
+    "total": 13,
+    "jewelry": 4,
+    "armor": 8,
+    "weapon": 1,
+    "implementation": "现有样品约 3 槽，需扩到 13 槽。帽子加回。新增称号、内甲、披风。新增槽基础偏低，原槽基础略降，避免总战力暴涨。"
+  },
+  "level_thresholds": [
+    {
+      "item_level": 10,
+      "region": "青石村",
+      "prefix": "精铁",
+      "W": 1.0
+    },
+    {
+      "item_level": 20,
+      "region": "落枫镇",
+      "prefix": "玄纹",
+      "W": 1.113
+    },
+    {
+      "item_level": 30,
+      "region": "天衡城",
+      "prefix": "天衡",
+      "W": 1.239
+    },
+    {
+      "item_level": 40,
+      "region": "玄朝国都",
+      "prefix": "龙阙",
+      "W": 1.379
+    },
+    {
+      "item_level": 50,
+      "region": "后续",
+      "prefix": "苍溟",
+      "W": 1.535
+    }
+  ],
+  "future_mid_tiers": [
+    7,
+    13,
+    26
+  ],
+  "advance": {
+    "name": "吞灵",
+    "same_slot_only": true,
+    "any_rarity_can_eat_any": true,
+    "whites_to_green": 15,
+    "same_tier_materials": {
+      "绿→蓝": 4,
+      "蓝→紫": 5,
+      "紫→橙": 6,
+      "橙→红": 8
+    },
+    "inherent_xp": [
+      1,
+      16,
+      80,
+      480,
+      3360,
+      30240,
+      37800
+    ],
+    "bar_xp": [
+      15,
+      64,
+      400,
+      2880,
+      26880,
+      null,
+      null
+    ],
+    "stored_xp_keep_ratio": 1.0,
+    "same_rarity_inherent_as_bar_pct": 12.5,
+    "swap_example": "50% 进度的橙喂给新橙，新橙进度 62.5%",
+    "level_gap_discount": "0.85 ^ max(0, 目标等级 − 材料等级)",
+    "red_is_cap": true,
+    "darkgold_cannot_advance": true,
+    "cost_bind_silver": "2 × 目标品质卖价基础 × W(L) / W(10)"
+  },
+  "enhance": {
+    "name": "强化",
+    "type": "flat_added_to_base_layer_from_white_base",
+    "buffs_use_percent": true,
+    "material": "强化石",
+    "protect_item": "固灵符",
+    "protect_craft_stones": 12,
+    "global_cap_abandoned": 30,
+    "cap_by_item_level": {
+      "below_30": 10,
+      "at_or_above_30": 20,
+      "note": "+30 只是假设，不采用。10 级装备到 +10 为止，不会进入碎装段。"
+    },
+    "fail_plus1_to_plus10": "失败退 1 级，不碎",
+    "fail_plus11_to_plus15": "失败不退级、不碎，只耗材料和绑银",
+    "fail_plus16_to_plus20": "失败本应碎装。使用固灵符后保住当前等级，不退级。",
+    "success_rates_plus1_to_plus20": [
+      1.0,
+      0.95,
+      0.9,
+      0.8,
+      0.75,
+      0.7,
+      0.62,
+      0.58,
+      0.55,
+      0.52,
+      0.38,
+      0.34,
+      0.3,
+      0.26,
+      0.24,
+      0.22,
+      0.2,
+      0.18,
+      0.16,
+      0.14
+    ],
+    "stone_cost_plus1_to_plus20": [
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      4,
+      4,
+      6,
+      6,
+      8,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20
+    ],
+    "silver_cost_draft": "每次尝试消耗 20 × W(L) × (当前强化等级+1) 绑银。石和符才是瓶颈，绑银偏宽。",
+    "f_plus10": 0.2,
+    "f_plus20": 0.28,
+    "why_not_percent_of_own": "若按自身基础加，暗金强化会把品质差再放大，和新阶段暗金抢位置。按白装基础加，同一件等级的强化数字好看、好算。",
+    "why_fail_rule": "成功率低于 50% 且失败退级时，期望进度为负，模拟无法到达 +20。中后期变慢改为耗材料和固灵符。"
+  },
+  "inherit": {
+    "name": "传承",
+    "rule": "把锁定的 1～2 条技能词条转到同部位新装备。源装备销毁。目标至少绿，品质降 1 档，强化等级改为 max(自身, floor(源装备 × 0.7))。",
+    "cost_is_draft": true
+  },
+  "darkgold": {
+    "drop_only": true,
+    "cannot_advance_rarity": true,
+    "recommended": "不必再升装备等级。30 级暗金 +20 约等于 50 级红装未强化（1.05 倍），略低于 50 级暗金（0.98 倍），可以过渡两档。技能词条用传承带走。",
+    "capital_drop_rate_suggestion": "国都 Boss 暗金权重建议仍下调到约 0.12%，保持高品质稀有。"
+  },
+  "sets": {
+    "rule": "同名同底，套装少 1 个技能词条。",
+    "drop_convert_chance": 0.12,
+    "first_version_drop": "只转化体修套",
+    "groups": [
+      {
+        "id": "jewelry",
+        "name": "首饰组",
+        "slots": [
+          "title",
+          "necklace",
+          "earring",
+          "ring"
+        ],
+        "breakpoints": [
+          2,
+          4
+        ]
+      },
+      {
+        "id": "armor",
+        "name": "防具组",
+        "slots": [
+          "head",
+          "chest",
+          "legs",
+          "belt",
+          "hands",
+          "feet",
+          "inner",
+          "cloak"
+        ],
+        "breakpoints": [
+          3,
+          5,
+          8
+        ]
+      }
+    ],
+    "quality_rule": "每档看该组第 N 好那件的品质。",
+    "trigger_pct_by_rarity": {
+      "白": 10,
+      "绿": 20,
+      "蓝": 30,
+      "紫": 40,
+      "橙": 50,
+      "红": 60,
+      "暗金": 70
+    }
+  },
+  "drop": {
+    "chance": {
+      "normal": 0.16,
+      "elite": 0.5,
+      "boss": 1.0,
+      "boss_count": 2
+    },
+    "qingshi_weights": {
+      "normal": [
+        72,
+        20,
+        6.5,
+        1.5,
+        0,
+        0,
+        0
+      ],
+      "elite": [
+        35,
+        38,
+        20,
+        7,
+        0,
+        0,
+        0
+      ],
+      "boss": [
+        0,
+        35,
+        48,
+        17,
+        0,
+        0,
+        0
+      ]
+    },
+    "note": "整体掉率高于 v0.4/v0.5，青石最高仍为紫，且紫更稀。"
+  },
+  "skill_affixes": [
+    {
+      "id": "zhenyue_zhiyi",
+      "name": "镇岳之意",
+      "slot": "chest",
+      "trigger": "自动，冷却 5 秒",
+      "effect": "半径 200 像素强制仇恨 4 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yufeng_zhouqi",
+      "name": "御风骤起",
+      "slot": "chest",
+      "trigger": "自动，冷却 10 秒",
+      "effect": "攻速 +25%，持续 5 秒",
+      "position": "自身"
+    },
+    {
+      "id": "xueqi_fenshen",
+      "name": "血气焚身",
+      "slot": "chest",
+      "trigger": "自动，冷却 20 秒",
+      "effect": "攻击 +100%，持续 7 秒",
+      "position": "自身"
+    },
+    {
+      "id": "jinshen_zhao",
+      "name": "金身罩",
+      "slot": "chest",
+      "trigger": "自动，冷却 12 秒",
+      "effect": "获得生命上限 15% 的护盾，持续 4 秒",
+      "position": "自身"
+    },
+    {
+      "id": "jingji_fanshi",
+      "name": "荆棘反噬",
+      "slot": "chest",
+      "trigger": "受击，内置 0.5 秒",
+      "effect": "对攻击自己的敌人返还攻击力 20% 的伤害",
+      "position": "自身"
+    },
+    {
+      "id": "tieyi_huajin",
+      "name": "铁衣化劲",
+      "slot": "chest",
+      "trigger": "受击 15%，冷却 8 秒",
+      "effect": "受伤 −20%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yishan_bu",
+      "name": "移山步",
+      "slot": "chest",
+      "trigger": "自动，冷却 15 秒",
+      "effect": "移速 +40%，持续 4 秒",
+      "position": "自身"
+    },
+    {
+      "id": "kaishan_yubo",
+      "name": "开山余波",
+      "slot": "weapon",
+      "trigger": "每次命中",
+      "effect": "目标周围 80 像素溅射 35%",
+      "position": "怪物处"
+    },
+    {
+      "id": "shuangyi_feichui",
+      "name": "双仪飞锤",
+      "slot": "weapon",
+      "trigger": "命中时 25%",
+      "effect": "额外从自身发出 2 把飞锤，各 50% 攻击",
+      "position": "角色处",
+      "no_chain": true
+    },
+    {
+      "id": "hanshuang_liedi",
+      "name": "寒霜裂地",
+      "slot": "weapon",
+      "trigger": "命中时 20%",
+      "effect": "半径 80 像素，冰冻小怪 1 秒；Boss 只减速",
+      "position": "怪物处"
+    },
+    {
+      "id": "jinglei_za",
+      "name": "惊雷砸",
+      "slot": "weapon",
+      "trigger": "命中时 15%",
+      "effect": "落雷，150% 伤害",
+      "position": "怪物处"
+    },
+    {
+      "id": "juhun_zhenqi",
+      "name": "惧魂阵旗",
+      "slot": "weapon",
+      "trigger": "命中时 18%",
+      "effect": "在目标脚下生成恐惧阵，小怪乱跑最长 2 秒，可刷新",
+      "position": "怪物处"
+    },
+    {
+      "id": "bengyue_yiji",
+      "name": "崩岳一击",
+      "slot": "weapon",
+      "trigger": "命中时 20%",
+      "effect": "小怪眩晕 1 秒（受递减规则）",
+      "position": "怪物处"
+    },
+    {
+      "id": "zhuihun_canxiang",
+      "name": "追魂残响",
+      "slot": "weapon",
+      "trigger": "装备后常驻",
+      "effect": "每秒生成 1 枚追踪残影，暴击后保留，最多 8 枚",
+      "position": "角色处",
+      "no_chain": true
+    },
+    {
+      "id": "panyuan_bu",
+      "name": "磐渊步",
+      "slot": "legs",
+      "trigger": "常驻",
+      "effect": "站立不动时每秒防御 +2%，最多 10 层，移动后清空",
+      "position": "自身"
+    },
+    {
+      "id": "liedi_huixiang",
+      "name": "裂地回响",
+      "slot": "legs",
+      "trigger": "受击 12%",
+      "effect": "对自身周围小范围造成 40% 攻击伤害",
+      "position": "自身周围"
+    },
+    {
+      "id": "budong_rushan",
+      "name": "不动如山",
+      "slot": "legs",
+      "trigger": "常驻",
+      "effect": "生命低于 40% 时，受伤 −15%",
+      "position": "自身"
+    },
+    {
+      "id": "fuyue_chenshen",
+      "name": "负岳沉身",
+      "slot": "legs",
+      "trigger": "自动，冷却 12 秒",
+      "effect": "半径 120 像素强制仇恨 2 秒",
+      "position": "自身"
+    },
+    {
+      "id": "zhenwan_kaishan",
+      "name": "振腕开山",
+      "slot": "hands",
+      "trigger": "命中时 15%",
+      "effect": "下一次攻击伤害 +40%",
+      "position": "自身"
+    },
+    {
+      "id": "dielang_lianji",
+      "name": "叠浪连击",
+      "slot": "hands",
+      "trigger": "常驻",
+      "effect": "连续命中同一目标时伤害逐次 +5%，最多 5 层",
+      "position": "自身"
+    },
+    {
+      "id": "gedang_yujin",
+      "name": "格挡余劲",
+      "slot": "hands",
+      "trigger": "受击 10%，冷却 6 秒",
+      "effect": "抵消该次伤害的 25%",
+      "position": "自身"
+    },
+    {
+      "id": "zhaixing_tanzhua",
+      "name": "摘星探爪",
+      "slot": "hands",
+      "trigger": "命中时 8%",
+      "effect": "拉近一名小怪；对 Boss 无效",
+      "position": "怪物处"
+    },
+    {
+      "id": "talang_lv",
+      "name": "踏浪履",
+      "slot": "feet",
+      "trigger": "常驻",
+      "effect": "移动后的首次攻击伤害 +25%",
+      "position": "自身"
+    },
+    {
+      "id": "jifeng_ta",
+      "name": "疾风踏",
+      "slot": "feet",
+      "trigger": "击杀小怪后",
+      "effect": "移速 +30%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "tuixuan_bu",
+      "name": "退玄步",
+      "slot": "feet",
+      "trigger": "生命低于 30%，冷却 15 秒",
+      "effect": "自动后跃一次",
+      "position": "自身"
+    },
+    {
+      "id": "qianjin_zhui",
+      "name": "千斤坠",
+      "slot": "feet",
+      "trigger": "站定时，冷却 8 秒",
+      "effect": "下一次攻击附带定身 0.5 秒；对 Boss 无效",
+      "position": "怪物处"
+    },
+    {
+      "id": "guben_shuyao",
+      "name": "固本束腰",
+      "slot": "belt",
+      "trigger": "常驻",
+      "effect": "每 10 秒回复生命上限 3%",
+      "position": "自身"
+    },
+    {
+      "id": "chenqi_huyuan",
+      "name": "沉气护元",
+      "slot": "belt",
+      "trigger": "受到致命伤害，冷却 60 秒",
+      "effect": "保留 1 点生命",
+      "position": "自身"
+    },
+    {
+      "id": "xuenu_shu",
+      "name": "血怒束",
+      "slot": "belt",
+      "trigger": "常驻",
+      "effect": "生命每降低 10%，攻击 +3%，最多 9 层",
+      "position": "自身"
+    },
+    {
+      "id": "nahai_dai",
+      "name": "纳海带",
+      "slot": "belt",
+      "trigger": "常驻",
+      "effect": "护盾类效果持续时间 +20%",
+      "position": "自身"
+    },
+    {
+      "id": "ningshen_pei",
+      "name": "凝神佩",
+      "slot": "necklace",
+      "trigger": "自动，冷却 15 秒",
+      "effect": "会心率 +50%，持续 6 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yuanji_suo",
+      "name": "远击索",
+      "slot": "necklace",
+      "trigger": "常驻",
+      "effect": "攻击距离 +15%",
+      "position": "自身"
+    },
+    {
+      "id": "lingchao_zhui",
+      "name": "灵潮坠",
+      "slot": "necklace",
+      "trigger": "常驻",
+      "effect": "技能词条冷却 −10%",
+      "position": "自身"
+    },
+    {
+      "id": "huichun_ling",
+      "name": "回春铃",
+      "slot": "necklace",
+      "trigger": "击杀后",
+      "effect": "回复 2% 生命",
+      "position": "自身"
+    },
+    {
+      "id": "wenfeng_er",
+      "name": "闻风珥",
+      "slot": "earring",
+      "trigger": "受击后",
+      "effect": "移速 +20%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "xingshen_ding",
+      "name": "醒神钉",
+      "slot": "earring",
+      "trigger": "会心后，冷却 6 秒",
+      "effect": "攻速 +15%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "kongling_er",
+      "name": "空灵耳",
+      "slot": "earring",
+      "trigger": "常驻",
+      "effect": "受到的控制时间 −30%",
+      "position": "自身"
+    },
+    {
+      "id": "huiyin_zhui",
+      "name": "回音坠",
+      "slot": "earring",
+      "trigger": "普攻命中时 10%",
+      "effect": "追加一次 40% 伤害（不是额外发射物，不连锁）",
+      "position": "怪物处",
+      "no_chain": true
+    },
+    {
+      "id": "liekong_jie",
+      "name": "裂空戒",
+      "slot": "ring",
+      "trigger": "命中时 12%",
+      "effect": "对目标再造成 80% 伤害",
+      "position": "怪物处"
+    },
+    {
+      "id": "dieren_huan",
+      "name": "叠刃环",
+      "slot": "ring",
+      "trigger": "常驻",
+      "effect": "每第 3 次普攻必定会心",
+      "position": "自身"
+    },
+    {
+      "id": "shihun_yin",
+      "name": "噬魂印",
+      "slot": "ring",
+      "trigger": "命中时",
+      "effect": "回复造成伤害的 4%",
+      "position": "自身"
+    },
+    {
+      "id": "shuangxin_jie",
+      "name": "霜心戒",
+      "slot": "ring",
+      "trigger": "会心时 20%",
+      "effect": "减速目标 30%，持续 2 秒；对 Boss 效果减弱",
+      "position": "怪物处"
+    },
+    {
+      "id": "pangguan_chenxin",
+      "name": "磐冠沉心",
+      "slot": "head",
+      "trigger": "常驻",
+      "effect": "受到的会心伤害 −10%",
+      "position": "自身"
+    },
+    {
+      "id": "tiee",
+      "name": "铁额",
+      "slot": "head",
+      "trigger": "受击 12%，冷却 8 秒",
+      "effect": "抵消该次伤害的 20%",
+      "position": "自身"
+    },
+    {
+      "id": "ningshen_guan",
+      "name": "凝神冠",
+      "slot": "head",
+      "trigger": "自动，冷却 16 秒",
+      "effect": "会心率 +20%，持续 5 秒",
+      "position": "自身"
+    },
+    {
+      "id": "xieli_kui",
+      "name": "卸力盔",
+      "slot": "head",
+      "trigger": "常驻",
+      "effect": "生命低于 35% 时，防御 +12%",
+      "position": "自身"
+    },
+    {
+      "id": "ruanjia_huajin",
+      "name": "软甲化劲",
+      "slot": "inner",
+      "trigger": "受击 15%，冷却 7 秒",
+      "effect": "受伤 −15%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "huxin_lin",
+      "name": "护心鳞",
+      "slot": "inner",
+      "trigger": "受到致命伤害，冷却 75 秒",
+      "effect": "保留 1 点生命并获得 8% 生命护盾 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "fuxi_jia",
+      "name": "伏息甲",
+      "slot": "inner",
+      "trigger": "常驻",
+      "effect": "脱离战斗 2 秒后，每秒回复 1.5% 生命",
+      "position": "自身"
+    },
+    {
+      "id": "cangfeng_yi",
+      "name": "藏锋衣",
+      "slot": "inner",
+      "trigger": "常驻",
+      "effect": "生命高于 70% 时，攻击 +8%",
+      "position": "自身"
+    },
+    {
+      "id": "fengxing_chang",
+      "name": "风行氅",
+      "slot": "cloak",
+      "trigger": "常驻",
+      "effect": "移速 +12%",
+      "position": "自身"
+    },
+    {
+      "id": "yinwu_pi",
+      "name": "隐雾披",
+      "slot": "cloak",
+      "trigger": "生命低于 25%，冷却 20 秒",
+      "effect": "短暂降低被攻击优先级 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yanyue",
+      "name": "掩月",
+      "slot": "cloak",
+      "trigger": "会心后，冷却 8 秒",
+      "effect": "下一次受击伤害 −25%",
+      "position": "自身"
+    },
+    {
+      "id": "biri",
+      "name": "蔽日",
+      "slot": "cloak",
+      "trigger": "自动，冷却 18 秒",
+      "effect": "周围小怪命中 −20%，持续 4 秒",
+      "position": "自身周围"
+    },
+    {
+      "id": "zhenyue_ming",
+      "name": "镇岳名",
+      "slot": "title",
+      "trigger": "常驻",
+      "effect": "嘲讽类效果半径 +15%",
+      "position": "自身"
+    },
+    {
+      "id": "pojun_hao",
+      "name": "破军号",
+      "slot": "title",
+      "trigger": "自动，冷却 16 秒",
+      "effect": "攻击 +18%，持续 5 秒",
+      "position": "自身"
+    },
+    {
+      "id": "qingxin_chi",
+      "name": "清心敕",
+      "slot": "title",
+      "trigger": "常驻",
+      "effect": "受到的控制时间 −15%",
+      "position": "自身"
+    },
+    {
+      "id": "wendao_yin",
+      "name": "问道印",
+      "slot": "title",
+      "trigger": "击杀后",
+      "effect": "回复 1.5% 生命",
+      "position": "自身"
+    }
+  ],
+  "trigger_no_chain": "触发类技能不能连锁。额外发射物只算第 0 代。",
+  "sim_estimate": {
+    "untested": true,
+    "script": "/workspace/sim_equip_growth/sim_equip_balance_v0.7.py",
+    "hours_per_day": 8,
+    "slots": 13,
+    "map_lv10": "青石村 10 级图，每场 3 分钟，每天 160 场",
+    "map_lv30": "天衡城 30 级图，每场 4 分钟，每天 120 场",
+    "stones_per_day_lv10": 1728.0,
+    "stones_per_day_lv30": 1603.2,
+    "charms_per_day_lv30": 45.6,
+    "lv10_13_items_to_plus10_days": 0.421,
+    "lv30_13_items_to_plus20_days_total": 5.538,
+    "lv30_1_item_to_plus20_days_stones": 0.397,
+    "full_red_median_days": 5.79,
+    "full_red_note": "沿用 v0.6 吞噬与掉率，未重跑。老板尚未表态。",
+    "n_runs_enhance": 4000
+  },
+  "overlap_relative": {
+    "unit": "以 10 级白为 1",
+    "50_orange_vs_40_darkgold": 1.0,
+    "20_orange_vs_10_darkgold": 1.0,
+    "10_red_plus10_vs_20_white": 1.258,
+    "10_red_plus10_vs_20_orange": 1.094,
+    "10_red_plus10_vs_20_darkgold": 0.983,
+    "30_darkgold_plus20_vs_50_orange": 1.095,
+    "30_darkgold_plus20_vs_50_red": 1.049,
+    "30_darkgold_plus20_vs_50_darkgold": 0.984
+  },
+  "open_questions": [
+    "是否同意把 7 档未强化倍率压到 1.00～1.28，强化按该等级白装基础加固定值（+10 加 20%，+20 加到 28%）？这样 50 级橙正好等于 40 级暗金；30 级暗金满强化约等于 50 级红，略低于 50 级暗金。",
+    "强化失败是否按「+1～+10 退 1 级不碎；+11～+15 不退级不碎；+16～+20 失败本应碎，固灵符保住当前等级不退级」定稿？按此规则，13 件 30 级装到 +20 约 5.6 天（含少量合成固灵符）。",
+    "全身红约 6 天、以及套装按首饰 4 件（2/4）、防具 8 件（3/5/8）、武器另算，这两条此前未表态，是否一起定？"
+  ],
+  "stone_drop": {
+    "lv10_qingshi": {
+      "normal": 0.15,
+      "elite": 0.5,
+      "boss": 3.0
+    },
+    "lv30_tianheng": {
+      "normal": 0.18,
+      "elite": 0.6,
+      "boss": 4.0
+    },
+    "charm_gu_ling_fu": {
+      "elite": 0.03,
+      "boss": 0.2
+    }
+  }
+}

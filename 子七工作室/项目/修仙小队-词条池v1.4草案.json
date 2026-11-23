@@ -1,0 +1,4843 @@
+{
+  "version": "1.4",
+  "title": "修仙小队-词条池v1.4草案",
+  "status": "draft_pending_approval",
+  "date": "2026-11-22",
+  "timezone": "Asia/Shanghai",
+  "based_on": [
+    "修仙小队-基础装备表v1.0正式.md",
+    "修仙小队-词条池v1.3草案.md",
+    "老板 t76u 反馈"
+  ],
+  "note": "纯文字设计草案。汲取改为出招判定+来源系数+自动源节流；套装按 2/3/5 件 1%/3%/5%，建议橙色以上开放；攻速不设品质上限。不改游戏代码、不碰 GitHub。",
+  "changes_from_v1_0": [
+    "删除所有全身上限与联合约束（攻击%80%、增伤区40%、攻速100%、减伤60%、联合≤2.00、固定词条≤裸属性40%、会心率80%等），只保留生命汲取既定的每击 5%、每秒 10%。",
+    "属性改为火、冰、雷、毒、暗五种。属性增伤叠加最终伤害，不提高攻击力。",
+    "明确无属性攻击与打上属性石后的计算公式，属性石带不受抗性影响的附着保底，保证任意属性石收益高于无属性。",
+    "有效会心率 = 会心率 − 怪物会心抵抗，下限 0，不设堆叠上限。",
+    "增伤不设上限；每种增伤在本次攻击后单独计算增量，再合计。",
+    "给怪物的减防、减命中等 debuff 同类取最高，不叠加。自身无视防御仍可加算。",
+    "汲取仅暗金第 5 词条；技能池、套装池以后也会有，共用 5%/10% 上限。",
+    "取消主动/被动之分，全部自动生效。词条池可出固定增益技能；13 条限时/叠层/debuff 触发移入技能池候选。",
+    "新增怪物侧平衡框架，并用 50 级多种配装验算。"
+  ],
+  "counts": {
+    "total": 72,
+    "common": 25,
+    "advanced": 29,
+    "rare": 18,
+    "base": 58,
+    "fixed_skills": 14,
+    "moved_to_skill_pool": 13
+  },
+  "removed_caps": [
+    "atk_pct_hard_80",
+    "damage_increase_zone_40",
+    "aspd_100",
+    "dr_60",
+    "joint_offense_2_00",
+    "flat_affix_40_of_naked",
+    "effective_crit_rate_80",
+    "hp_def_pct_soft_caps",
+    "ms_50",
+    "cdr_30",
+    "stun_res_60",
+    "tenacity_50",
+    "hit_40",
+    "def_shred_combined_40",
+    "life_drain_stack_5_pct",
+    "life_drain_per_second_10_pct",
+    "life_drain_aoe_counts_once",
+    "aspd_frequency_limit"
+  ],
+  "kept_caps": {
+    "life_drain_per_line_max": 1.5,
+    "crit_dmg_floor_suggested": 120,
+    "effective_defense_floor": 0,
+    "effective_crit_rate_floor": 0,
+    "single_hit_crits_at_most_once": true,
+    "life_drain_body_cap": null,
+    "life_drain_per_second_cap": null,
+    "aspd_cap": null
+  },
+  "elements": {
+    "list": [
+      "火",
+      "冰",
+      "雷",
+      "毒",
+      "暗"
+    ],
+    "identities": {
+      "火": "偏灼烧与持续压力，技能池再做灼烧状态",
+      "冰": "偏减速、降低命中，技能池再做控制 debuff",
+      "雷": "偏易伤与爆发手感，技能池再做短暂易伤",
+      "毒": "偏叠层持续伤害，技能池再做毒层",
+      "暗": "偏残血增伤、与汲取协同，技能池再做状态"
+    },
+    "primary": "已附着属性（属性石或武器自带）作为本次攻击属性。若未附着，属性增伤词条不生效。若同时存在多种附着，以本次生效的石头或武器属性为准（不互乘）。"
+  },
+  "element_stone": {
+    "name": "属性石",
+    "status": "未来系统，此处只定计算公式与建议数值",
+    "effects": [
+      "让本次攻击带上该属性，否则属性增伤词条不生效",
+      "提供该属性增伤 S%，与词条加算后被怪物抗性抵消",
+      "提供不受抗性影响的属性附着保底 P%，保证任意属性石都高于无属性"
+    ],
+    "suggested_P_pct": {
+      "note": "不受抗性抵消",
+      "value": 10,
+      "optional_by_quality": {
+        "绿": 6,
+        "蓝": 7,
+        "紫": 8,
+        "橙": 9,
+        "红": 10,
+        "暗金": 12
+      }
+    },
+    "suggested_S_pct": {
+      "绿": 8,
+      "蓝": 10,
+      "紫": 12,
+      "橙": 15,
+      "红": 18,
+      "暗金": 20
+    },
+    "guarantee": "最终伤害至少比同一击无属性时高出含会心基础的 P%。即使怪物抗性 100%，仍保留 P%。"
+  },
+  "damage_formula": {
+    "step1_attack": "攻击 = 裸攻击 × (1 + 攻击百分比合计)。攻击百分比只提高攻击力，不直接加成最终伤害。裸攻击 = 人物基础 + 装备基础 + 强化 + 宝石 + 固定攻击词条。",
+    "step2_effective_def": "有效防御 = max(0, 防御 × (1 − 怪物固有穿透 − 攻击者无视防御合计) × (1 − 减防debuff) )。减防 debuff 同类取最高，不叠加。精英固有穿透 20%，首领 40%。当有效防御/攻击 > 1.5 时，按既定规则可能闪避，伤害为 0。",
+    "step3_base": "基础伤害 H0 = 四舍五入( 攻² / (攻 + 有效防御) )，与基础数值表同一套公式。",
+    "step4_crit": "有效会心率 p = max(0, 会心率 − 怪物会心抵抗)。不设堆叠上限。p ≥ 100% 时本次必会心，单次攻击最多会心一次。有效会心伤害 c = max(120%, 会心伤害 − 怪物会心防御)。含会心基础 Hc = H0 × (1 − p + p × c)，其中 p、c 用小数。",
+    "step5_each_amp": "本次攻击后，每种增伤单独计算增量：增量_i = Hc × 有效增伤_i。属性有效增伤 = P（仅已附着） + max(0, 词条该属性增伤 + 属性石 S + 属性穿透 − 怪物该抗性)。对首领、对精英、通用增伤、其他独立增伤各算一项。未附着属性时，属性项为 0。",
+    "step6_sum": "最终伤害 = 四舍五入( (Hc + Σ增量_i) × (1 − 怪物减伤) ) = 四舍五入( Hc × (1 + Σ有效增伤_i) × (1 − 怪物减伤) )。各项是加算后合计，不是 (1+A)×(1+B)×(1+C) 连乘。",
+    "debuff_rule": "给怪物上的减防、减命中、减速、降抗等 debuff：同一类只取最高值，不叠加。不同类可以同时存在。"
+  },
+  "roll_rules": {
+    "affix_slots_by_rarity": {
+      "白": 0,
+      "绿": 1,
+      "蓝": 2,
+      "紫": 3,
+      "橙": 4,
+      "红": 4,
+      "暗金": 5
+    },
+    "tier_weights": {
+      "普通": 70,
+      "高级": 25,
+      "稀有": 5
+    },
+    "repeat_base_affixes": true,
+    "max_fixed_skills_per_item": 1,
+    "fixed_skill_slots": [
+      "weapon",
+      "chest",
+      "legs"
+    ],
+    "reroll_if_second_fixed_skill": true,
+    "life_drain_only_darkgold_slot5": true,
+    "life_drain_slots": [
+      "weapon",
+      "chest",
+      "ring",
+      "necklace"
+    ],
+    "no_active_manual_skills": true,
+    "exclusive_skill_slot_orange_plus": "橙以上仍可保留一条不可洗的技能槽，改为自动生效的技能池技能（叠层状态、自身增益、怪物 debuff），不再区分主动/被动，无需点击。"
+  },
+  "slot_rules": {
+    "official_slot_ids": [
+      "weapon",
+      "head",
+      "chest",
+      "legs",
+      "belt",
+      "hands",
+      "feet",
+      "inner",
+      "cloak",
+      "title",
+      "necklace",
+      "earring",
+      "ring"
+    ],
+    "slot_names_zh": {
+      "weapon": "武器",
+      "head": "帽子",
+      "chest": "衣服",
+      "legs": "裤子",
+      "belt": "腰带",
+      "hands": "护手",
+      "feet": "鞋",
+      "inner": "内甲",
+      "cloak": "披风",
+      "title": "称号",
+      "necklace": "项链",
+      "earring": "耳环",
+      "ring": "戒指"
+    },
+    "life_drain": {
+      "slots": [
+        "weapon",
+        "chest",
+        "ring",
+        "necklace"
+      ],
+      "rarity": "暗金",
+      "column": "第5词条栏",
+      "keep": true,
+      "reason": "汲取只在暗金第 5 词条出现（老板已确认）。技能池、套装池以后也会有汲取，与词条百分比加算，不设全身或每秒上限。结算为每次攻击一次，与命中数无关。",
+      "no_body_cap": true
+    },
+    "fixed_gain_skills": {
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "max_per_item": 1,
+      "reason": "词条栏里的技能是固定增益包，限制部位和每件条数，避免一件装备同时带多条常驻技能包；基础数值词条仍可在该部位重复堆。"
+    }
+  },
+  "scaling": {
+    "rounding": "四舍五入，即 floor(x+0.5)",
+    "flat_attack": "四舍五入(该等级段白武器攻击 × 系数)",
+    "flat_hp": "四舍五入(该等级段白衣服生命 × 系数)",
+    "flat_def": "四舍五入(该等级段白衣服防御 × 系数)",
+    "percent": "百分比词条不随等级放大，只随品质提高区间",
+    "drain": "仅暗金，0.5–1.5，建议按 0.1 步进",
+    "white_bases_from_official_table": [
+      {
+        "item_level": 1,
+        "white_weapon_atk": 90,
+        "white_chest_hp": 300,
+        "white_chest_def": 30
+      },
+      {
+        "item_level": 10,
+        "white_weapon_atk": 480,
+        "white_chest_hp": 1620,
+        "white_chest_def": 135
+      },
+      {
+        "item_level": 20,
+        "white_weapon_atk": 1440,
+        "white_chest_hp": 4860,
+        "white_chest_def": 405
+      },
+      {
+        "item_level": 30,
+        "white_weapon_atk": 3600,
+        "white_chest_hp": 12150,
+        "white_chest_def": 1020
+      },
+      {
+        "item_level": 40,
+        "white_weapon_atk": 3750,
+        "white_chest_hp": 12660,
+        "white_chest_def": 1050
+      },
+      {
+        "item_level": 50,
+        "white_weapon_atk": 4185,
+        "white_chest_hp": 14130,
+        "white_chest_def": 1170
+      },
+      {
+        "item_level": 60,
+        "white_weapon_atk": 4650,
+        "white_chest_hp": 15690,
+        "white_chest_def": 1305
+      },
+      {
+        "item_level": 70,
+        "white_weapon_atk": 5175,
+        "white_chest_hp": 17460,
+        "white_chest_def": 1455
+      },
+      {
+        "item_level": 80,
+        "white_weapon_atk": 5760,
+        "white_chest_hp": 19434,
+        "white_chest_def": 1619
+      },
+      {
+        "item_level": 90,
+        "white_weapon_atk": 6405,
+        "white_chest_hp": 21610,
+        "white_chest_def": 1801
+      },
+      {
+        "item_level": 100,
+        "white_weapon_atk": 7125,
+        "white_chest_hp": 24039,
+        "white_chest_def": 2003
+      }
+    ]
+  },
+  "reroll_and_lock": {
+    "wash_cost_by_locked_count": {
+      "0": 1,
+      "1": 2,
+      "2": 4,
+      "3": 8,
+      "4": 16
+    },
+    "lock_stone": "锁定某一词条栏。锁定的固定增益技能占用每件 1 条名额。",
+    "skill_slot": "橙以上技能槽（技能池）不可用词条洗练改。",
+    "slot5": "暗金第 5 栏只在该部位专属池中重抽；武器/衣服/戒指/项链该栏生命汲取相对权重约 35%。汲取没有全身条数上限，但只有这 4 个部位的第 5 栏能出装备词条汲取。",
+    "repeat_allowed": "基础增益允许重复（例如 4 条雷属性伤害）。",
+    "fixed_skill_rule": "若抽出第 2 条固定增益技能，只重抽这一条。"
+  },
+  "monster_framework": {
+    "principle": "人物和装备数值先确定。用怪物的抗性、会心抵抗、会心防御、减伤、攻击、防御和生命来做节奏。抗性以同级玩家典型主修能堆到的属性增伤为基准来设，而不是先砍装备。",
+    "design_method": [
+      "先估该等级「专注主修」大约能堆到的单属性增伤中位数 M（含属性石 S，不含附着保底 P）。50 级建议 M 约 90–110%（例如 12 条均值 6% 的雷伤 + 暗金石 20%，约 92%）。",
+      "普通怪各抗约 0–0.15M，精英主抗约 0.2M–0.3M，可带一个弱点。",
+      "均衡首领各抗约 0.25M–0.35M，使主修仍明显优于无属性，但不会无脑秒杀。",
+      "属性首领主抗约 0.6M–0.8M，弱点 −10%～−25%。主修被克时优势缩小，改打弱点属性会重新领先——这就是堆属性的意义。",
+      "会心抵抗、会心防御按会心流中位数来设：普通低、精英中、首领高；特别耐会心的首领可以把会心抵抗放到 50–80%，用来对冲会心爆发，而不是给人物会心率加上限。",
+      "首领生命按「典型暗金主修打均衡首领，每击约 1.2–1.8%」反推，并给区间。v2.4 的 170 万是按尚未计入属性石和属性增伤的爆发刀反推的，本版建议上调生命或提高抗性/减伤来接住新公式，而不是回过头限制装备。"
+    ],
+    "suggested_ranges_level_50": {
+      "note": "建议值，待做怪物表时确定。",
+      "normal": {
+        "hp": [
+          150000,
+          280000
+        ],
+        "elem_res_pct": [
+          0,
+          15
+        ],
+        "crit_res_pct": [
+          5,
+          15
+        ],
+        "crit_def_pct": [
+          10,
+          20
+        ],
+        "dr_pct": [
+          0,
+          5
+        ]
+      },
+      "elite": {
+        "hp": [
+          320000,
+          600000
+        ],
+        "elem_res_main_pct": [
+          20,
+          35
+        ],
+        "elem_weak_pct": [
+          -15,
+          0
+        ],
+        "crit_res_pct": [
+          15,
+          25
+        ],
+        "crit_def_pct": [
+          20,
+          30
+        ],
+        "dr_pct": [
+          5,
+          10
+        ]
+      },
+      "boss_balanced": {
+        "hp": [
+          1800000,
+          2500000
+        ],
+        "hp_median": 2200000,
+        "elem_res_pct": [
+          25,
+          35
+        ],
+        "crit_res_pct": [
+          20,
+          35
+        ],
+        "crit_def_pct": [
+          25,
+          40
+        ],
+        "dr_pct": [
+          12,
+          18
+        ]
+      },
+      "boss_elemental": {
+        "hp": [
+          1800000,
+          2500000
+        ],
+        "main_res_pct": [
+          55,
+          80
+        ],
+        "weak_pct": [
+          -25,
+          -10
+        ],
+        "other_res_pct": [
+          20,
+          30
+        ],
+        "crit_res_pct": [
+          20,
+          40
+        ],
+        "crit_def_pct": [
+          25,
+          40
+        ],
+        "dr_pct": [
+          12,
+          18
+        ]
+      },
+      "boss_anti_crit": {
+        "crit_res_pct": [
+          50,
+          80
+        ],
+        "crit_def_pct": [
+          40,
+          60
+        ],
+        "note": "用来对冲会心爆发流，不砍人物会心率。"
+      }
+    },
+    "scaling_by_level": "生命随等级大致跟随官方装备与人物攻击预算（可先按白武器攻击的平方关系做斜率，再按类型乘系数）。抗性、会心抵抗不必随等级线性拔高，按该级玩家能堆到的中位数 M 重估即可。"
+  },
+  "example_builds": {
+    "assumptions": {
+      "level": 50,
+      "gear": "全身暗金，武器强化 +20，不含宝石",
+      "naked_atk": 14362,
+      "naked_atk_note": "沿用 v2.4 / 词条池 v1.0 的 50 级预算口径，便于对照。若强化 +20 只按白武器加值 610 计，裸攻击约为 10177，怪物生命和抗性按同一口径同比缩放即可，比例关系不变。",
+      "boss_def": 5370,
+      "P_pct": 10,
+      "S_darkgold_pct": 20,
+      "formula": "最终 = Hc × (1 + Σ有效增伤) × (1 − 怪物减伤)"
+    },
+    "results_note": "百分比均为约数。生命、抗性为建议值。",
+    "scenarios": [
+      {
+        "name": "无属性白板（暗金基础+强化，无凝神、无词条、无属性石）",
+        "hit": 9408,
+        "boss": "均衡减伤10%、会抗20%、生命170万",
+        "pct": 0.55,
+        "hits": null,
+        "note": "有效会心 0。打上暗金雷石后，即使雷抗 20% 或 100%，都固定高出 10%（保底 P），伤害 10348。"
+      },
+      {
+        "name": "全白 +20，无属性",
+        "hit": 7482,
+        "boss": "减伤10%、生命170万",
+        "pct": 0.44,
+        "hits": null,
+        "note": "仍明显弱于暗金，打不过的定位不变。"
+      },
+      {
+        "name": "全雷主修典型（凝神45%，12条雷伤约72%，穿透14%，暗金雷石，会心47%/会伤166%）· 均衡首领抗20% 减伤10% 生命170万",
+        "hit": 32043,
+        "pct": 1.88,
+        "hits": 53,
+        "note": "已快于原 60–70 击目标，说明 170 万是按未计入属性石/属性伤的口径估的，需要用怪物生命或抗性接住。"
+      },
+      {
+        "name": "同上全雷 · 建议均衡首领抗30% 减伤15% 生命220万",
+        "hit": 28719,
+        "pct": 1.31,
+        "hits": 77,
+        "note": "落在每击 1–2%。击数略多于原爆发目标，但暗金仍明显可打。"
+      },
+      {
+        "name": "同上全雷 · 雷抗首领抗70% 减伤15% 生命220万",
+        "hit": 22543,
+        "pct": 1.02,
+        "hits": 98,
+        "note": "被克制，优势缩小。"
+      },
+      {
+        "name": "同等投入的火主修 · 打同一只雷抗首领（火抗20%）",
+        "hit": 30263,
+        "pct": 1.38,
+        "hits": 73,
+        "note": "比全雷打这只首领明显更高。堆对属性才有意义。"
+      },
+      {
+        "name": "同上全雷 · 雷弱首领抗−20% 减伤15% 生命220万",
+        "hit": 36439,
+        "pct": 1.66,
+        "hits": 60,
+        "note": "打弱点时回到爆发节奏。"
+      },
+      {
+        "name": "传统爆发（攻击75%+会心，对首领30%，无属性石）· 减伤15% 生命220万",
+        "hit": 28033,
+        "pct": 1.27,
+        "hits": 78,
+        "note": "无属性爆发低于典型全雷打均衡首领，高于全雷打雷抗首领。打上任意属性石后还会再高一截。"
+      },
+      {
+        "name": "混堆（攻击75%+雷伤40%+暗金雷石+会心）· 均衡抗30% 减伤15% 生命220万",
+        "hit": 27926,
+        "pct": 1.27,
+        "hits": 79,
+        "note": "和爆发接近。若改打雷抗70%首领，降到约 1.00%、100 击。"
+      },
+      {
+        "name": "攻速续航（凝神45%，少会心，打属性石并带少量属性/通用增伤）",
+        "note": "攻速不设上限。汲取改为每次攻击结算一次。群战续航见 group_combat_validation。"
+      },
+      {
+        "name": "极限堆叠（约 50 条雷伤 300%）",
+        "hit_lowres": 69318,
+        "pct_lowres": 4.08,
+        "note": "允许堆，不砍装备。用高抗（如 80%）或更高生命的首领来接。例如抗 80%、减伤 15%、生命 250 万时约 2.25%。"
+      }
+    ]
+  },
+  "open_questions": [
+    "套装按 2 件 1%、3 件 3%、5 件合计 5%，并且只有橙色及以上装备计入件数，可以吗？",
+    "装备词条汲取是否以武器第 5 栏 1.0–5.0% 为主通道，衣服、戒指、项链第 5 栏不再出汲取（或只出 1.0–2.5%）？这样暗金典型是套装 5%+武器约 3–5%，和套装同一量级再高一截。",
+    "汲取用「出招判定 + 来源系数 + 自动源每秒系数合计最多 1.0」可以吗？普攻系数 1.0 且不封顶；引导每秒 1.0；放置阵法每 tick 0.35 且自动源合计封顶；DoT 和反击默认不回血。"
+  ],
+  "risks": [
+    "5 件套只有 5% 时，橙装要在有效出招次数大约 4.2 的示例下才能贴线站住。若实际攻速或技能频率明显更低，需要 5 件套或走位、法修补足。3 件套 3% 不够扛这场围殴。",
+    "不限制攻速后，堆到每秒 7 次会让橙装群战到约 1.76 倍、暗金更高。必须靠大招、禁疗、控制给压力，不能回头给装备加攻速上限。",
+    "自动源每秒系数合计 1.0 是折算规则，不是全局回血上限。需要在界面或技能说明里写清楚，避免被理解成「阵法不加血」。",
+    "六职业的出招结构还是示例，正式技能池确定后要重算 E，使各职业仍然接近。",
+    "数字均为建议值，待怪物表和试玩后调整。"
+  ],
+  "skill_pool_candidates": [
+    {
+      "id": "ruiyi",
+      "name": "锐意",
+      "from_affix_tier": "高级",
+      "style": "叠层自身状态",
+      "reason": "会心后叠会心率，限时刷新，属于技能池的成长状态。",
+      "old_desc": "造成会心后，会心率提升，可叠层。限时成长，服务爆发流起手。",
+      "trigger": {
+        "event": "on_crit",
+        "proc_chance": null,
+        "effect": "会心率 +3%/层",
+        "duration_s": 5,
+        "internal_cd_s": 0,
+        "max_stacks": 4
+      },
+      "suggested_slots": [
+        "weapon",
+        "hands",
+        "earring",
+        "ring",
+        "title"
+      ]
+    },
+    {
+      "id": "houtu",
+      "name": "厚土",
+      "from_affix_tier": "高级",
+      "style": "限时自身状态",
+      "reason": "被击概率限时加防御，属于技能池的触发状态。",
+      "old_desc": "被击时有概率在短时间内提升防御。",
+      "trigger": {
+        "event": "on_hit_taken",
+        "proc_chance": 0.3,
+        "effect": "防御 +15%（计入防御百分比区）",
+        "duration_s": 6,
+        "internal_cd_s": 8,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "chest",
+        "legs",
+        "inner",
+        "belt",
+        "head",
+        "cloak"
+      ]
+    },
+    {
+      "id": "chaifang",
+      "name": "拆防",
+      "from_affix_tier": "高级",
+      "style": "怪物 debuff，同类取最高",
+      "reason": "攻击概率减对方防御，给怪物上的减防不叠加。",
+      "old_desc": "攻击命中时有概率在短时间内降低目标防御。与无视防御合计，最多降低目标有效防御 40%。",
+      "trigger": {
+        "event": "on_hit",
+        "proc_chance": 0.2,
+        "effect": "目标防御 −12%",
+        "duration_s": 5,
+        "internal_cd_s": 6,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "weapon",
+        "hands",
+        "ring",
+        "title"
+      ]
+    },
+    {
+      "id": "jifeng",
+      "name": "疾风",
+      "from_affix_tier": "高级",
+      "style": "限时自身状态",
+      "reason": "会心后限时加攻速。",
+      "old_desc": "造成会心后短时间提升攻速。攻速续航流的触发核心之一。",
+      "trigger": {
+        "event": "on_crit",
+        "proc_chance": null,
+        "effect": "攻速 +10%",
+        "duration_s": 4,
+        "internal_cd_s": 1,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "weapon",
+        "feet",
+        "hands",
+        "earring"
+      ]
+    },
+    {
+      "id": "jiwei",
+      "name": "积威",
+      "from_affix_tier": "高级",
+      "style": "叠层自身状态",
+      "reason": "连续命中同一目标叠攻击，超时清空。",
+      "old_desc": "连续命中同一目标时叠层增加攻击百分比，离开或超时清空。计入攻击百分比区。",
+      "trigger": {
+        "event": "on_hit_same_target",
+        "proc_chance": null,
+        "effect": "攻击 +3%/层；5 秒内未再命中该目标则清空",
+        "duration_s": 5,
+        "internal_cd_s": 0,
+        "max_stacks": 5
+      },
+      "suggested_slots": [
+        "weapon",
+        "ring",
+        "title"
+      ]
+    },
+    {
+      "id": "weicun",
+      "name": "危存",
+      "from_affix_tier": "高级",
+      "style": "限时自身状态",
+      "reason": "低血时限时减伤，长冷却。",
+      "old_desc": "生命首次低于 40% 时获得短时间减伤，长冷却。保命用。",
+      "trigger": {
+        "event": "hp_below_40",
+        "proc_chance": null,
+        "effect": "减伤 +12%",
+        "duration_s": 8,
+        "internal_cd_s": 20,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "chest",
+        "inner",
+        "legs",
+        "belt"
+      ]
+    },
+    {
+      "id": "shuangbu",
+      "name": "霜步",
+      "from_affix_tier": "高级",
+      "style": "怪物 debuff，同类取最高",
+      "reason": "攻击概率减速。",
+      "old_desc": "攻击命中时有概率降低目标移速。冰属性路线的功能词条。",
+      "trigger": {
+        "event": "on_hit",
+        "proc_chance": 0.2,
+        "effect": "目标移速 −30%",
+        "duration_s": 3,
+        "internal_cd_s": 5,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "weapon",
+        "feet",
+        "legs",
+        "hands"
+      ]
+    },
+    {
+      "id": "jianbi",
+      "name": "坚壁",
+      "from_affix_tier": "高级",
+      "style": "限时自身状态",
+      "reason": "被会心后限时加会心抵抗。",
+      "old_desc": "被会心后短时间提升会心抵抗。",
+      "trigger": {
+        "event": "on_crit_taken",
+        "proc_chance": null,
+        "effect": "会心抵抗 +10%",
+        "duration_s": 5,
+        "internal_cd_s": 8,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "head",
+        "chest",
+        "inner",
+        "cloak"
+      ]
+    },
+    {
+      "id": "shixing",
+      "name": "蚀性",
+      "from_affix_tier": "稀有",
+      "style": "怪物 debuff，同类取最高",
+      "reason": "攻击概率降低目标主属性抗性。",
+      "old_desc": "攻击命中时有概率降低目标的主属性抗性，放大已堆起来的属性增伤。",
+      "trigger": {
+        "event": "on_hit",
+        "proc_chance": 0.25,
+        "effect": "目标主属性抗性 −10%",
+        "duration_s": 5,
+        "internal_cd_s": 6,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "weapon",
+        "ring",
+        "necklace",
+        "title"
+      ]
+    },
+    {
+      "id": "zhuomai",
+      "name": "灼脉",
+      "from_affix_tier": "稀有",
+      "style": "持续伤害状态",
+      "reason": "攻击概率灼烧，刷新不叠层。",
+      "old_desc": "攻击命中时有概率使目标灼烧，每秒造成一次火属性伤害。刷新持续时间，不叠层。伤害以裸攻击为基数，避免被乘区放大失控。",
+      "trigger": {
+        "event": "on_hit",
+        "proc_chance": 0.2,
+        "effect": "灼烧：每秒造成裸攻击 6% 的火属性伤害",
+        "duration_s": 4,
+        "internal_cd_s": 0,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "weapon",
+        "ring",
+        "hands"
+      ]
+    },
+    {
+      "id": "leiguan",
+      "name": "雷贯",
+      "from_affix_tier": "稀有",
+      "style": "怪物 debuff，同类取最高",
+      "reason": "攻击概率使目标短暂更吃雷伤。",
+      "old_desc": "攻击命中时有概率使目标在短时间内受到的雷属性伤害增加。计入对该目标的增伤区，受上限约束。",
+      "trigger": {
+        "event": "on_hit",
+        "proc_chance": 0.15,
+        "effect": "目标受到的雷属性伤害 +12%",
+        "duration_s": 4,
+        "internal_cd_s": 6,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "weapon",
+        "ring",
+        "hands"
+      ]
+    },
+    {
+      "id": "duoshi",
+      "name": "毒蚀",
+      "from_affix_tier": "稀有",
+      "style": "叠层持续伤害状态",
+      "reason": "攻击叠毒层。",
+      "old_desc": "攻击命中叠加毒层，每层造成持续毒伤。以裸攻击为基数。",
+      "trigger": {
+        "event": "on_hit",
+        "proc_chance": 1.0,
+        "effect": "叠加 1 层毒：每层每秒造成裸攻击 4% 的毒属性伤害",
+        "duration_s": 6,
+        "internal_cd_s": 0,
+        "max_stacks": 4
+      },
+      "suggested_slots": [
+        "weapon",
+        "ring",
+        "chest"
+      ]
+    },
+    {
+      "id": "fanzhen",
+      "name": "反震",
+      "from_affix_tier": "稀有",
+      "style": "触发反伤状态",
+      "reason": "被击概率反弹伤害。",
+      "old_desc": "被击时有概率反弹本次伤害的一部分。对首领减半，避免把首领反打死。",
+      "trigger": {
+        "event": "on_hit_taken",
+        "proc_chance": 0.25,
+        "effect": "反弹本次受到伤害的 10%（对首领为 5%）",
+        "duration_s": 0,
+        "internal_cd_s": 3,
+        "max_stacks": 1
+      },
+      "suggested_slots": [
+        "chest",
+        "inner",
+        "cloak",
+        "legs"
+      ]
+    }
+  ],
+  "affixes": [
+    {
+      "id": "atk_flat",
+      "name": "攻击",
+      "tier": "普通",
+      "family": "atk_flat",
+      "kind": "flat",
+      "unit": "点",
+      "desc": "增加固定攻击。数值随装备等级段缩放。",
+      "scale": "flat_atk",
+      "by_quality": {
+        "绿": [
+          6.0,
+          8.0
+        ],
+        "蓝": [
+          6.5,
+          9.0
+        ],
+        "紫": [
+          7.0,
+          10.0
+        ],
+        "橙": [
+          7.5,
+          11.0
+        ],
+        "红": [
+          8.0,
+          11.5
+        ],
+        "暗金": [
+          8.0,
+          12.0
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "necklace",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "hp_flat",
+      "name": "生命",
+      "tier": "普通",
+      "family": "hp_flat",
+      "kind": "flat",
+      "unit": "点",
+      "desc": "增加固定生命。数值随装备等级段缩放。",
+      "scale": "flat_hp",
+      "by_quality": {
+        "绿": [
+          8.0,
+          12.0
+        ],
+        "蓝": [
+          8.5,
+          12.5
+        ],
+        "紫": [
+          9.0,
+          13.0
+        ],
+        "橙": [
+          9.5,
+          14.0
+        ],
+        "红": [
+          10.0,
+          14.5
+        ],
+        "暗金": [
+          10.0,
+          15.0
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "feet",
+        "necklace",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "def_flat",
+      "name": "防御",
+      "tier": "普通",
+      "family": "def_flat",
+      "kind": "flat",
+      "unit": "点",
+      "desc": "增加固定防御。数值随装备等级段缩放。",
+      "scale": "flat_def",
+      "by_quality": {
+        "绿": [
+          8.0,
+          12.0
+        ],
+        "蓝": [
+          8.5,
+          12.5
+        ],
+        "紫": [
+          9.0,
+          13.0
+        ],
+        "橙": [
+          9.5,
+          14.0
+        ],
+        "红": [
+          10.0,
+          14.5
+        ],
+        "暗金": [
+          10.0,
+          15.0
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "hands",
+        "inner"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "atk_pct",
+      "name": "攻击百分比",
+      "tier": "普通",
+      "family": "atk_pct",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "按裸攻击加算攻击百分比。只提高攻击力，不直接加成最终伤害。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "necklace",
+        "ring",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "hp_pct",
+      "name": "生命百分比",
+      "tier": "普通",
+      "family": "hp_pct",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "按裸生命加算生命百分比。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "feet",
+        "necklace",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "def_pct",
+      "name": "防御百分比",
+      "tier": "普通",
+      "family": "def_pct",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "按裸防御加算防御百分比。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "hands",
+        "inner",
+        "cloak"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "aspd",
+      "name": "攻速",
+      "tier": "普通",
+      "family": "aspd",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加攻击速度。数值可自由堆叠，不设全身上限。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "feet",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "ms",
+      "name": "移速",
+      "tier": "普通",
+      "family": "ms",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加移动速度。数值不设上限；表现层如镜头跟随过快，可单独做显示平滑，不削减属性本身。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          1,
+          2
+        ],
+        "蓝": [
+          1,
+          2
+        ],
+        "紫": [
+          1,
+          3
+        ],
+        "橙": [
+          2,
+          3
+        ],
+        "红": [
+          2,
+          3
+        ],
+        "暗金": [
+          2,
+          4
+        ]
+      },
+      "slots": [
+        "feet",
+        "cloak",
+        "legs"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit",
+      "name": "会心率",
+      "tier": "普通",
+      "family": "crit",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加会心率。有效会心率 = 会心率 − 怪物会心抵抗，下限 0，不设堆叠上限。超过 100% 的会心率用来抵消抵抗；抵消后若仍不低于 100%，本次必会心（单次攻击最多会心一次）。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "earring",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit_dmg",
+      "name": "会心伤害",
+      "tier": "普通",
+      "family": "crit_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加会心伤害。有效会心伤害 = 会心伤害 − 怪物会心防御，建议下限 120%。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          8
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "earring",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit_res",
+      "name": "会心抵抗",
+      "tier": "普通",
+      "family": "crit_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "降低敌方对自己的有效会心率。有效会心率 = 对方会心率 − 自身会心抵抗，下限 0。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "chest",
+        "inner",
+        "legs",
+        "belt",
+        "cloak",
+        "head",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit_def",
+      "name": "会心防御",
+      "tier": "普通",
+      "family": "crit_def",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "降低敌方对自己的有效会心伤害。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          8
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          10
+        ]
+      },
+      "slots": [
+        "chest",
+        "inner",
+        "legs",
+        "belt",
+        "cloak",
+        "head",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "fire_dmg",
+      "name": "火属性伤害",
+      "tier": "普通",
+      "family": "fire_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "火属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物火抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修火。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          4
+        ],
+        "蓝": [
+          2,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          3,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          6
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "火",
+      "category": "基础增益"
+    },
+    {
+      "id": "fire_res",
+      "name": "火属性抗性",
+      "tier": "普通",
+      "family": "fire_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加火属性抗性，抵消来自该属性的增伤。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "element": "火",
+      "category": "基础增益"
+    },
+    {
+      "id": "thunder_dmg",
+      "name": "雷属性伤害",
+      "tier": "普通",
+      "family": "thunder_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "雷属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物雷抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修雷。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          4
+        ],
+        "蓝": [
+          2,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          3,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          6
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "雷",
+      "category": "基础增益"
+    },
+    {
+      "id": "thunder_res",
+      "name": "雷属性抗性",
+      "tier": "普通",
+      "family": "thunder_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加雷属性抗性，抵消来自该属性的增伤。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "element": "雷",
+      "category": "基础增益"
+    },
+    {
+      "id": "ice_dmg",
+      "name": "冰属性伤害",
+      "tier": "普通",
+      "family": "ice_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "冰属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物冰抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修冰。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          4
+        ],
+        "蓝": [
+          2,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          3,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          6
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "冰",
+      "category": "基础增益"
+    },
+    {
+      "id": "ice_res",
+      "name": "冰属性抗性",
+      "tier": "普通",
+      "family": "ice_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加冰属性抗性，抵消来自该属性的增伤。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "element": "冰",
+      "category": "基础增益"
+    },
+    {
+      "id": "poison_dmg",
+      "name": "毒属性伤害",
+      "tier": "普通",
+      "family": "poison_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "毒属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物毒抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修毒。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          4
+        ],
+        "蓝": [
+          2,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          3,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          6
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "毒",
+      "category": "基础增益"
+    },
+    {
+      "id": "poison_res",
+      "name": "毒属性抗性",
+      "tier": "普通",
+      "family": "poison_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加毒属性抗性，抵消来自该属性的增伤。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "element": "毒",
+      "category": "基础增益"
+    },
+    {
+      "id": "stun_res",
+      "name": "眩晕抗性",
+      "tier": "普通",
+      "family": "stun_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "降低被眩晕（及同类硬控）的概率与持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          3,
+          5
+        ],
+        "蓝": [
+          3,
+          5
+        ],
+        "紫": [
+          3,
+          6
+        ],
+        "橙": [
+          4,
+          6
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          8
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "inner",
+        "necklace",
+        "belt"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "hit",
+      "name": "命中",
+      "tier": "普通",
+      "family": "hit",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "降低目标闪避率（含高防闪避）。自身命中可加算。给怪物上的「减命中」debuff 同类取最高、不叠加。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          3,
+          5
+        ],
+        "蓝": [
+          3,
+          5
+        ],
+        "紫": [
+          3,
+          6
+        ],
+        "橙": [
+          4,
+          6
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 5,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "dodge",
+      "name": "闪避",
+      "tier": "普通",
+      "family": "dodge",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加自身闪避率，与高防闪避一并计算。怪物侧仍可用命中对冲。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          3,
+          5
+        ],
+        "蓝": [
+          3,
+          5
+        ],
+        "紫": [
+          3,
+          6
+        ],
+        "橙": [
+          4,
+          6
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          8
+        ]
+      },
+      "slots": [
+        "feet",
+        "cloak",
+        "legs",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 5,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "atk_pct_adv",
+      "name": "攻击百分比·强",
+      "tier": "高级",
+      "family": "atk_pct",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的攻击百分比，与「攻击百分比」加算，只提高攻击力。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          8
+        ],
+        "红": [
+          7,
+          9
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "necklace",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 10,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "hp_pct_adv",
+      "name": "生命百分比·强",
+      "tier": "高级",
+      "family": "hp_pct",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的生命百分比。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          8
+        ],
+        "红": [
+          7,
+          9
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "feet",
+        "necklace",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "def_pct_adv",
+      "name": "防御百分比·强",
+      "tier": "高级",
+      "family": "def_pct",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的防御百分比。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          8
+        ],
+        "红": [
+          7,
+          9
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "hands",
+        "inner"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "aspd_adv",
+      "name": "攻速·强",
+      "tier": "高级",
+      "family": "aspd",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的攻速加成。数值可自由堆叠，不设全身上限。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "feet",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit_adv",
+      "name": "会心率·强",
+      "tier": "高级",
+      "family": "crit",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的会心率加成。规则同会心率。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "earring",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit_dmg_adv",
+      "name": "会心伤害·强",
+      "tier": "高级",
+      "family": "crit_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的会心伤害加成。规则同会心伤害。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          7,
+          9
+        ],
+        "蓝": [
+          7,
+          9
+        ],
+        "紫": [
+          8,
+          10
+        ],
+        "橙": [
+          8,
+          11
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "earring",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 9,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "fire_dmg_adv",
+      "name": "火属性伤害·强",
+      "tier": "高级",
+      "family": "fire_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "火属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物火抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修火。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "火",
+      "category": "基础增益"
+    },
+    {
+      "id": "thunder_dmg_adv",
+      "name": "雷属性伤害·强",
+      "tier": "高级",
+      "family": "thunder_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "雷属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物雷抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修雷。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "雷",
+      "category": "基础增益"
+    },
+    {
+      "id": "ice_dmg_adv",
+      "name": "冰属性伤害·强",
+      "tier": "高级",
+      "family": "ice_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "冰属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物冰抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修冰。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "冰",
+      "category": "基础增益"
+    },
+    {
+      "id": "poison_dmg_adv",
+      "name": "毒属性伤害·强",
+      "tier": "高级",
+      "family": "poison_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "毒属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物毒抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修毒。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "毒",
+      "category": "基础增益"
+    },
+    {
+      "id": "def_pen",
+      "name": "无视防御",
+      "tier": "高级",
+      "family": "def_pen",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "自身无视目标防御的百分比，与词条、固定增益技能中的无视防御加算，再与怪物固有穿透一起作用于有效防御，最低把有效防御降到 0。这是攻击者自身属性，可以重复堆叠。给怪物上的「减防」debuff 另算，同类取最高、不叠加。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "elite_dmg",
+      "name": "对精英伤害",
+      "tier": "高级",
+      "family": "elite_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "对精英的增伤。本次攻击后单独计算增量，再与其他增伤合计。对非精英不生效。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "boss_dmg",
+      "name": "对首领伤害",
+      "tier": "高级",
+      "family": "boss_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "对首领的增伤。本次攻击后单独计算增量，再与其他增伤合计。对非首领不生效。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "dr",
+      "name": "减伤",
+      "tier": "高级",
+      "family": "dr",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "减少自身受到的伤害。不设全身上限；若堆得很高，由怪物侧用破防、真实伤害等对冲。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          3,
+          4
+        ],
+        "蓝": [
+          3,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          4,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          5,
+          6
+        ]
+      },
+      "slots": [
+        "chest",
+        "inner",
+        "legs",
+        "belt",
+        "cloak",
+        "head"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "life_drain",
+      "name": "生命汲取",
+      "tier": "高级",
+      "family": "life_drain",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "每次伤害出招判定按规则回复自身最大生命的该比例，与命中目标数、伤害高低无关。1.0–5.0%，5.0% 可显示 MAX。建议仅暗金武器第 5 词条栏作为装备汲取的主通道。无全身上限，无每秒上限。技能池、套装池以后也会有汲取，与词条百分比加算。具体出招系数见汲取结算规则。",
+      "scale": "drain",
+      "by_quality": {
+        "暗金": [
+          1.0,
+          5.0
+        ]
+      },
+      "slots": [
+        "weapon"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 12,
+      "slot5_only": true,
+      "darkgold_only": true,
+      "min_quality": "暗金",
+      "category": "基础增益",
+      "aoe_counts_once": true,
+      "per_target": false,
+      "body_cap_pct": null,
+      "per_second_cap_pct": null,
+      "once_per_attack": true,
+      "range_note": "v1.4 主通道改为武器 1.0–5.0%。若衣服/戒指/项链仍保留，建议 1.0–2.5%。"
+    },
+    {
+      "id": "cdr",
+      "name": "冷却缩短",
+      "tier": "高级",
+      "family": "cdr",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "缩短技能冷却（技能池中带冷却的技能）。不设上限。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "title",
+        "ring",
+        "necklace",
+        "earring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "stun_res_adv",
+      "name": "眩晕抗性·强",
+      "tier": "高级",
+      "family": "stun_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的眩晕抗性，服务攻速续航流。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          8
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          7,
+          9
+        ],
+        "橙": [
+          7,
+          10
+        ],
+        "红": [
+          8,
+          11
+        ],
+        "暗金": [
+          8,
+          12
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "inner",
+        "necklace",
+        "belt"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "crit_res_adv",
+      "name": "会心抵抗·强",
+      "tier": "高级",
+      "family": "crit_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "较大的会心抵抗。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "chest",
+        "inner",
+        "legs",
+        "belt",
+        "cloak",
+        "head",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "shield_str",
+      "name": "护盾效果",
+      "tier": "高级",
+      "family": "shield_str",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加护盾吸收量（含法修澄源术暗金短盾及未来护盾技能/套装）。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "chest",
+        "inner",
+        "necklace",
+        "cloak",
+        "legs"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 5,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "heal_bonus",
+      "name": "治疗效果",
+      "tier": "高级",
+      "family": "heal_bonus",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加受到的治疗效果（含法修治疗与套装治疗，不含生命汲取）。生命汲取按自身最大生命百分比、每次攻击结算一次，不吃此加成，以免和汲取百分比叠乘。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "chest",
+        "necklace",
+        "ring",
+        "inner",
+        "legs"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 5,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "boss_dmg_rare",
+      "name": "对首领伤害·极",
+      "tier": "稀有",
+      "family": "boss_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "很高的对首领增伤，与「对首领伤害」加算为同一项后再单独计算增量。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          8,
+          10
+        ],
+        "蓝": [
+          8,
+          10
+        ],
+        "紫": [
+          9,
+          12
+        ],
+        "橙": [
+          10,
+          13
+        ],
+        "红": [
+          11,
+          14
+        ],
+        "暗金": [
+          12,
+          15
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "dr_rare",
+      "name": "减伤·极",
+      "tier": "稀有",
+      "family": "dr",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "很高的减伤，规则同减伤。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          6
+        ],
+        "蓝": [
+          5,
+          6
+        ],
+        "紫": [
+          6,
+          7
+        ],
+        "橙": [
+          6,
+          8
+        ],
+        "红": [
+          7,
+          9
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "chest",
+        "inner",
+        "legs",
+        "belt",
+        "cloak",
+        "head"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "def_pen_rare",
+      "name": "无视防御·极",
+      "tier": "稀有",
+      "family": "def_pen",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "很高的无视防御，规则同无视防御。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          8,
+          10
+        ],
+        "蓝": [
+          8,
+          10
+        ],
+        "紫": [
+          9,
+          12
+        ],
+        "橙": [
+          10,
+          13
+        ],
+        "红": [
+          11,
+          14
+        ],
+        "暗金": [
+          12,
+          15
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "all_elem_res",
+      "name": "全属性抗性",
+      "tier": "稀有",
+      "family": "all_elem_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "同时增加火、冰、雷、毒、暗五种属性抗性。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          3,
+          5
+        ],
+        "蓝": [
+          3,
+          5
+        ],
+        "紫": [
+          4,
+          6
+        ],
+        "橙": [
+          4,
+          6
+        ],
+        "红": [
+          5,
+          7
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "fire_dmg_rare",
+      "name": "火属性伤害·极",
+      "tier": "稀有",
+      "family": "fire_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "火属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物火抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修火。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          7,
+          9
+        ],
+        "蓝": [
+          7,
+          9
+        ],
+        "紫": [
+          8,
+          10
+        ],
+        "橙": [
+          8,
+          11
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "element": "火",
+      "category": "基础增益"
+    },
+    {
+      "id": "thunder_dmg_rare",
+      "name": "雷属性伤害·极",
+      "tier": "稀有",
+      "family": "thunder_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "雷属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物雷抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修雷。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          7,
+          9
+        ],
+        "蓝": [
+          7,
+          9
+        ],
+        "紫": [
+          8,
+          10
+        ],
+        "橙": [
+          8,
+          11
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "element": "雷",
+      "category": "基础增益"
+    },
+    {
+      "id": "ice_dmg_rare",
+      "name": "冰属性伤害·极",
+      "tier": "稀有",
+      "family": "ice_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "冰属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物冰抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修冰。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          7,
+          9
+        ],
+        "蓝": [
+          7,
+          9
+        ],
+        "紫": [
+          8,
+          10
+        ],
+        "橙": [
+          8,
+          11
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "element": "冰",
+      "category": "基础增益"
+    },
+    {
+      "id": "poison_dmg_rare",
+      "name": "毒属性伤害·极",
+      "tier": "稀有",
+      "family": "poison_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "毒属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物毒抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修毒。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          7,
+          9
+        ],
+        "蓝": [
+          7,
+          9
+        ],
+        "紫": [
+          8,
+          10
+        ],
+        "橙": [
+          8,
+          11
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "element": "毒",
+      "category": "基础增益"
+    },
+    {
+      "id": "generic_dmg",
+      "name": "伤害加深",
+      "tier": "稀有",
+      "family": "generic_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "通用增伤（伤害加深）。本次攻击后单独计算增量，再与属性增伤、对精英/首领等其他增伤合计。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          7
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          6,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "title",
+        "ring",
+        "necklace",
+        "chest"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "tenacity",
+      "name": "韧性",
+      "tier": "稀有",
+      "family": "tenacity",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "缩短自身被控制的持续时间。不设上限。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          8
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          7,
+          9
+        ],
+        "橙": [
+          8,
+          10
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "inner",
+        "necklace",
+        "belt",
+        "cloak"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "category": "基础增益"
+    },
+    {
+      "id": "dark_dmg",
+      "name": "暗属性伤害",
+      "tier": "普通",
+      "family": "dark_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "暗属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物暗抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修暗。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          4
+        ],
+        "蓝": [
+          2,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          3,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          4,
+          6
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "暗",
+      "category": "基础增益"
+    },
+    {
+      "id": "dark_res",
+      "name": "暗属性抗性",
+      "tier": "普通",
+      "family": "dark_res",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "增加暗属性抗性，抵消来自该属性的增伤。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          2,
+          3
+        ],
+        "蓝": [
+          2,
+          3
+        ],
+        "紫": [
+          2,
+          4
+        ],
+        "橙": [
+          3,
+          4
+        ],
+        "红": [
+          3,
+          4
+        ],
+        "暗金": [
+          3,
+          5
+        ]
+      },
+      "slots": [
+        "head",
+        "chest",
+        "legs",
+        "belt",
+        "inner",
+        "cloak",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false,
+      "element": "暗",
+      "category": "基础增益"
+    },
+    {
+      "id": "dark_dmg_adv",
+      "name": "暗属性伤害·强",
+      "tier": "高级",
+      "family": "dark_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "暗属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物暗抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修暗。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          6
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          6,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 8,
+      "slot5_only": false,
+      "element": "暗",
+      "category": "基础增益"
+    },
+    {
+      "id": "dark_dmg_rare",
+      "name": "暗属性伤害·极",
+      "tier": "稀有",
+      "family": "dark_dmg",
+      "kind": "percent",
+      "unit": "%",
+      "desc": "暗属性增伤，叠加的是最终伤害，不提高攻击力。全身同属性词条加算后，加上属性石增伤，再减去怪物暗抗性（可被属性穿透抵消），作为单独一项计算增量，最后与其他增伤合计。允许同一件重复，用于主修暗。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          7,
+          9
+        ],
+        "蓝": [
+          7,
+          9
+        ],
+        "紫": [
+          8,
+          10
+        ],
+        "橙": [
+          8,
+          11
+        ],
+        "红": [
+          9,
+          12
+        ],
+        "暗金": [
+          10,
+          12
+        ]
+      },
+      "slots": [
+        "weapon",
+        "head",
+        "chest",
+        "legs",
+        "hands",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false,
+      "element": "暗",
+      "category": "基础增益"
+    },
+    {
+      "id": "ele_pen",
+      "name": "属性穿透",
+      "tier": "高级",
+      "family": "ele_pen",
+      "kind": "percent",
+      "category": "基础增益",
+      "unit": "%",
+      "desc": "减少目标属性抗性的计入值。有效属性抗性 = 怪物该抗性 − 属性穿透。抗性可为负（弱点），穿透在弱点上继续放大该属性收益。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          3,
+          4
+        ],
+        "蓝": [
+          3,
+          4
+        ],
+        "紫": [
+          3,
+          5
+        ],
+        "橙": [
+          4,
+          5
+        ],
+        "红": [
+          4,
+          6
+        ],
+        "暗金": [
+          5,
+          6
+        ]
+      },
+      "slots": [
+        "weapon",
+        "hands",
+        "ring",
+        "title",
+        "necklace"
+      ],
+      "can_repeat": true,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false
+    },
+    {
+      "id": "fengrui",
+      "name": "锋锐",
+      "tier": "高级",
+      "family": "fixed_skill_fengrui",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "攻击 +X%，会心伤害 +2X%。X 按品质随机。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          4,
+          4
+        ],
+        "蓝": [
+          4,
+          6
+        ],
+        "紫": [
+          4,
+          6
+        ],
+        "橙": [
+          5,
+          7
+        ],
+        "红": [
+          5,
+          8
+        ],
+        "暗金": [
+          6,
+          8
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false
+    },
+    {
+      "id": "panshi",
+      "name": "磐石",
+      "tier": "高级",
+      "family": "fixed_skill_panshi",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "防御 +X%，减伤 +⌊X/2⌋%。X 按品质随机。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "lingdong",
+      "name": "灵动",
+      "tier": "高级",
+      "family": "fixed_skill_lingdong",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "攻速 +X%，移速 +⌊X/2⌋%。X 按品质随机。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          5
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          6,
+          8
+        ],
+        "红": [
+          6,
+          9
+        ],
+        "暗金": [
+          7,
+          9
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "dongxu",
+      "name": "洞虚",
+      "tier": "高级",
+      "family": "fixed_skill_dongxu",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "无视防御 +X%。X 按品质随机。属于自身属性，可与无视防御词条加算。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          9
+        ],
+        "紫": [
+          6,
+          9
+        ],
+        "橙": [
+          7,
+          10
+        ],
+        "红": [
+          7,
+          11
+        ],
+        "暗金": [
+          8,
+          11
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false
+    },
+    {
+      "id": "huti",
+      "name": "护体",
+      "tier": "高级",
+      "family": "fixed_skill_huti",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "生命 +X%，会心防御 +X%。X 按品质随机。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          5,
+          5
+        ],
+        "蓝": [
+          5,
+          7
+        ],
+        "紫": [
+          5,
+          7
+        ],
+        "橙": [
+          6,
+          8
+        ],
+        "红": [
+          6,
+          9
+        ],
+        "暗金": [
+          7,
+          9
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "mingcha",
+      "name": "明察",
+      "tier": "高级",
+      "family": "fixed_skill_mingcha",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "命中 +X%，会心率 +⌊X/2⌋%。X 按品质随机。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "budong",
+      "name": "不动",
+      "tier": "高级",
+      "family": "fixed_skill_budong",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "眩晕抗性 +2X%，韧性 +X%。X 按品质随机。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "zhanshou",
+      "name": "斩首",
+      "tier": "稀有",
+      "family": "fixed_skill_zhanshou",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "对首领增伤 +X%。X 按品质随机。与对首领伤害词条加算为同一项。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          8,
+          8
+        ],
+        "蓝": [
+          8,
+          11
+        ],
+        "紫": [
+          8,
+          11
+        ],
+        "橙": [
+          9,
+          12
+        ],
+        "红": [
+          9,
+          13
+        ],
+        "暗金": [
+          10,
+          13
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 7,
+      "slot5_only": false
+    },
+    {
+      "id": "tulu",
+      "name": "屠戮",
+      "tier": "稀有",
+      "family": "fixed_skill_tulu",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "对精英增伤 +X%。X 按品质随机。与对精英伤害词条加算为同一项。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          8,
+          8
+        ],
+        "蓝": [
+          8,
+          11
+        ],
+        "紫": [
+          8,
+          11
+        ],
+        "橙": [
+          9,
+          12
+        ],
+        "红": [
+          9,
+          13
+        ],
+        "暗金": [
+          10,
+          13
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "fire_mastery",
+      "name": "炎心",
+      "tier": "稀有",
+      "family": "fixed_skill_fire_mastery",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "火属性增伤 +X%，火属性穿透 +⌊X/2⌋%。X 按品质随机。与对应属性伤害、属性穿透词条加算。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "ice_mastery",
+      "name": "寒魄",
+      "tier": "稀有",
+      "family": "fixed_skill_ice_mastery",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "冰属性增伤 +X%，冰属性穿透 +⌊X/2⌋%。X 按品质随机。与对应属性伤害、属性穿透词条加算。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "thunder_mastery",
+      "name": "雷霆",
+      "tier": "稀有",
+      "family": "fixed_skill_thunder_mastery",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "雷属性增伤 +X%，雷属性穿透 +⌊X/2⌋%。X 按品质随机。与对应属性伤害、属性穿透词条加算。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "poison_mastery",
+      "name": "蚀骨",
+      "tier": "稀有",
+      "family": "fixed_skill_poison_mastery",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "毒属性增伤 +X%，毒属性穿透 +⌊X/2⌋%。X 按品质随机。与对应属性伤害、属性穿透词条加算。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    },
+    {
+      "id": "dark_mastery",
+      "name": "幽冥",
+      "tier": "稀有",
+      "family": "fixed_skill_dark_mastery",
+      "kind": "skill_fixed",
+      "category": "固定增益技能",
+      "unit": "%",
+      "desc": "暗属性增伤 +X%，暗属性穿透 +⌊X/2⌋%。X 按品质随机。与对应属性伤害、属性穿透词条加算。常驻生效，无需点击，无叠层、无概率、无持续时间。",
+      "scale": "quality_percent",
+      "by_quality": {
+        "绿": [
+          6,
+          6
+        ],
+        "蓝": [
+          6,
+          8
+        ],
+        "紫": [
+          6,
+          8
+        ],
+        "橙": [
+          7,
+          9
+        ],
+        "红": [
+          7,
+          10
+        ],
+        "暗金": [
+          8,
+          10
+        ]
+      },
+      "slots": [
+        "weapon",
+        "chest",
+        "legs"
+      ],
+      "can_repeat": false,
+      "timed_trigger": false,
+      "weight": 6,
+      "slot5_only": false
+    }
+  ],
+  "changes_from_v1_1": [
+    "【历史说明，已被 v1.3 取代】以下为 v1.1 到 v1.2 的改动摘要。其中「按命中目标结算」和套装 2 件 0.35%、4 件 0.70% 已由 v1.3 改为「每次攻击结算一次」和 2 件 4%、4 件 10%。",
+    "取消生命汲取全身每击 5% 上限和每秒 10% 上限，取消对汲取频率的限制。攻速本来就不设上限，本版再次确认。",
+    "汲取按自身最大生命百分比回复；每次攻击每命中一个目标结算一次（范围攻击打 20 只就回 20 次）。多条来源（词条、技能、套装）百分比加算。",
+    "装备词条汲取仍只在暗金第 5 栏出现（武器、衣服、戒指、项链）。橙、红没有第 5 栏，过图续航主要靠套装汲取，技能池汲取和法修治疗是增强。",
+    "给出套装汲取建议值：2 件 0.35%、4 件 0.70%（按最大生命、每命中一个目标）。锚点是 50 级橙装+4 件套在「20 只小怪+首领」且打满 21 个目标时勉强站住。",
+    "分层：橙装+套装能过图但容错低（失误、漏打、吃控制或大招会致死）；红装+套装更稳但仍不如暗金；暗金靠第 5 栏词条汲取明显轻松。装备提升要有明确意义。",
+    "平衡放在怪物侧：读条大招、短时降低治疗或禁疗、控制打断攻击（汲取暂停）、必须躲开的范围等，防止暗金无限站撸。不砍装备数值。"
+  ],
+  "life_drain": {
+    "based_on": "max_hp",
+    "independent_of_target_count": true,
+    "independent_of_damage": true,
+    "body_cap_pct": null,
+    "per_second_cap_pct": null,
+    "aspd_cap": null,
+    "settle_rule": "action_tick_with_coefficient",
+    "heal_formula": "单次回复 = 总汲取% × 该出招汲取系数 × 最大生命；每秒回复 ≈ 有效出招次数 E × 总汲取% × 最大生命。E = Σ(出招次数/秒 × 系数)，自动源受节流。",
+    "sources_add_linearly": true,
+    "affix": {
+      "primary": {
+        "slot": "weapon",
+        "column": "第5词条栏",
+        "rarity": "暗金",
+        "range_pct": [
+          1.0,
+          5.0
+        ]
+      },
+      "secondary_optional": {
+        "slots": [
+          "chest",
+          "ring",
+          "necklace"
+        ],
+        "column": "第5词条栏",
+        "rarity": "暗金",
+        "range_pct": [
+          1.0,
+          2.5
+        ],
+        "recommend": "建议不再出汲取，或仅用此较低区间。主推荐只保留武器一条，以免 4 条满 MAX 再加套装过高。"
+      }
+    },
+    "set_suggested_pct": {
+      "2_piece": 1.0,
+      "3_piece": 3.0,
+      "5_piece_total": 5.0,
+      "unlock": "橙色及以上"
+    },
+    "skill_pool_suggested_pct": {
+      "note": "增强，非过图门槛。",
+      "橙": 2.0,
+      "红": 3.0,
+      "暗金": 4.0
+    },
+    "heal_bonus_does_not_apply": true
+  },
+  "life_drain_settlement": {
+    "rules": [
+      "汲取始终按自身当前最大生命的百分比回复，不按造成的伤害计算，也不按命中目标数计算。",
+      "每次完成一次攻击动作，按当前汲取合计百分比回复一次。范围攻击打 20 只也只结算 1 次。",
+      "每秒回复 ≈ 每秒攻击次数 × 总汲取%。例如总汲取 10%、每秒攻击 3 次，约回 30% 最大生命。",
+      "打空或目标全部闪避，只要这次攻击动作完成，仍然结算一次。",
+      "攻击未完成（被眩晕、击飞、冰冻打断）不结算。被控期间攻击类汲取暂停。",
+      "灼烧、毒等持续伤害默认不结算汲取，除非该效果写明「可汲取」。",
+      "词条、技能池、套装的汲取百分比线性加算。不设全身上限，不设每秒频率上限，攻速不设上限。",
+      "生命回满后溢出的回复无效。",
+      "周期性治疗（如法修澄源术）在被控期间仍可生效。",
+      "「治疗效果」加成法修、药水和套装治疗，不加成生命汲取。"
+    ]
+  },
+  "group_combat_validation": {
+    "scenario": "50级战士嘲讽 20 只同级小怪 + 1 只同级首领",
+    "incoming_same_as_v1_2": true,
+    "incoming_adjustment": "受伤口径不调整。20 只小怪加首领的绝对伤害仍然成立；v1.2 每秒回 107% 是按目标倍增造成的，本版改为每次攻击一次后，用套装和词条百分比重新对齐分层，不必再砍受伤。",
+    "assumptions": {
+      "player_hp_no_affix_pct": {
+        "橙": 97382,
+        "红": 101280,
+        "暗金": 106468
+      },
+      "incoming_tuned_to": "暗金受伤目标中位（小怪每击 1.5%/会心 2.5%，首领每击 8%/会心 13.5%），橙红承受同样的绝对伤害。",
+      "mob_expected_hit": 1703,
+      "mob_attack_interval_s": 2.0,
+      "mob_count_all_hitting": 20,
+      "boss_expected_hit": 9981,
+      "boss_attack_interval_s": 2.5,
+      "boss_ultimate": {
+        "pct_of_darkgold_hp": 30,
+        "absolute": 31940,
+        "has_cast_bar": true
+      },
+      "incoming_per_second_before_dr": 21027,
+      "incoming_solo_boss_before_dr": 3993,
+      "base_aps": 1.0,
+      "aps_used": {
+        "橙": 2.1,
+        "红": 2.5,
+        "暗金": 3.0
+      },
+      "drain_settle": "每次攻击结算一次，与命中目标数无关",
+      "note": "攻速、减伤、怪物攻击间隔均为建议口径，待怪物表确定后重算。数字仅供参考。"
+    },
+    "set_values_used": {
+      "2_piece_pct": 4.0,
+      "4_piece_pct": 10.0
+    },
+    "tier_intent": {
+      "橙装+套装": "能过图，但容错低。回复/受伤约 1.0–1.2 倍。被控或没躲大招会掉大量生命。",
+      "红装+套装": "同样不靠第 5 栏词条，因攻速、减伤、生命更好而约 1.3–1.6 倍，比橙装稳，仍不如暗金。",
+      "暗金": "第 5 栏可出词条汲取。套装+2 条均值 1.0% 时约 2.1 倍、每秒回 36%；满配 4 条 MAX 约 2.9 倍、每秒回 48%。明显轻松，但不是每秒回满一管血的无敌。"
+    },
+    "results_group": [
+      {
+        "name": "橙装+4件套（10%），2.1 次/秒，减伤 8%",
+        "incoming_per_s": 19345,
+        "incoming_hp_pct_per_s": 19.9,
+        "heal_per_s": 20450,
+        "heal_hp_pct_per_s": 21.0,
+        "net_hp_pct_per_s": 1.1,
+        "ratio": 1.06,
+        "verdict": "勉强站住。被晕 3 秒约掉 60% 生命，没躲开大招约掉 30%。2 件套（4%）每秒只回 8.4%，站不住。",
+        "stand": "贴线站住"
+      },
+      {
+        "name": "红装+4件套（10%），2.5 次/秒，减伤 12%",
+        "incoming_per_s": 18504,
+        "incoming_hp_pct_per_s": 18.3,
+        "heal_per_s": 25320,
+        "heal_hp_pct_per_s": 25.0,
+        "net_hp_pct_per_s": 6.7,
+        "ratio": 1.37,
+        "verdict": "能站住，余量大于橙装。被晕 3 秒约掉 55%，大招约 28%。",
+        "stand": "站住，比橙装稳"
+      },
+      {
+        "name": "暗金+4件套（10%）+ 2 条词条汲取（各 1.0%），3.0 次/秒，减伤 15%",
+        "incoming_per_s": 17873,
+        "incoming_hp_pct_per_s": 16.8,
+        "heal_per_s": 38328,
+        "heal_hp_pct_per_s": 36.0,
+        "net_hp_pct_per_s": 19.2,
+        "ratio": 2.14,
+        "verdict": "明显轻松，每秒回 36%，约 2.14 倍，不是无敌。被晕 3 秒仍约掉 50%，大招约 25%，仍要看机制。",
+        "stand": "明显轻松，非无敌"
+      },
+      {
+        "name": "暗金+4件套 + 4 条 MAX（1.5%），3.0 次/秒，减伤 15%",
+        "incoming_per_s": 17873,
+        "incoming_hp_pct_per_s": 16.8,
+        "heal_per_s": 51105,
+        "heal_hp_pct_per_s": 48.0,
+        "net_hp_pct_per_s": 31.2,
+        "ratio": 2.86,
+        "verdict": "满配约每秒回 48%、2.86 倍，落在 30–50% / 2–3 倍目标上沿。常规围殴很稳，仍靠大招、禁疗、控制给压力。",
+        "stand": "轻松上沿，需怪物反制"
+      }
+    ],
+    "results_solo_boss": [
+      {
+        "name": "橙装+4件套（10%），2.1 次/秒，减伤 8%",
+        "incoming_per_s": 3673,
+        "incoming_hp_pct_per_s": 3.8,
+        "heal_per_s": 20450,
+        "heal_hp_pct_per_s": 21.0,
+        "ratio": 5.57,
+        "verdict": "单挑平砍很宽裕。压力在读条大招（约 30% 生命，回满约 1.4 秒）和控制窗口。"
+      },
+      {
+        "name": "红装+4件套（10%），2.5 次/秒，减伤 12%",
+        "incoming_per_s": 3513,
+        "incoming_hp_pct_per_s": 3.5,
+        "heal_per_s": 25320,
+        "heal_hp_pct_per_s": 25.0,
+        "ratio": 7.21,
+        "verdict": "单挑更稳。大招约 28%，回满约 1.1 秒。"
+      },
+      {
+        "name": "暗金+4件套+2条各1.0%，3.0 次/秒，减伤 15%",
+        "incoming_per_s": 3394,
+        "incoming_hp_pct_per_s": 3.2,
+        "heal_per_s": 38328,
+        "heal_hp_pct_per_s": 36.0,
+        "ratio": 11.29,
+        "verdict": "单挑平砍几乎无压。真正的威胁是大招（约 25%，回满约 0.7 秒）、禁疗和控制，必须靠机制而不是再砍汲取。"
+      }
+    ]
+  },
+  "monster_countermeasures": {
+    "principle": "不砍汲取，不设攻速上限，不设全局回血上限。常见续航下暗金大约每秒回 34%，极限堆攻速会更高。压力继续由大招、禁疗、控制、必须躲开的范围提供。",
+    "tools": [
+      {
+        "name": "读条大招",
+        "suggest": "单次 25–35% 最大生命（按暗金生命换算成绝对伤害），带明确读条。没躲开会掉一大截，汲取回不满这一下，必须看读条走位。"
+      },
+      {
+        "name": "短时降低治疗或禁疗",
+        "suggest": "例如 5–8 秒内汲取和治疗效果降低 60–80%，或短时间完全禁疗。窗口内必须靠减伤、走位或控制抗性硬抗，不能站着回。"
+      },
+      {
+        "name": "控制打断攻击",
+        "suggest": "眩晕、击飞、冰冻会让攻击类汲取暂停，20 只小怪仍在打。所以攻速续航流必须堆眩晕抗性和韧性。给首领控制技能，但配读条或可解，避免毫无反制地被控死。"
+      },
+      {
+        "name": "必须躲开的范围",
+        "suggest": "地面警告圈、全场爆炸、点名分散。嘲讽把怪堆在一起后，首领可以用范围压堆怪，逼玩家短暂拉开。火属性爆炸也可做成双刃：玩家用它清群，首领用它惩罚过密站桩。"
+      },
+      {
+        "name": "不可被汲取的伤害（可选）",
+        "suggest": "少量阶段伤害或处决线不吃汲取，用来做机制惩罚，不要变成常规自动攻击，否则橙装更难过图。"
+      },
+      {
+        "name": "精英/小怪配合",
+        "suggest": "部分精英带禁疗或强控；密集小怪伤害高，但可被冰缓、冰冻、火爆炸处理。让攻速+汲取+控制抗性都有用。"
+      }
+    ],
+    "what_not_to_do": "不要重新给汲取加上每秒上限或全身上限，也不要改回按怪物数量结算。按攻击次数结算后，30–50% 的量级已经可调，橙装也能在套装百分比上站住。"
+  },
+  "orange_red_sustain_sources": {
+    "why": "橙、红没有暗金武器第 5 栏，出不了主通道词条汲取。过图续航以橙色以上的 5 件套 5% 为稳定门槛。",
+    "sources": [
+      {
+        "source": "套装汲取",
+        "role": "过图的稳定门槛",
+        "suggest": "2 件 1%、3 件 3%、5 件合计 5%，仅橙/红/暗金计入件数。橙装+5 件套在 E≈4.2 时群战约 1.06 倍，容错低。"
+      },
+      {
+        "source": "技能池汲取技能",
+        "role": "增强，不是门槛",
+        "suggest": "建议橙 2%、红 3%、暗金 4%。抽到会更稳（橙装大约升到 1.27 倍）；过图不绑在这颗技能上。"
+      },
+      {
+        "source": "攻速词条",
+        "role": "提高每秒结算次数",
+        "suggest": "不设上限。有效出招次数越高，每秒回复越高。等级和品阶只是一部分，词条和 buff 都能加。"
+      },
+      {
+        "source": "眩晕抗性、韧性",
+        "role": "减少汲取被打断的时间",
+        "suggest": "被控时 20 只怪仍在打，这是橙装容错低的主要原因之一。"
+      },
+      {
+        "source": "法修澄源术、治疗套装",
+        "role": "组队补充，尤其是被控期间",
+        "suggest": "澄源术量级约 0.8–1.5% 生命/秒，帮不了围殴主回血，但能在控制窗口补一口。"
+      },
+      {
+        "source": "范围攻击（横扫、火爆炸等）",
+        "role": "让每目标结算真正打满 20 只",
+        "suggest": "范围攻击不再增加汲取次数，但仍能缩短清怪时间、减少受击。冰冻冰缓减少来伤。"
+      }
+    ]
+  },
+  "changes_from_v1_2": [
+    "汲取结算改为：每次完成一次攻击动作回复一次自身最大生命百分比，与命中怪物数量、伤害无关。范围攻击打 20 只也只回 1 次。每秒回复 ≈ 每秒攻击次数 × 总汲取%。",
+    "v1.2 按目标结算使暗金群战出现每秒回复 107% 的失真（21 个目标倍增）。本版取消该倍率。",
+    "围殴受伤口径保持 v1.2（未算减伤前每秒 21027）。套装百分比相应上调：2 件 4%、4 件 10%，否则橙装在每秒约 2.1 次攻击时回不过围殴。",
+    "词条单条仍为 0.5–1.5%（1.5% 显示 MAX）。暗金第 5 栏仍只出在武器、衣服、戒指、项链。",
+    "技能池汲取建议改为橙 2%、红 3%、暗金 4%，作为增强而非过图门槛。",
+    "写明 50 级攻速续航基准：橙约 2.1 次/秒，红约 2.5 次/秒，暗金约 3.0 次/秒（对应老板「每秒 3 次」）。",
+    "重算群战与单挑：橙装+4 件套约 1.06 倍勉强站住；红装+4 件套约 1.37 倍更稳；暗金套装+2 条词条约 2.14 倍、每秒回 36%，明显轻松但不是无敌（满配 4 条 MAX 约 2.86 倍、每秒回 48%）。"
+  ],
+  "attack_speed_baselines_level_50": {
+    "deprecated_in": "1.4",
+    "note": "v1.3 的橙 2.1 / 红 2.5 / 暗金 3.0 次/秒不再作为品质门槛或上限。见 attack_speed_sources。验算改用有效出招次数 E 的示例值。"
+  },
+  "changes_from_v1_3": [
+    "套装汲取改为参考值：2 件 1%、3 件 3%、5 件合计 5%（取当前最高档，不把 1+3+5 相加）。建议仅橙色及以上品质的装备计入件数。",
+    "装备词条汲取建议以暗金武器第 5 栏 1.0–5.0% 为主通道，与 5 件套 5% 同一量级。衣服、戒指、项链第 5 栏建议不再出汲取，或仅出 1.0–2.5%，避免多条满 MAX 叠太高。",
+    "删除按品质卡死的攻速基准（不再把橙 2.1、红 2.5、暗金 3.0 次/秒写成上限或档位门槛）。改成来源构成+示例。堆到每秒 7 次也可以，平衡交给怪物侧。",
+    "汲取结算升级为跨职业统一规则：每次伤害出招判定回复一次（与命中数、伤害高低无关），按来源给汲取系数；放置型阵法/领域/召唤等自动源的系数每秒合计最多按 1.0 计。不设全局汲取上限。",
+    "用战士、剑修、弓箭手、法师、阵法师、体修六套 50 级示例验算，使各职业有效出招次数接近，橙装+5 件套勉强站住，暗金（套装+武器词条）明显轻松。"
+  ],
+  "set_drain_recommendation": {
+    "thresholds": {
+      "2": 1.0,
+      "3": 3.0,
+      "5": 5.0
+    },
+    "stacking": "取当前达到的最高档，不是 1%+3%+5% 相加。5 件时总计 5%。",
+    "unlock_from": "橙色",
+    "count_rule": "只有橙、红、暗金品质的装备计入汲取套装件数。白、绿、蓝、紫不计入。混穿时按够格的件数取档。",
+    "recommend_orange_plus": true,
+    "reasons": [
+      "橙装+5 件套 5% 是「能过图、容错低」的门槛，和橙以上才有技能槽同一档开放，系统更整齐。",
+      "若白绿蓝紫也能凑汲取套装，中期就可能提前获得接近橙装的续航，品质提升会变糊。",
+      "暗金在 5% 套装之外还有武器第 5 栏 1–5%，这才是和套装同一量级的跃升，装备提升仍然明确。",
+      "紫装及以下仍可靠走位、攻速、法修治疗和减伤，只是没有套装汲取这根续航柱。"
+    ],
+    "alternative_rejected": "若全品质都开放汲取套装，则需把 5 件套数值压得更低，橙装过图会更吃力，或前期套装过强。不建议。"
+  },
+  "drain_action_system": {
+    "name": "出招判定汲取",
+    "one_sentence": "每次伤害出招判定回复一次自身最大生命百分比，与命中目标数和伤害高低无关；不同来源乘各自汲取系数，放置型自动源的系数每秒合计最多按 1.0 计。",
+    "compared_schemes": [
+      {
+        "id": "A",
+        "name": "造成伤害时恢复 x% 最大生命",
+        "verdict": "不推荐。多段、群伤、DoT、多阵法会按命中或跳字放大，容易回到 v1.2 那种按目标倍增的失真。伤害越高回得越多，也和「不按伤害计算」的既定原则冲突。"
+      },
+      {
+        "id": "B",
+        "name": "每次攻击或出招都按系数 1.0 回复，无节流",
+        "verdict": "不推荐。普攻职业和多阵法+普攻的阵法师每秒判定次数差太大，后者会明显更厚。"
+      },
+      {
+        "id": "C",
+        "name": "出招判定 + 来源系数 + 自动源节流（推荐）",
+        "verdict": "推荐。与命中数、伤害无关；低频技能用较高系数补偿，高频 tick 用较低系数并给自动源合计封顶；角色自己的普攻不受这条封顶，堆到每秒 7 次仍然按 7 次计。新职业只要归类就能接入。"
+      },
+      {
+        "id": "D",
+        "name": "全部出招按每秒次数归一化、超过基准后递减",
+        "verdict": "不推荐作为全局规则。容易被理解成攻速或回血上限，和「能堆到每秒 7 次就按 7 次算」不一致。只在自动源上做合计封顶即可。"
+      }
+    ],
+    "recommended": "C",
+    "coefficients": [
+      {
+        "source": "普攻",
+        "coeff": 1.0,
+        "throttle": "无额外节流，频率等于攻速，可到每秒 7 次或更高",
+        "note": "战士、剑修、弓箭手的主要来源"
+      },
+      {
+        "source": "瞬发攻击技能",
+        "coeff": "常见 1.2–1.8，上限建议 2.0；可按冷却约等于冷却秒数/1.0 来估，但不超过 2.0",
+        "throttle": "每次释放只结算 1 次，跟随技能冷却",
+        "note": "法师火球、战士战技、剑修剑气"
+      },
+      {
+        "source": "引导技能（引导期间不能普攻）",
+        "coeff": 1.0,
+        "throttle": "每秒最多结算 1 次 tick，即使特效跳得更碎",
+        "note": "若阵法师冰霜领域做成全身引导，每秒按 1.0 计，避免 5 秒只在释放时回 1 次；但引导期没有普攻，续航会低于「放置+普攻」。更建议做成放置型。"
+      },
+      {
+        "source": "放置型阵法/领域（放下后仍可普攻）",
+        "coeff": 0.35,
+        "throttle": "单个阵法每秒最多 1 次；全部自动源（阵法、领域、召唤物攻击）系数每秒合计最多 1.0。三个阵法同时 tick 时按 1.0 计，而不是 1.05。",
+        "note": "阵法师推荐默认做成这一类。火焰灼烧若只是放下后的 DoT，释放瞬间算一次瞬发技能，之后的灼烧跳字不再回血。"
+      },
+      {
+        "source": "灼烧、毒、流血等 DoT",
+        "coeff": 0.0,
+        "throttle": "—",
+        "note": "持续伤害默认不触发汲取"
+      },
+      {
+        "source": "反击、反伤",
+        "coeff": 0.0,
+        "throttle": "若以后要给反击汲取，每秒最多 0.3，避免被 20 只怪围殴时靠挨打回血",
+        "note": "体修的反击伤害可以存在，但不作为回血来源"
+      }
+    ],
+    "auto_source_cap_per_second": 1.0,
+    "basic_attack_not_capped": true,
+    "dot_default_zero": true,
+    "whiff_still_heals": true,
+    "interrupted_no_heal": true,
+    "examples": {
+      "ice_domain_channel": "若冰霜领域是 5 秒引导、每秒 1 次攻击且期间不能普攻：5 次 tick，每次系数 1.0，5 秒内 E=5，平均每秒 1.0，明显低于普攻流。故不建议作为阵法师的默认形态。",
+      "ice_domain_placed": "若放下后每秒 1 次 tick、仍可普攻：tick 系数 0.35，与其他自动源合计封顶 1.0；普攻另计。这是推荐形态。",
+      "multi_formation": "同时放火焰、冰霜、雷霆三个阵法，每个每秒 1 tick、系数 0.35，合计 1.05，按 1.0 封顶。再加普攻 3.2 次/秒，E≈4.2。不会因多阵法把回血翻倍。",
+      "fire_burn": "释放火焰阵法算 1 次瞬发（系数约 1.5），随后的灼烧跳字系数为 0，阵法师还可以继续普攻。"
+    }
+  },
+  "attack_speed_sources": {
+    "cap": null,
+    "principle": "不从装备、等级或品阶卡死攻速上限。能堆到每秒 7 次就按 7 次计。平衡放在怪物侧（大招、禁疗、控制）。",
+    "sources": [
+      "人物成长和职业基础攻击间隔（职业之间可以不同）",
+      "装备基础攻速（武器等，随品质提高，但不设顶）",
+      "可洗词条：攻速、攻速·强，以及固定增益技能「灵动」",
+      "技能池、套装、增益状态、药水等 buff"
+    ],
+    "examples_not_caps": {
+      "note": "以下只是 50 级示例，用来验算，不是门槛，更不是上限。",
+      "light_stack": {
+        "aps": 2.0,
+        "desc": "只堆了少量攻速词条和武器基础，大约每秒 2 次。"
+      },
+      "typical_sustain": {
+        "effective_E": 4.2,
+        "desc": "50 级专注续航的常见示例：近战把普攻堆到约每秒 3.5–4.2 次，或法师、阵法师用技能和自动源把有效出招次数 E 凑到约 4.2。橙装+5 件套在此示例下群战约 1.06 倍，刚好贴线。"
+      },
+      "high_stack": {
+        "aps": 7.0,
+        "desc": "词条、buff 堆满时可以到每秒 7 次普攻。橙装 5%×7=每秒回 35%，群战约 1.76 倍，会比贴线更稳；暗金再加武器词条会到 3 倍以上。不禁止这种堆法，由首领禁疗、控制、大招给压力。"
+      }
+    }
+  },
+  "class_validation": {
+    "scenario": "50 级嘲讽或同等拉怪：20 只小怪 + 首领。受伤口径与 v1.2/v1.3 相同（未算减伤前每秒 21027）。",
+    "drain_used": {
+      "orange": "仅 5 件套 5%，不计技能槽汲取",
+      "darkgold": "5 件套 5% + 武器第 5 栏中位 3%，合计 8%"
+    },
+    "E_note": "各职业用 50 级常见续航示例把有效出招次数 E 接到约 4.0–4.3，不是攻速上限。",
+    "incoming": {
+      "橙_减伤8%": 19345,
+      "红_减伤12%": 18504,
+      "暗金_减伤15%": 17873
+    },
+    "classes": [
+      {
+        "id": "warrior",
+        "name": "战士",
+        "kit": "普攻约 4.0 次/秒×1.0，战技每 5 秒一次×1.5",
+        "E": 4.3
+      },
+      {
+        "id": "sword",
+        "name": "剑修",
+        "kit": "普攻约 3.5 次/秒×1.0，剑气每 2 秒一次×1.4",
+        "E": 4.2
+      },
+      {
+        "id": "archer",
+        "name": "弓箭手",
+        "kit": "普攻约 3.4 次/秒×1.0，射击技能每 1.5 秒一次×1.2",
+        "E": 4.2
+      },
+      {
+        "id": "mage",
+        "name": "法师",
+        "kit": "普攻约 1.5 次/秒×1.0，主法每 0.8 秒一次×1.5，大技能每 5 秒×2.0，次级每 3 秒×1.2",
+        "E": 4.18
+      },
+      {
+        "id": "array",
+        "name": "阵法师",
+        "kit": "普攻约 3.2 次/秒×1.0，火焰/冰霜/雷霆三个放置阵法每秒 tick，自动源系数合计封顶 1.0",
+        "E": 4.2
+      },
+      {
+        "id": "body",
+        "name": "体修",
+        "kit": "普攻约 3.7 次/秒×1.0，崩拳每 3 秒×1.5；反击伤害不回血",
+        "E": 4.2
+      }
+    ],
+    "results": [
+      {
+        "class": "战士",
+        "E": 4.3,
+        "orange_heal_pct": 21.5,
+        "orange_ratio": 1.08,
+        "darkgold_heal_pct": 34.4,
+        "darkgold_ratio": 2.05
+      },
+      {
+        "class": "剑修",
+        "E": 4.2,
+        "orange_heal_pct": 21.0,
+        "orange_ratio": 1.06,
+        "darkgold_heal_pct": 33.6,
+        "darkgold_ratio": 2.0
+      },
+      {
+        "class": "弓箭手",
+        "E": 4.2,
+        "orange_heal_pct": 21.0,
+        "orange_ratio": 1.06,
+        "darkgold_heal_pct": 33.6,
+        "darkgold_ratio": 2.0
+      },
+      {
+        "class": "法师",
+        "E": 4.18,
+        "orange_heal_pct": 20.9,
+        "orange_ratio": 1.05,
+        "darkgold_heal_pct": 33.4,
+        "darkgold_ratio": 1.99
+      },
+      {
+        "class": "阵法师",
+        "E": 4.2,
+        "orange_heal_pct": 21.0,
+        "orange_ratio": 1.06,
+        "darkgold_heal_pct": 33.6,
+        "darkgold_ratio": 2.0
+      },
+      {
+        "class": "体修",
+        "E": 4.2,
+        "orange_heal_pct": 21.0,
+        "orange_ratio": 1.06,
+        "darkgold_heal_pct": 33.6,
+        "darkgold_ratio": 2.0,
+        "note": "反击不回血，续航靠普攻和主动技能把 E 补到约 4.2。"
+      }
+    ],
+    "verdict": "六职业在常见续航示例下，橙装+5 件套都大约 1.05–1.08 倍，勉强站住、容错低；暗金套装+武器中位 3% 都大约 2.00–2.05 倍，明显轻松。职业之间接近。堆到每秒 7 次时倍率会升高，由怪物侧接住。",
+    "high_aps_note": "若有人把普攻堆到每秒 7 次（E=7），橙装约 1.76 倍，暗金中位约 3.34 倍。允许，不从装备卡死，由首领机制对冲。"
+  }
+}

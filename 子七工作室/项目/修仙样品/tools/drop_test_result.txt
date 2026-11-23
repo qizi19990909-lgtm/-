@@ -1,0 +1,48 @@
+掉落测试  表版本 v0.4  区域 青石村  每种怪 1000 次
+
+[普通怪] 掉率 期望 8.0% 实测 8.1%（81 件）OK
+  稀有度  期望% / 实测%： 白 60.6/61.9 绿 25.3/25.6 蓝 10.1/9.1 紫 4.0/3.4 橙 0.0/0.0 红 0.0/0.0 暗金 0.0/0.0
+  最大偏差 1.05σ（<4σ 视为符合）  高于紫的件数 0  OK
+
+[精英怪] 掉率 期望 35.0% 实测 36.0%（360 件）OK
+  稀有度  期望% / 实测%： 白 26.0/27.0 绿 36.5/36.2 蓝 26.0/25.3 紫 11.5/11.5 橙 0.0/0.0 红 0.0/0.0 暗金 0.0/0.0
+  最大偏差 0.72σ（<4σ 视为符合）  高于紫的件数 0  OK
+
+[Boss] 掉率 期望 100.0% 实测 100.0%（2000 件）OK
+  稀有度  期望% / 实测%： 白 0.0/0.0 绿 27.8/29.4 蓝 50.0/47.4 紫 22.2/23.2 橙 0.0/0.0 红 0.0/0.0 暗金 0.0/0.0
+  最大偏差 2.33σ（<4σ 视为符合）  高于紫的件数 0  OK
+
+[Boss 保底] 连续未出紫最多 5 次（规则 ≤ 5）OK
+
+[强化] 方案 slice  单件上限 +10  全身上限 100  特效门槛 [21, 61, 75, 91]（来源 enhance.slice_fx_thresholds）
+  曲线累计%： +1=5.0 +2=10.0 +3=15.0 +4=20.0 +5=25.0 +6=30.0 +7=35.0 +8=40.0 +9=45.0 +10=50.0
+  切换 enhance_profile=formal → 单件 +30  全身 300  门槛 [61, 181, 223, 271]（来源 enhance.fx_thresholds）
+  兜底（无 profiles / 门槛字段）→ 单件 +10  全身 100  门槛 [21, 61, 75, 91]（来源 floor(thresholds_ratio × 100) + 1）
+  成功率（slice）： +0→100% +1→100% +2→100% +3→100% +4→100% +5→95% +6→90% +7→85% +8→80% +9→75%
+  试玩版 +0~+9 失败不掉级：OK；正式版 +16 失败 → +15、+20 失败 → +20（fail_drop/safe_floor）
+  祝福：每次失败 +5%，+9 基础 75% → 失败 2 次后 85%；+9 白 10 级消耗 { "silver": 240, "stones": 1 }
+[宝石 normal] 期望每只 0.03 颗 实测 0.028 颗 OK  种类分布 { "crystal_shadow": 5, "crystal_lightning": 3, "star_crit": 5, "ruby_atk": 3, "jade_hp": 4, "crystal_fire": 3, "onyx_def": 2, "crystal_frost": 1, "dawn_acc": 2 }
+[宝石 elite] 期望每只 0.15 颗 实测 0.156 颗 OK  种类分布 { "dawn_acc": 18, "jade_hp": 25, "star_crit": 19, "crystal_frost": 19, "crystal_lightning": 11, "crystal_fire": 14, "ruby_atk": 19, "onyx_def": 10, "crystal_shadow": 21 }
+[宝石 boss] 期望每只 1.30 颗 实测 1.313 颗 OK  种类分布 { "onyx_def": 171, "crystal_frost": 132, "crystal_shadow": 164, "ruby_atk": 152, "dawn_acc": 162, "jade_hp": 142, "star_crit": 147, "crystal_fire": 120, "crystal_lightning": 123 }
+
+[参数来源]
+  g_curve ← equipment.json:formula.g_curve
+  hero_base ← equipment.json:formula.hero_base
+  def_k ← equipment.json:formula.def_k
+  hit ← equipment.json:formula.hit
+  crit ← equipment.json:formula.crit
+  level_mod ← equipment.json:formula.level_mod
+  variance ← equipment.json:formula.variance
+  quality_range ← equipment.json:formula.roll.quality_range
+  budget_roll ← equipment.json:formula.roll.budget_roll
+  affix_weight_range ← equipment.json:formula.roll.affix_weight_range
+  elements ← equipment.json:formula.element_stack + formula.elements
+  pity ← equipment.json:drop_tables.pity
+  gem_merge_count ← equipment.json:gem_merge_count
+  gem_drop ← equipment.json:gem_drop
+  starter_gems ← equipment.json:starter_gems
+  starter_gear ← equipment.json:starter_gear
+  hero_level ← equipment.json:qingshi.sample.hero_level
+  farm_item_levels ← equipment.json:qingshi.sample.farm_item_levels
+
+结论：全部通过（失败项 0）

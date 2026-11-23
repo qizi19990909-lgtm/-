@@ -1,0 +1,1775 @@
+{
+  "version": "1.5-playtest",
+  "title": "修仙小队试玩技能池",
+  "status": "playtest",
+  "date": "2026-11-22",
+  "timezone": "Asia/Shanghai",
+  "note": "橙以上不可洗专属技能槽。技能分三段，橙解锁第 1 段，红累加第 2 段，暗金累加第 3 段。全部自动生效。凝神用老板原案 9 层、期间会心 +30%，不用 v2.2 弱化建议。触发类技能不连锁。",
+  "unlock_by_rarity": {
+    "橙": 1,
+    "红": 2,
+    "暗金": 3
+  },
+  "trigger_no_chain": true,
+  "count": 33,
+  "skills": [
+    {
+      "id": "ningshen",
+      "name": "凝神",
+      "slots": [
+        "chest",
+        "head",
+        "title",
+        "ring"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "chest": 25,
+        "head": 40,
+        "title": 40,
+        "ring": 50
+      },
+      "trigger": "on_crit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "会心后进入凝神，5 秒内攻击 +5%。",
+          "runtime": {
+            "type": "ningshen",
+            "atk_pct": 5,
+            "dur": 5,
+            "stacks": 1,
+            "crit_bonus": 0
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "凝神可叠加，最多 9 层（满层 +45% 攻击）。每层刷新 5 秒，超时一层一层掉。",
+          "runtime": {
+            "type": "ningshen",
+            "atk_pct": 5,
+            "dur": 5,
+            "stacks": 9,
+            "crit_bonus": 0
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "凝神期间会心率 +30%。",
+          "runtime": {
+            "type": "ningshen",
+            "atk_pct": 5,
+            "dur": 5,
+            "stacks": 9,
+            "crit_bonus": 30
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 完整技能，数值用老板原案 9 层/+30% 会心"
+    },
+    {
+      "id": "chengyuan_shu",
+      "name": "澄源术",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "staff"
+      ],
+      "weight_by_slot": {
+        "staff": 40
+      },
+      "trigger": "auto",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "每 10 秒为生命比例最低的队友回复生命上限的 8%。",
+          "runtime": {
+            "type": "heal_lowest_pct",
+            "value": 8,
+            "cd": 10
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "回复 10%，冷却 8 秒。",
+          "runtime": {
+            "type": "heal_lowest_pct",
+            "value": 10,
+            "cd": 8
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "回复 12%，冷却 8 秒，并为该队友附加相当于回复量 30% 的护盾，持续 3 秒。",
+          "runtime": {
+            "type": "heal_lowest_pct",
+            "value": 12,
+            "cd": 8,
+            "shield_of_heal": 30,
+            "shield_dur": 3
+          }
+        }
+      ],
+      "shared_cd": true,
+      "source": "v2.2 完整技能"
+    },
+    {
+      "id": "liepo_ji",
+      "name": "裂魄击",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "sword",
+        "blade",
+        "spear",
+        "hammer"
+      ],
+      "weight_by_slot": {
+        "sword": 30,
+        "blade": 25,
+        "spear": 35,
+        "hammer": 25
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "普通攻击有 20% 概率追加一次 40% 攻击的伤害。",
+          "runtime": {
+            "type": "extra_hit",
+            "chance": 20,
+            "pct": 40
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "概率 30%，额外伤害 50%。",
+          "runtime": {
+            "type": "extra_hit",
+            "chance": 30,
+            "pct": 50
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "额外伤害 60%，并让该目标的有效防御短时降低 10%。",
+          "runtime": {
+            "type": "extra_hit",
+            "chance": 30,
+            "pct": 60,
+            "def_shred": 10,
+            "def_shred_dur": 4
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 完整技能"
+    },
+    {
+      "id": "panyue_ling",
+      "name": "磐岳令",
+      "slots": [
+        "chest",
+        "belt",
+        "inner"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "chest": 20,
+        "belt": 35,
+        "inner": 25
+      },
+      "trigger": "auto",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "每 12 秒嘲讽周围敌人，强制 2 秒，随后仍按仇恨计算。",
+          "runtime": {
+            "type": "taunt",
+            "cd": 12,
+            "radius": 200,
+            "force_s": 2,
+            "bonus_seconds": 8
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "嘲讽同时使自己防御 +15%，持续 5 秒。",
+          "runtime": {
+            "type": "taunt",
+            "cd": 12,
+            "radius": 200,
+            "force_s": 2,
+            "bonus_seconds": 8,
+            "self_def_pct": 15,
+            "self_def_dur": 5
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "持续期间再减免 10% 受到的伤害。",
+          "runtime": {
+            "type": "taunt",
+            "cd": 12,
+            "radius": 200,
+            "force_s": 2,
+            "bonus_seconds": 8,
+            "self_def_pct": 15,
+            "self_def_dur": 5,
+            "dr_pct": 10
+          }
+        }
+      ],
+      "shared_cd": true,
+      "source": "v2.2 完整技能"
+    },
+    {
+      "id": "guanhong",
+      "name": "贯虹",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "bow"
+      ],
+      "weight_by_slot": {
+        "bow": 40
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "普通攻击有 25% 概率穿透，对路径上下一个敌人打出 50% 伤害。",
+          "runtime": {
+            "type": "pierce",
+            "chance": 25,
+            "targets": 1,
+            "pcts": [
+              50
+            ]
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "可穿透两名额外敌人，伤害为 70%、40%。",
+          "runtime": {
+            "type": "pierce",
+            "chance": 25,
+            "targets": 2,
+            "pcts": [
+              70,
+              40
+            ]
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "至少必穿透一名额外敌人，且这次攻击会心率 +15%。",
+          "runtime": {
+            "type": "pierce",
+            "chance": 100,
+            "targets": 2,
+            "pcts": [
+              70,
+              40
+            ],
+            "min_targets": 1,
+            "crit_bonus": 15
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 完整技能"
+    },
+    {
+      "id": "xirang_zhao",
+      "name": "息壤罩",
+      "slots": [
+        "chest",
+        "inner",
+        "cloak"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "chest": 25,
+        "inner": 30,
+        "cloak": 25
+      },
+      "trigger": "auto",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "每 15 秒给自己一层相当于生命上限 6% 的护盾，持续 6 秒。",
+          "runtime": {
+            "type": "shield_pct",
+            "value": 6,
+            "cd": 15,
+            "dur": 6
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "护盾 8%，并给生命比例最低的队友一半护盾。",
+          "runtime": {
+            "type": "shield_pct",
+            "value": 8,
+            "cd": 15,
+            "dur": 6,
+            "ally_half": true
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "护盾 10%，破碎时对周围造成一次相当于攻击 40% 的伤害。",
+          "runtime": {
+            "type": "shield_pct",
+            "value": 10,
+            "cd": 15,
+            "dur": 6,
+            "ally_half": true,
+            "break_pct": 40,
+            "break_radius": 140
+          }
+        }
+      ],
+      "shared_cd": true,
+      "source": "v2.2 完整技能"
+    },
+    {
+      "id": "jingtin",
+      "name": "惊霆",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "hammer",
+        "staff"
+      ],
+      "weight_by_slot": {
+        "hammer": 20,
+        "staff": 15
+      },
+      "trigger": "auto",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "每隔 8 秒在身前砸出一小圈雷击，造成 60% 攻击的雷属性伤害。",
+          "runtime": {
+            "type": "nova",
+            "cd": 8,
+            "radius": 110,
+            "pct": 60,
+            "element": "thunder"
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "冷却 7 秒，伤害 80%。",
+          "runtime": {
+            "type": "nova",
+            "cd": 7,
+            "radius": 120,
+            "pct": 80,
+            "element": "thunder"
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "冷却 6 秒，伤害 100%，并短暂降低目标雷抗 8%。",
+          "runtime": {
+            "type": "nova",
+            "cd": 6,
+            "radius": 130,
+            "pct": 100,
+            "element": "thunder",
+            "res_shred": 8,
+            "res_ele": "thunder",
+            "dur": 4
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "kaishan_yubo",
+      "name": "开山余波",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "blade",
+        "hammer"
+      ],
+      "weight_by_slot": {
+        "blade": 25,
+        "hammer": 25
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "重击后留下一小道残余伤害，20% 概率对目标再造成 30% 攻击的伤害。",
+          "runtime": {
+            "type": "extra_hit",
+            "chance": 20,
+            "pct": 30
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "概率 25%，伤害 40%。",
+          "runtime": {
+            "type": "extra_hit",
+            "chance": 25,
+            "pct": 40
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "概率 30%，伤害 50%。",
+          "runtime": {
+            "type": "extra_hit",
+            "chance": 30,
+            "pct": 50
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "feishuang",
+      "name": "飞霜点",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "sword",
+        "staff",
+        "blade",
+        "bow",
+        "spear"
+      ],
+      "weight_by_slot": {
+        "sword": 20,
+        "staff": 15,
+        "blade": 10,
+        "bow": 15,
+        "spear": 20
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击有 25% 概率使目标移速 -20%，持续 2 秒（同类取最高）。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 25,
+            "stat": "ms",
+            "value": -20,
+            "dur": 2
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "减速 30%，持续 3 秒。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 25,
+            "stat": "ms",
+            "value": -30,
+            "dur": 3
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "减速 35%，持续 3 秒，并附带短暂冰缓攻击间隔。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 30,
+            "stat": "ms",
+            "value": -35,
+            "dur": 3
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "wenxin_shan",
+      "name": "问心闪",
+      "slots": [
+        "earring",
+        "title",
+        "head"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "earring": 50,
+        "title": 30,
+        "head": 25
+      },
+      "trigger": "on_dodge",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "闪避成功后，3 秒内攻速 +10%，下一次伤害 +15%。",
+          "runtime": {
+            "type": "on_dodge_buff",
+            "aspd": 10,
+            "dur": 3,
+            "next_hit_pct": 15
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "攻速 +15%，下一次伤害 +25%。",
+          "runtime": {
+            "type": "on_dodge_buff",
+            "aspd": 15,
+            "dur": 3,
+            "next_hit_pct": 25
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "攻速 +20%，下一次伤害 +35%，并回复 2% 最大生命。",
+          "runtime": {
+            "type": "on_dodge_buff",
+            "aspd": 20,
+            "dur": 3,
+            "next_hit_pct": 35,
+            "heal_pct": 2
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "talang_bu",
+      "name": "踏浪步",
+      "slots": [
+        "feet",
+        "cloak",
+        "legs"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "feet": 50,
+        "cloak": 25,
+        "legs": 40
+      },
+      "trigger": "on_move",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "持续移动 2 秒后，下一次攻击伤害 +15%。",
+          "runtime": {
+            "type": "after_move",
+            "move_s": 2,
+            "next_hit_pct": 15
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "移动 2 秒后，下一次伤害 +25%，并获得 2 秒 8% 攻速。",
+          "runtime": {
+            "type": "after_move",
+            "move_s": 2,
+            "next_hit_pct": 25,
+            "aspd": 8,
+            "dur": 2
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "下一次伤害 +35%，攻速 +12%。",
+          "runtime": {
+            "type": "after_move",
+            "move_s": 2,
+            "next_hit_pct": 35,
+            "aspd": 12,
+            "dur": 2
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "huifeng",
+      "name": "回锋",
+      "slots": [
+        "hands",
+        "weapon"
+      ],
+      "weapon_types": [
+        "sword",
+        "blade",
+        "spear",
+        "hammer",
+        "bow"
+      ],
+      "weight_by_slot": {
+        "hands": 50,
+        "sword": 25,
+        "blade": 20,
+        "spear": 30,
+        "hammer": 20,
+        "bow": 20
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "连续命中同一目标时，伤害 +4%/层，最多 3 层，换目标清空。",
+          "runtime": {
+            "type": "same_target_stack",
+            "dmg_pct": 4,
+            "stacks": 3
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "+5%/层，最多 4 层。",
+          "runtime": {
+            "type": "same_target_stack",
+            "dmg_pct": 5,
+            "stacks": 4
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "+6%/层，最多 5 层。",
+          "runtime": {
+            "type": "same_target_stack",
+            "dmg_pct": 6,
+            "stacks": 5
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "fenmai",
+      "name": "焚脉",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "staff",
+        "sword"
+      ],
+      "weight_by_slot": {
+        "staff": 20,
+        "sword": 15
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击叠加 1 层灼烧，最多 3 层，满层爆发一次 50% 攻击的火伤并清空。",
+          "runtime": {
+            "type": "burn_stack",
+            "per": 1,
+            "cap": 3,
+            "burst_pct": 50,
+            "element": "fire"
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "最多 4 层，爆发 70%。",
+          "runtime": {
+            "type": "burn_stack",
+            "per": 1,
+            "cap": 4,
+            "burst_pct": 70,
+            "element": "fire"
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "最多 5 层，爆发 100%。",
+          "runtime": {
+            "type": "burn_stack",
+            "per": 1,
+            "cap": 5,
+            "burst_pct": 100,
+            "element": "fire"
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "zheguang",
+      "name": "折光",
+      "slots": [
+        "cloak",
+        "head",
+        "chest"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "cloak": 25,
+        "head": 35,
+        "chest": 15
+      },
+      "trigger": "auto",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "每隔 16 秒抵消下一次受到的伤害。",
+          "runtime": {
+            "type": "guard",
+            "cd": 16
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "每隔 13 秒。",
+          "runtime": {
+            "type": "guard",
+            "cd": 13
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "每隔 10 秒，抵消后回复 3% 最大生命。",
+          "runtime": {
+            "type": "guard",
+            "cd": 10,
+            "heal_pct": 3
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "fuling_si",
+      "name": "缚灵丝",
+      "slots": [
+        "necklace",
+        "earring"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "necklace": 100,
+        "earring": 50
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击有 15% 概率短暂捆住敌人 1.2 秒（首领减半）。",
+          "runtime": {
+            "type": "stun",
+            "chance": 15,
+            "dur": 1.2
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "概率 20%，持续 1.5 秒。",
+          "runtime": {
+            "type": "stun",
+            "chance": 20,
+            "dur": 1.5
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "概率 25%，持续 1.8 秒。",
+          "runtime": {
+            "type": "stun",
+            "chance": 25,
+            "dur": 1.8
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "yangrui",
+      "name": "养锐",
+      "slots": [
+        "ring",
+        "title",
+        "weapon"
+      ],
+      "weapon_types": [
+        "staff"
+      ],
+      "weight_by_slot": {
+        "ring": 50,
+        "title": 30,
+        "staff": 10
+      },
+      "trigger": "on_idle",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "停手 3 秒后，下一次攻击必会心。",
+          "runtime": {
+            "type": "charge_crit",
+            "idle_s": 3
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "停手 2.5 秒，并会心伤害 +20%。",
+          "runtime": {
+            "type": "charge_crit",
+            "idle_s": 2.5,
+            "critdmg": 20
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "停手 2 秒，会心伤害 +30%。",
+          "runtime": {
+            "type": "charge_crit",
+            "idle_s": 2,
+            "critdmg": 30
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "liedi_wen",
+      "name": "裂地纹",
+      "slots": [
+        "legs",
+        "feet",
+        "belt",
+        "inner"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "legs": 60,
+        "feet": 50,
+        "belt": 30,
+        "inner": 20
+      },
+      "trigger": "standing",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "站定时每秒防御 +3%，最多 4 层，移动后清零。",
+          "runtime": {
+            "type": "stand_def",
+            "per_s": 1,
+            "def_pct": 3,
+            "stacks": 4
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "+4%/层，最多 5 层。",
+          "runtime": {
+            "type": "stand_def",
+            "per_s": 1,
+            "def_pct": 4,
+            "stacks": 5
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "+5%/层，最多 6 层。",
+          "runtime": {
+            "type": "stand_def",
+            "per_s": 1,
+            "def_pct": 5,
+            "stacks": 6
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "xingluo",
+      "name": "星落",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "bow"
+      ],
+      "weight_by_slot": {
+        "bow": 25
+      },
+      "trigger": "auto",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "每隔 10 秒落下箭雨，对周围敌人各造成 40% 攻击的伤害。",
+          "runtime": {
+            "type": "nova",
+            "cd": 10,
+            "radius": 140,
+            "pct": 40
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "冷却 8 秒，伤害 55%。",
+          "runtime": {
+            "type": "nova",
+            "cd": 8,
+            "radius": 150,
+            "pct": 55
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "冷却 7 秒，伤害 70%。",
+          "runtime": {
+            "type": "nova",
+            "cd": 7,
+            "radius": 160,
+            "pct": 70
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "zhishui_jue",
+      "name": "止水诀",
+      "slots": [
+        "inner",
+        "belt",
+        "chest"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "inner": 25,
+        "belt": 35,
+        "chest": 15
+      },
+      "trigger": "on_lowhp",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "生命低于 35% 时获得 15% 减伤，持续 6 秒，冷却 20 秒。",
+          "runtime": {
+            "type": "lowhp_dr",
+            "hp_pct": 35,
+            "dr_pct": 15,
+            "dur": 6,
+            "cd": 20
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "低于 40% 时 18% 减伤，冷却 18 秒。",
+          "runtime": {
+            "type": "lowhp_dr",
+            "hp_pct": 40,
+            "dr_pct": 18,
+            "dur": 6,
+            "cd": 18
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "低于 40% 时 22% 减伤，持续 8 秒，冷却 16 秒。",
+          "runtime": {
+            "type": "lowhp_dr",
+            "hp_pct": 40,
+            "dr_pct": 22,
+            "dur": 8,
+            "cd": 16
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "xiu_feng",
+      "name": "袖风",
+      "slots": [
+        "cloak",
+        "hands"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "cloak": 25,
+        "hands": 50
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击或受击时有 15% 概率把近身敌人轻微推开。",
+          "runtime": {
+            "type": "knockback",
+            "chance": 15,
+            "dist": 40
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "概率 20%，距离更远。",
+          "runtime": {
+            "type": "knockback",
+            "chance": 20,
+            "dist": 55
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "概率 25%，并短暂减速。",
+          "runtime": {
+            "type": "knockback",
+            "chance": 25,
+            "dist": 65,
+            "ms": -20,
+            "dur": 2
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v2.2 框架补三段"
+    },
+    {
+      "id": "ruiyi",
+      "name": "锐意",
+      "slots": [
+        "weapon",
+        "hands",
+        "title"
+      ],
+      "weapon_types": [
+        "sword",
+        "blade",
+        "spear",
+        "bow"
+      ],
+      "weight_by_slot": {
+        "weapon": 18,
+        "hands": 20,
+        "title": 20
+      },
+      "trigger": "on_crit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "造成会心后会心率 +3%，持续 5 秒，最多 4 层。",
+          "runtime": {
+            "type": "stack_buff",
+            "stat": "crit",
+            "value": 3,
+            "dur": 5,
+            "stacks": 4
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "+4%/层。",
+          "runtime": {
+            "type": "stack_buff",
+            "stat": "crit",
+            "value": 4,
+            "dur": 5,
+            "stacks": 4
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "+5%/层，最多 5 层。",
+          "runtime": {
+            "type": "stack_buff",
+            "stat": "crit",
+            "value": 5,
+            "dur": 5,
+            "stacks": 5
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "houtu",
+      "name": "厚土",
+      "slots": [
+        "chest",
+        "inner",
+        "legs"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "chest": 12,
+        "inner": 12,
+        "legs": 15
+      },
+      "trigger": "on_hit_taken",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "被击有 30% 概率防御 +15%，持续 6 秒，冷却 8 秒。",
+          "runtime": {
+            "type": "buff",
+            "stat": "def_pct",
+            "value": 15,
+            "dur": 6,
+            "chance": 30,
+            "cd": 8
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "防御 +20%。",
+          "runtime": {
+            "type": "buff",
+            "stat": "def_pct",
+            "value": 20,
+            "dur": 6,
+            "chance": 30,
+            "cd": 8
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "防御 +25%，持续 7 秒。",
+          "runtime": {
+            "type": "buff",
+            "stat": "def_pct",
+            "value": 25,
+            "dur": 7,
+            "chance": 35,
+            "cd": 7
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "chaifang",
+      "name": "拆防",
+      "slots": [
+        "weapon",
+        "hands"
+      ],
+      "weapon_types": [
+        "sword",
+        "blade",
+        "spear",
+        "hammer"
+      ],
+      "weight_by_slot": {
+        "weapon": 16,
+        "hands": 15
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击命中有 20% 概率使目标防御 -12%，持续 5 秒（同类取最高），冷却 6 秒。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 20,
+            "stat": "def_pct",
+            "value": -12,
+            "dur": 5,
+            "cd": 6
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "-16%。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 20,
+            "stat": "def_pct",
+            "value": -16,
+            "dur": 5,
+            "cd": 6
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "-20%。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 25,
+            "stat": "def_pct",
+            "value": -20,
+            "dur": 5,
+            "cd": 5
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "jifeng",
+      "name": "疾风",
+      "slots": [
+        "feet",
+        "weapon",
+        "cloak"
+      ],
+      "weapon_types": [
+        "bow",
+        "sword"
+      ],
+      "weight_by_slot": {
+        "feet": 20,
+        "weapon": 10,
+        "cloak": 12
+      },
+      "trigger": "on_crit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "造成会心后攻速 +10%，持续 4 秒，冷却 1 秒。",
+          "runtime": {
+            "type": "buff",
+            "stat": "aspd",
+            "value": 10,
+            "dur": 4,
+            "cd": 1
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "攻速 +14%。",
+          "runtime": {
+            "type": "buff",
+            "stat": "aspd",
+            "value": 14,
+            "dur": 4,
+            "cd": 1
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "攻速 +18%。",
+          "runtime": {
+            "type": "buff",
+            "stat": "aspd",
+            "value": 18,
+            "dur": 4,
+            "cd": 1
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "jiwei",
+      "name": "积威",
+      "slots": [
+        "weapon",
+        "hands"
+      ],
+      "weapon_types": [
+        "sword",
+        "blade",
+        "spear",
+        "hammer",
+        "bow",
+        "staff"
+      ],
+      "weight_by_slot": {
+        "weapon": 14,
+        "hands": 15
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "连续命中同一目标攻击 +3%/层，最多 5 层；5 秒内未再命中则清空。",
+          "runtime": {
+            "type": "same_target_stack",
+            "atk_pct": 3,
+            "stacks": 5,
+            "dur": 5
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "+4%/层。",
+          "runtime": {
+            "type": "same_target_stack",
+            "atk_pct": 4,
+            "stacks": 5,
+            "dur": 5
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "+5%/层。",
+          "runtime": {
+            "type": "same_target_stack",
+            "atk_pct": 5,
+            "stacks": 5,
+            "dur": 5
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "weicun",
+      "name": "危存",
+      "slots": [
+        "chest",
+        "inner",
+        "cloak"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "chest": 10,
+        "inner": 10,
+        "cloak": 10
+      },
+      "trigger": "on_lowhp",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "生命低于 40% 时减伤 +12%，持续 8 秒，冷却 20 秒。",
+          "runtime": {
+            "type": "lowhp_dr",
+            "hp_pct": 40,
+            "dr_pct": 12,
+            "dur": 8,
+            "cd": 20
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "减伤 +16%。",
+          "runtime": {
+            "type": "lowhp_dr",
+            "hp_pct": 40,
+            "dr_pct": 16,
+            "dur": 8,
+            "cd": 18
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "减伤 +20%，冷却 16 秒。",
+          "runtime": {
+            "type": "lowhp_dr",
+            "hp_pct": 40,
+            "dr_pct": 20,
+            "dur": 8,
+            "cd": 16
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "shuangbu",
+      "name": "霜步",
+      "slots": [
+        "weapon",
+        "feet"
+      ],
+      "weapon_types": [
+        "sword",
+        "staff",
+        "bow"
+      ],
+      "weight_by_slot": {
+        "weapon": 12,
+        "feet": 15
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击命中有 20% 概率使目标移速 -30%，持续 3 秒（同类取最高），冷却 5 秒。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 20,
+            "stat": "ms",
+            "value": -30,
+            "dur": 3,
+            "cd": 5
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "-35%。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 20,
+            "stat": "ms",
+            "value": -35,
+            "dur": 3,
+            "cd": 5
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "-40%。",
+          "runtime": {
+            "type": "debuff",
+            "chance": 25,
+            "stat": "ms",
+            "value": -40,
+            "dur": 3,
+            "cd": 4
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "jianbi",
+      "name": "坚壁",
+      "slots": [
+        "head",
+        "chest",
+        "cloak"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "head": 15,
+        "chest": 8,
+        "cloak": 10
+      },
+      "trigger": "on_crit_taken",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "被会心后会心抵抗 +10%，持续 5 秒，冷却 8 秒。",
+          "runtime": {
+            "type": "buff",
+            "stat": "crit_res",
+            "value": 10,
+            "dur": 5,
+            "cd": 8
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "+15%。",
+          "runtime": {
+            "type": "buff",
+            "stat": "crit_res",
+            "value": 15,
+            "dur": 5,
+            "cd": 8
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "+20%。",
+          "runtime": {
+            "type": "buff",
+            "stat": "crit_res",
+            "value": 20,
+            "dur": 5,
+            "cd": 7
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "shixing",
+      "name": "蚀性",
+      "slots": [
+        "weapon",
+        "necklace"
+      ],
+      "weapon_types": [
+        "staff",
+        "sword"
+      ],
+      "weight_by_slot": {
+        "weapon": 10,
+        "necklace": 20
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击命中有 25% 概率降低目标主属性抗性 10%，持续 5 秒（同类取最高），冷却 6 秒。",
+          "runtime": {
+            "type": "res_shred",
+            "chance": 25,
+            "value": 10,
+            "dur": 5,
+            "cd": 6
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "-14%。",
+          "runtime": {
+            "type": "res_shred",
+            "chance": 25,
+            "value": 14,
+            "dur": 5,
+            "cd": 6
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "-18%。",
+          "runtime": {
+            "type": "res_shred",
+            "chance": 30,
+            "value": 18,
+            "dur": 5,
+            "cd": 5
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "zhuomai",
+      "name": "灼脉",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "staff",
+        "sword",
+        "blade"
+      ],
+      "weight_by_slot": {
+        "weapon": 10
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击命中有 20% 概率灼烧：每秒造成裸攻击 6% 的火属性伤害，持续 4 秒，刷新不叠层。不触发汲取。",
+          "runtime": {
+            "type": "dot",
+            "chance": 20,
+            "atk_pct": 6,
+            "dur": 4,
+            "element": "fire",
+            "stack": 1
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "每秒 8%。",
+          "runtime": {
+            "type": "dot",
+            "chance": 25,
+            "atk_pct": 8,
+            "dur": 4,
+            "element": "fire",
+            "stack": 1
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "每秒 10%，持续 5 秒。",
+          "runtime": {
+            "type": "dot",
+            "chance": 25,
+            "atk_pct": 10,
+            "dur": 5,
+            "element": "fire",
+            "stack": 1
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "leiguan",
+      "name": "雷贯",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "hammer",
+        "staff",
+        "spear"
+      ],
+      "weight_by_slot": {
+        "weapon": 10
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击命中有 15% 概率使目标受到的雷属性伤害 +12%，持续 4 秒（同类取最高），冷却 6 秒。",
+          "runtime": {
+            "type": "vuln",
+            "chance": 15,
+            "element": "thunder",
+            "value": 12,
+            "dur": 4,
+            "cd": 6
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "+16%。",
+          "runtime": {
+            "type": "vuln",
+            "chance": 18,
+            "element": "thunder",
+            "value": 16,
+            "dur": 4,
+            "cd": 6
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "+20%。",
+          "runtime": {
+            "type": "vuln",
+            "chance": 20,
+            "element": "thunder",
+            "value": 20,
+            "dur": 5,
+            "cd": 5
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "dushi",
+      "name": "毒蚀",
+      "slots": [
+        "weapon"
+      ],
+      "weapon_types": [
+        "staff",
+        "blade",
+        "spear"
+      ],
+      "weight_by_slot": {
+        "weapon": 10
+      },
+      "trigger": "on_hit",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "攻击叠加 1 层毒：每层每秒造成裸攻击 4% 的毒属性伤害，持续 6 秒，最多 4 层。不触发汲取。",
+          "runtime": {
+            "type": "dot",
+            "chance": 100,
+            "atk_pct": 4,
+            "dur": 6,
+            "element": "poison",
+            "stack": 4
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "每层 5%，最多 5 层。",
+          "runtime": {
+            "type": "dot",
+            "chance": 100,
+            "atk_pct": 5,
+            "dur": 6,
+            "element": "poison",
+            "stack": 5
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "每层 6%，最多 6 层。",
+          "runtime": {
+            "type": "dot",
+            "chance": 100,
+            "atk_pct": 6,
+            "dur": 6,
+            "element": "poison",
+            "stack": 6
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    },
+    {
+      "id": "fanzhen",
+      "name": "反震",
+      "slots": [
+        "chest",
+        "cloak",
+        "hands"
+      ],
+      "weapon_types": [],
+      "weight_by_slot": {
+        "chest": 8,
+        "cloak": 10,
+        "hands": 10
+      },
+      "trigger": "on_hit_taken",
+      "stages": [
+        {
+          "rarity": "橙",
+          "desc": "被击有 25% 概率反弹本次受到伤害的 10%（对首领为 5%），冷却 3 秒。反伤不触发汲取。",
+          "runtime": {
+            "type": "reflect",
+            "chance": 25,
+            "pct": 10,
+            "boss_pct": 5,
+            "cd": 3
+          }
+        },
+        {
+          "rarity": "红",
+          "desc": "反弹 13%（首领 6%）。",
+          "runtime": {
+            "type": "reflect",
+            "chance": 25,
+            "pct": 13,
+            "boss_pct": 6,
+            "cd": 3
+          }
+        },
+        {
+          "rarity": "暗金",
+          "desc": "反弹 16%（首领 8%）。",
+          "runtime": {
+            "type": "reflect",
+            "chance": 30,
+            "pct": 16,
+            "boss_pct": 8,
+            "cd": 3
+          }
+        }
+      ],
+      "shared_cd": false,
+      "source": "v1.1 移入技能池"
+    }
+  ]
+}

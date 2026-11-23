@@ -1,0 +1,1862 @@
+{
+  "version": "1.0",
+  "title": "修仙小队基础装备表",
+  "status": "official_for_implementation",
+  "date": "2026-11-22",
+  "timezone": "Asia/Shanghai",
+  "based_on": "装备基础池草案 v2.4",
+  "scale": 15,
+  "rounding": "floor(x+0.5)",
+  "rarity_formula": "round(white_value * rarity.mult)",
+  "rarities": [
+    {
+      "id": "white",
+      "name": "白",
+      "mult": 1.0
+    },
+    {
+      "id": "green",
+      "name": "绿",
+      "mult": 1.06
+    },
+    {
+      "id": "blue",
+      "name": "蓝",
+      "mult": 1.12
+    },
+    {
+      "id": "purple",
+      "name": "紫",
+      "mult": 1.18
+    },
+    {
+      "id": "orange",
+      "name": "橙",
+      "mult": 1.24
+    },
+    {
+      "id": "red",
+      "name": "红",
+      "mult": 1.3
+    },
+    {
+      "id": "darkgold",
+      "name": "暗金",
+      "mult": 1.38
+    }
+  ],
+  "percent_stats": [
+    "aspd",
+    "crit",
+    "ms"
+  ],
+  "percent_note": "攻速、移速、会心不随等级做15倍放大，只随品阶倍率取整。",
+  "slots": [
+    {
+      "id": "weapon",
+      "name": "武器",
+      "group": "weapon",
+      "base_stats": [
+        "atk",
+        "aspd"
+      ]
+    },
+    {
+      "id": "head",
+      "name": "帽子",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "def"
+      ]
+    },
+    {
+      "id": "chest",
+      "name": "衣服",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "def"
+      ]
+    },
+    {
+      "id": "legs",
+      "name": "裤子",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "def"
+      ]
+    },
+    {
+      "id": "belt",
+      "name": "腰带",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "def"
+      ]
+    },
+    {
+      "id": "hands",
+      "name": "护手",
+      "group": "armor",
+      "base_stats": [
+        "atk",
+        "def"
+      ]
+    },
+    {
+      "id": "feet",
+      "name": "鞋",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "def",
+        "ms"
+      ]
+    },
+    {
+      "id": "inner",
+      "name": "内甲",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "def"
+      ]
+    },
+    {
+      "id": "cloak",
+      "name": "披风",
+      "group": "armor",
+      "base_stats": [
+        "hp",
+        "ms"
+      ]
+    },
+    {
+      "id": "title",
+      "name": "称号",
+      "group": "jewelry",
+      "base_stats": [
+        "atk",
+        "crit"
+      ]
+    },
+    {
+      "id": "necklace",
+      "name": "项链",
+      "group": "jewelry",
+      "base_stats": [
+        "hp",
+        "atk"
+      ]
+    },
+    {
+      "id": "earring",
+      "name": "耳环",
+      "group": "jewelry",
+      "base_stats": [
+        "hp",
+        "crit"
+      ]
+    },
+    {
+      "id": "ring",
+      "name": "戒指",
+      "group": "jewelry",
+      "base_stats": [
+        "atk"
+      ]
+    }
+  ],
+  "weapon_types": [
+    {
+      "id": "sword",
+      "name": "剑"
+    },
+    {
+      "id": "blade",
+      "name": "刀"
+    },
+    {
+      "id": "spear",
+      "name": "枪"
+    },
+    {
+      "id": "staff",
+      "name": "杖"
+    },
+    {
+      "id": "hammer",
+      "name": "锤"
+    },
+    {
+      "id": "bow",
+      "name": "弓"
+    }
+  ],
+  "weapon_type_note": "游戏类型名「大刀」对应 id=blade，中文名称用「刀」。同一等级各武器类型基础数值相同。",
+  "life_drain": {
+    "name": "生命汲取",
+    "based_on": "max_hp",
+    "per_hit_min_pct": 0.5,
+    "per_hit_max_pct": 1.5,
+    "max_is_cap": true,
+    "stack_cap_pct": 5.0,
+    "per_second_cap_pct": 10.0,
+    "aoe_counts_once": true,
+    "note": "按自身生命上限回复，不按伤害计算。"
+  },
+  "incoming_damage_targets": {
+    "anchor": "50级一身暗金基础生命约106468",
+    "normal": {
+      "hit_pct": [
+        1,
+        2
+      ],
+      "crit_pct": [
+        2,
+        3
+      ]
+    },
+    "elite": {
+      "hit_pct": [
+        3,
+        5
+      ],
+      "crit_pct": [
+        6,
+        8
+      ]
+    },
+    "boss": {
+      "hit_pct": [
+        6,
+        10
+      ],
+      "crit_pct": [
+        12,
+        15
+      ],
+      "ultimate_pct": [
+        25,
+        35
+      ],
+      "ultimate_has_cast": true
+    },
+    "builds": {
+      "haste_drain_hits_to_kill_boss": [
+        90,
+        110
+      ],
+      "burst_hits_to_kill_boss": [
+        60,
+        70
+      ]
+    }
+  },
+  "overlap": {
+    "30红": 4680,
+    "40橙": 4650,
+    "40暗金": 5175,
+    "50橙": 5189
+  },
+  "character_bases": [
+    {
+      "level": 1,
+      "hp": 1875,
+      "atk": 120,
+      "defense": 90,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 0,
+      "crit_def": 0
+    },
+    {
+      "level": 10,
+      "hp": 3765,
+      "atk": 240,
+      "defense": 195,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 0,
+      "crit_def": 0
+    },
+    {
+      "level": 20,
+      "hp": 7515,
+      "atk": 480,
+      "defense": 375,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 0,
+      "crit_def": 0
+    },
+    {
+      "level": 30,
+      "hp": 11745,
+      "atk": 750,
+      "defense": 585,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 5,
+      "crit_def": 5
+    },
+    {
+      "level": 40,
+      "hp": 14100,
+      "atk": 900,
+      "defense": 705,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 5,
+      "crit_def": 8
+    },
+    {
+      "level": 50,
+      "hp": 16920,
+      "atk": 1080,
+      "defense": 840,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 8,
+      "crit_def": 10
+    },
+    {
+      "level": 60,
+      "hp": 19740,
+      "atk": 1260,
+      "defense": 990,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 10,
+      "crit_def": 12
+    },
+    {
+      "level": 70,
+      "hp": 22560,
+      "atk": 1440,
+      "defense": 1125,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 12,
+      "crit_def": 15
+    },
+    {
+      "level": 80,
+      "hp": 25380,
+      "atk": 1620,
+      "defense": 1260,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 12,
+      "crit_def": 15
+    },
+    {
+      "level": 90,
+      "hp": 28200,
+      "atk": 1800,
+      "defense": 1395,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 15,
+      "crit_def": 18
+    },
+    {
+      "level": 100,
+      "hp": 31020,
+      "atk": 1980,
+      "defense": 1530,
+      "crit_rate": 5,
+      "crit_dmg": 150,
+      "crit_res": 15,
+      "crit_def": 20
+    }
+  ],
+  "character_total_hp_level_50_no_affix": {
+    "白": 81810,
+    "绿": 85705,
+    "蓝": 89596,
+    "紫": 93490,
+    "橙": 97382,
+    "红": 101280,
+    "暗金": 106468
+  },
+  "tiers": [
+    {
+      "item_level": 1,
+      "tier_id": "fantie",
+      "tier_name": "凡铁",
+      "region": "凡人开局",
+      "names": {
+        "sword": "铁剑",
+        "blade": "铁刀",
+        "spear": "铁枪",
+        "staff": "木杖",
+        "hammer": "铁锤",
+        "bow": "木弓",
+        "head": "布帽",
+        "chest": "布衣",
+        "legs": "布裤",
+        "belt": "布带",
+        "hands": "皮护手",
+        "feet": "布鞋",
+        "inner": "布内甲",
+        "cloak": "布披风",
+        "title": "凡人称号",
+        "necklace": "铜项链",
+        "earring": "铜耳环",
+        "ring": "铜戒"
+      },
+      "white": {
+        "title": {
+          "atk": 0,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 120,
+          "atk": 15
+        },
+        "earring": {
+          "hp": 90,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 15
+        },
+        "head": {
+          "hp": 105,
+          "def": 15
+        },
+        "chest": {
+          "hp": 300,
+          "def": 30
+        },
+        "legs": {
+          "hp": 240,
+          "def": 15
+        },
+        "belt": {
+          "hp": 210,
+          "def": 0
+        },
+        "hands": {
+          "atk": 15,
+          "def": 15
+        },
+        "feet": {
+          "hp": 120,
+          "def": 15,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 135,
+          "def": 15
+        },
+        "cloak": {
+          "hp": 75,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 90,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 0,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 166,
+          "atk": 21
+        },
+        "earring": {
+          "hp": 124,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 21
+        },
+        "head": {
+          "hp": 145,
+          "def": 21
+        },
+        "chest": {
+          "hp": 414,
+          "def": 41
+        },
+        "legs": {
+          "hp": 331,
+          "def": 21
+        },
+        "belt": {
+          "hp": 290,
+          "def": 0
+        },
+        "hands": {
+          "atk": 21,
+          "def": 21
+        },
+        "feet": {
+          "hp": 166,
+          "def": 21,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 186,
+          "def": 21
+        },
+        "cloak": {
+          "hp": 104,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 124,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 10,
+      "tier_id": "jingtie",
+      "tier_name": "精铁",
+      "region": "青石村",
+      "names": {
+        "sword": "精铁剑",
+        "blade": "精铁刀",
+        "spear": "精铁枪",
+        "staff": "青木杖",
+        "hammer": "精铁锤",
+        "bow": "青藤弓",
+        "head": "精铁帽",
+        "chest": "精铁衣",
+        "legs": "精铁裤",
+        "belt": "精铁带",
+        "hands": "精铁护手",
+        "feet": "精铁靴",
+        "inner": "精铁内甲",
+        "cloak": "精铁披风",
+        "title": "练气称号",
+        "necklace": "精铁坠",
+        "earring": "精铁耳环",
+        "ring": "精铁戒"
+      },
+      "white": {
+        "title": {
+          "atk": 30,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 645,
+          "atk": 45
+        },
+        "earring": {
+          "hp": 480,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 75
+        },
+        "head": {
+          "hp": 540,
+          "def": 45
+        },
+        "chest": {
+          "hp": 1620,
+          "def": 135
+        },
+        "legs": {
+          "hp": 1290,
+          "def": 105
+        },
+        "belt": {
+          "hp": 1140,
+          "def": 30
+        },
+        "hands": {
+          "atk": 75,
+          "def": 45
+        },
+        "feet": {
+          "hp": 645,
+          "def": 45,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 720,
+          "def": 45
+        },
+        "cloak": {
+          "hp": 360,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 480,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 41,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 890,
+          "atk": 62
+        },
+        "earring": {
+          "hp": 662,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 104
+        },
+        "head": {
+          "hp": 745,
+          "def": 62
+        },
+        "chest": {
+          "hp": 2236,
+          "def": 186
+        },
+        "legs": {
+          "hp": 1780,
+          "def": 145
+        },
+        "belt": {
+          "hp": 1573,
+          "def": 41
+        },
+        "hands": {
+          "atk": 104,
+          "def": 62
+        },
+        "feet": {
+          "hp": 890,
+          "def": 62,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 994,
+          "def": 62
+        },
+        "cloak": {
+          "hp": 497,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 662,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 20,
+      "tier_id": "xuanwen",
+      "tier_name": "玄纹",
+      "region": "落枫镇",
+      "names": {
+        "sword": "玄纹剑",
+        "blade": "玄纹刀",
+        "spear": "玄纹枪",
+        "staff": "玄纹杖",
+        "hammer": "玄纹锤",
+        "bow": "玄纹弓",
+        "head": "玄纹帽",
+        "chest": "玄纹衣",
+        "legs": "玄纹裤",
+        "belt": "玄纹带",
+        "hands": "玄纹护手",
+        "feet": "玄纹靴",
+        "inner": "玄纹内甲",
+        "cloak": "玄纹披风",
+        "title": "筑基称号",
+        "necklace": "玄纹坠",
+        "earring": "玄纹耳环",
+        "ring": "玄纹戒"
+      },
+      "white": {
+        "title": {
+          "atk": 90,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 1935,
+          "atk": 135
+        },
+        "earring": {
+          "hp": 1440,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 225
+        },
+        "head": {
+          "hp": 1620,
+          "def": 135
+        },
+        "chest": {
+          "hp": 4860,
+          "def": 405
+        },
+        "legs": {
+          "hp": 3870,
+          "def": 315
+        },
+        "belt": {
+          "hp": 3420,
+          "def": 90
+        },
+        "hands": {
+          "atk": 225,
+          "def": 135
+        },
+        "feet": {
+          "hp": 1935,
+          "def": 135,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 2160,
+          "def": 135
+        },
+        "cloak": {
+          "hp": 1080,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 1440,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 124,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 2670,
+          "atk": 186
+        },
+        "earring": {
+          "hp": 1987,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 311
+        },
+        "head": {
+          "hp": 2236,
+          "def": 186
+        },
+        "chest": {
+          "hp": 6707,
+          "def": 559
+        },
+        "legs": {
+          "hp": 5341,
+          "def": 435
+        },
+        "belt": {
+          "hp": 4720,
+          "def": 124
+        },
+        "hands": {
+          "atk": 311,
+          "def": 186
+        },
+        "feet": {
+          "hp": 2670,
+          "def": 186,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 2981,
+          "def": 186
+        },
+        "cloak": {
+          "hp": 1490,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 1987,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 30,
+      "tier_id": "tianheng",
+      "tier_name": "天衡",
+      "region": "天衡城",
+      "names": {
+        "sword": "天衡剑",
+        "blade": "天衡刀",
+        "spear": "天衡枪",
+        "staff": "天衡杖",
+        "hammer": "天衡锤",
+        "bow": "天衡弓",
+        "head": "天衡帽",
+        "chest": "天衡衣",
+        "legs": "天衡裤",
+        "belt": "天衡带",
+        "hands": "天衡护手",
+        "feet": "天衡靴",
+        "inner": "天衡内甲",
+        "cloak": "天衡披风",
+        "title": "金丹称号",
+        "necklace": "天衡坠",
+        "earring": "天衡耳环",
+        "ring": "天衡戒"
+      },
+      "white": {
+        "title": {
+          "atk": 225,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 4845,
+          "atk": 345
+        },
+        "earring": {
+          "hp": 3600,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 570
+        },
+        "head": {
+          "hp": 4050,
+          "def": 345
+        },
+        "chest": {
+          "hp": 12150,
+          "def": 1020
+        },
+        "legs": {
+          "hp": 9675,
+          "def": 795
+        },
+        "belt": {
+          "hp": 8550,
+          "def": 225
+        },
+        "hands": {
+          "atk": 570,
+          "def": 345
+        },
+        "feet": {
+          "hp": 4845,
+          "def": 345,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 5400,
+          "def": 345
+        },
+        "cloak": {
+          "hp": 2700,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 3600,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 311,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 6686,
+          "atk": 476
+        },
+        "earring": {
+          "hp": 4968,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 787
+        },
+        "head": {
+          "hp": 5589,
+          "def": 476
+        },
+        "chest": {
+          "hp": 16767,
+          "def": 1408
+        },
+        "legs": {
+          "hp": 13352,
+          "def": 1097
+        },
+        "belt": {
+          "hp": 11799,
+          "def": 311
+        },
+        "hands": {
+          "atk": 787,
+          "def": 476
+        },
+        "feet": {
+          "hp": 6686,
+          "def": 476,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 7452,
+          "def": 476
+        },
+        "cloak": {
+          "hp": 3726,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 4968,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 40,
+      "tier_id": "longque",
+      "tier_name": "龙阙",
+      "region": "玄朝国都",
+      "names": {
+        "sword": "龙阙剑",
+        "blade": "龙阙刀",
+        "spear": "龙阙枪",
+        "staff": "龙阙杖",
+        "hammer": "龙阙锤",
+        "bow": "龙阙弓",
+        "head": "龙阙帽",
+        "chest": "龙阙衣",
+        "legs": "龙阙裤",
+        "belt": "龙阙带",
+        "hands": "龙阙护手",
+        "feet": "龙阙靴",
+        "inner": "龙阙内甲",
+        "cloak": "龙阙披风",
+        "title": "元婴称号",
+        "necklace": "龙阙坠",
+        "earring": "龙阙耳环",
+        "ring": "龙阙戒"
+      },
+      "white": {
+        "title": {
+          "atk": 240,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 5040,
+          "atk": 345
+        },
+        "earring": {
+          "hp": 3750,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 585
+        },
+        "head": {
+          "hp": 4215,
+          "def": 345
+        },
+        "chest": {
+          "hp": 12660,
+          "def": 1050
+        },
+        "legs": {
+          "hp": 10080,
+          "def": 825
+        },
+        "belt": {
+          "hp": 8910,
+          "def": 240
+        },
+        "hands": {
+          "atk": 585,
+          "def": 345
+        },
+        "feet": {
+          "hp": 5040,
+          "def": 345,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 5625,
+          "def": 345
+        },
+        "cloak": {
+          "hp": 2820,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 3750,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 331,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 6955,
+          "atk": 476
+        },
+        "earring": {
+          "hp": 5175,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 807
+        },
+        "head": {
+          "hp": 5817,
+          "def": 476
+        },
+        "chest": {
+          "hp": 17471,
+          "def": 1449
+        },
+        "legs": {
+          "hp": 13910,
+          "def": 1139
+        },
+        "belt": {
+          "hp": 12296,
+          "def": 331
+        },
+        "hands": {
+          "atk": 807,
+          "def": 476
+        },
+        "feet": {
+          "hp": 6955,
+          "def": 476,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 7763,
+          "def": 476
+        },
+        "cloak": {
+          "hp": 3892,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 5175,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 50,
+      "tier_id": "cangming",
+      "tier_name": "苍溟",
+      "region": "苍溟",
+      "names": {
+        "sword": "苍溟剑",
+        "blade": "苍溟刀",
+        "spear": "苍溟枪",
+        "staff": "苍溟杖",
+        "hammer": "苍溟锤",
+        "bow": "苍溟弓",
+        "head": "苍溟帽",
+        "chest": "苍溟衣",
+        "legs": "苍溟裤",
+        "belt": "苍溟带",
+        "hands": "苍溟护手",
+        "feet": "苍溟靴",
+        "inner": "苍溟内甲",
+        "cloak": "苍溟披风",
+        "title": "化神称号",
+        "necklace": "苍溟坠",
+        "earring": "苍溟耳环",
+        "ring": "苍溟戒"
+      },
+      "white": {
+        "title": {
+          "atk": 255,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 5625,
+          "atk": 390
+        },
+        "earring": {
+          "hp": 4185,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 660
+        },
+        "head": {
+          "hp": 4710,
+          "def": 390
+        },
+        "chest": {
+          "hp": 14130,
+          "def": 1170
+        },
+        "legs": {
+          "hp": 11250,
+          "def": 915
+        },
+        "belt": {
+          "hp": 9945,
+          "def": 255
+        },
+        "hands": {
+          "atk": 660,
+          "def": 390
+        },
+        "feet": {
+          "hp": 5625,
+          "def": 390,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 6285,
+          "def": 390
+        },
+        "cloak": {
+          "hp": 3135,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 4185,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 352,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 7763,
+          "atk": 538
+        },
+        "earring": {
+          "hp": 5775,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 911
+        },
+        "head": {
+          "hp": 6500,
+          "def": 538
+        },
+        "chest": {
+          "hp": 19499,
+          "def": 1615
+        },
+        "legs": {
+          "hp": 15525,
+          "def": 1263
+        },
+        "belt": {
+          "hp": 13724,
+          "def": 352
+        },
+        "hands": {
+          "atk": 911,
+          "def": 538
+        },
+        "feet": {
+          "hp": 7763,
+          "def": 538,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 8673,
+          "def": 538
+        },
+        "cloak": {
+          "hp": 4326,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 5775,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 60,
+      "tier_id": "taixu",
+      "tier_name": "太虚",
+      "region": "太虚",
+      "names": {
+        "sword": "太虚剑",
+        "blade": "太虚刀",
+        "spear": "太虚枪",
+        "staff": "太虚杖",
+        "hammer": "太虚锤",
+        "bow": "太虚弓",
+        "head": "太虚帽",
+        "chest": "太虚衣",
+        "legs": "太虚裤",
+        "belt": "太虚带",
+        "hands": "太虚护手",
+        "feet": "太虚靴",
+        "inner": "太虚内甲",
+        "cloak": "太虚披风",
+        "title": "炼虚称号",
+        "necklace": "太虚坠",
+        "earring": "太虚耳环",
+        "ring": "太虚戒"
+      },
+      "white": {
+        "title": {
+          "atk": 285,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 6255,
+          "atk": 435
+        },
+        "earring": {
+          "hp": 4650,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 720
+        },
+        "head": {
+          "hp": 5235,
+          "def": 435
+        },
+        "chest": {
+          "hp": 15690,
+          "def": 1305
+        },
+        "legs": {
+          "hp": 12495,
+          "def": 1020
+        },
+        "belt": {
+          "hp": 11040,
+          "def": 285
+        },
+        "hands": {
+          "atk": 720,
+          "def": 435
+        },
+        "feet": {
+          "hp": 6255,
+          "def": 435,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 6975,
+          "def": 435
+        },
+        "cloak": {
+          "hp": 3495,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 4650,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 393,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 8632,
+          "atk": 600
+        },
+        "earring": {
+          "hp": 6417,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 994
+        },
+        "head": {
+          "hp": 7224,
+          "def": 600
+        },
+        "chest": {
+          "hp": 21652,
+          "def": 1801
+        },
+        "legs": {
+          "hp": 17243,
+          "def": 1408
+        },
+        "belt": {
+          "hp": 15235,
+          "def": 393
+        },
+        "hands": {
+          "atk": 994,
+          "def": 600
+        },
+        "feet": {
+          "hp": 8632,
+          "def": 600,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 9626,
+          "def": 600
+        },
+        "cloak": {
+          "hp": 4823,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 6417,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 70,
+      "tier_id": "guizhen",
+      "tier_name": "归真",
+      "region": "归真",
+      "names": {
+        "sword": "归真剑",
+        "blade": "归真刀",
+        "spear": "归真枪",
+        "staff": "归真杖",
+        "hammer": "归真锤",
+        "bow": "归真弓",
+        "head": "归真帽",
+        "chest": "归真衣",
+        "legs": "归真裤",
+        "belt": "归真带",
+        "hands": "归真护手",
+        "feet": "归真靴",
+        "inner": "归真内甲",
+        "cloak": "归真披风",
+        "title": "合体称号",
+        "necklace": "归真坠",
+        "earring": "归真耳环",
+        "ring": "归真戒"
+      },
+      "white": {
+        "title": {
+          "atk": 330,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 6960,
+          "atk": 480
+        },
+        "earring": {
+          "hp": 5175,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 810
+        },
+        "head": {
+          "hp": 5820,
+          "def": 480
+        },
+        "chest": {
+          "hp": 17460,
+          "def": 1455
+        },
+        "legs": {
+          "hp": 13905,
+          "def": 1125
+        },
+        "belt": {
+          "hp": 12285,
+          "def": 330
+        },
+        "hands": {
+          "atk": 810,
+          "def": 480
+        },
+        "feet": {
+          "hp": 6960,
+          "def": 480,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 7770,
+          "def": 480
+        },
+        "cloak": {
+          "hp": 3885,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 5175,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 455,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 9605,
+          "atk": 662
+        },
+        "earring": {
+          "hp": 7142,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 1118
+        },
+        "head": {
+          "hp": 8032,
+          "def": 662
+        },
+        "chest": {
+          "hp": 24095,
+          "def": 2008
+        },
+        "legs": {
+          "hp": 19189,
+          "def": 1553
+        },
+        "belt": {
+          "hp": 16953,
+          "def": 455
+        },
+        "hands": {
+          "atk": 1118,
+          "def": 662
+        },
+        "feet": {
+          "hp": 9605,
+          "def": 662,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 10723,
+          "def": 662
+        },
+        "cloak": {
+          "hp": 5361,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 7142,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 80,
+      "tier_id": "wendao",
+      "tier_name": "问道",
+      "region": "问道",
+      "names": {
+        "sword": "问道剑",
+        "blade": "问道刀",
+        "spear": "问道枪",
+        "staff": "问道杖",
+        "hammer": "问道锤",
+        "bow": "问道弓",
+        "head": "问道帽",
+        "chest": "问道衣",
+        "legs": "问道裤",
+        "belt": "问道带",
+        "hands": "问道护手",
+        "feet": "问道靴",
+        "inner": "问道内甲",
+        "cloak": "问道披风",
+        "title": "大乘称号",
+        "necklace": "问道坠",
+        "earring": "问道耳环",
+        "ring": "问道戒"
+      },
+      "white": {
+        "title": {
+          "atk": 367,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 7747,
+          "atk": 534
+        },
+        "earring": {
+          "hp": 5760,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 902
+        },
+        "head": {
+          "hp": 6478,
+          "def": 534
+        },
+        "chest": {
+          "hp": 19434,
+          "def": 1619
+        },
+        "legs": {
+          "hp": 15477,
+          "def": 1252
+        },
+        "belt": {
+          "hp": 13674,
+          "def": 367
+        },
+        "hands": {
+          "atk": 902,
+          "def": 534
+        },
+        "feet": {
+          "hp": 7747,
+          "def": 534,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 8648,
+          "def": 534
+        },
+        "cloak": {
+          "hp": 4324,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 5760,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 506,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 10691,
+          "atk": 737
+        },
+        "earring": {
+          "hp": 7949,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 1245
+        },
+        "head": {
+          "hp": 8940,
+          "def": 737
+        },
+        "chest": {
+          "hp": 26819,
+          "def": 2234
+        },
+        "legs": {
+          "hp": 21358,
+          "def": 1728
+        },
+        "belt": {
+          "hp": 18870,
+          "def": 506
+        },
+        "hands": {
+          "atk": 1245,
+          "def": 737
+        },
+        "feet": {
+          "hp": 10691,
+          "def": 737,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 11934,
+          "def": 737
+        },
+        "cloak": {
+          "hp": 5967,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 7949,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 90,
+      "tier_id": "poxu",
+      "tier_name": "破虚",
+      "region": "破虚",
+      "names": {
+        "sword": "破虚剑",
+        "blade": "破虚刀",
+        "spear": "破虚枪",
+        "staff": "破虚杖",
+        "hammer": "破虚锤",
+        "bow": "破虚弓",
+        "head": "破虚帽",
+        "chest": "破虚衣",
+        "legs": "破虚裤",
+        "belt": "破虚带",
+        "hands": "破虚护手",
+        "feet": "破虚靴",
+        "inner": "破虚内甲",
+        "cloak": "破虚披风",
+        "title": "渡劫称号",
+        "necklace": "破虚坠",
+        "earring": "破虚耳环",
+        "ring": "破虚戒"
+      },
+      "white": {
+        "title": {
+          "atk": 408,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 8614,
+          "atk": 594
+        },
+        "earring": {
+          "hp": 6405,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 1003
+        },
+        "head": {
+          "hp": 7203,
+          "def": 594
+        },
+        "chest": {
+          "hp": 21610,
+          "def": 1801
+        },
+        "legs": {
+          "hp": 17210,
+          "def": 1392
+        },
+        "belt": {
+          "hp": 15205,
+          "def": 408
+        },
+        "hands": {
+          "atk": 1003,
+          "def": 594
+        },
+        "feet": {
+          "hp": 8614,
+          "def": 594,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 9617,
+          "def": 594
+        },
+        "cloak": {
+          "hp": 4808,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 6405,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 563,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 11887,
+          "atk": 820
+        },
+        "earring": {
+          "hp": 8839,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 1384
+        },
+        "head": {
+          "hp": 9940,
+          "def": 820
+        },
+        "chest": {
+          "hp": 29822,
+          "def": 2485
+        },
+        "legs": {
+          "hp": 23750,
+          "def": 1921
+        },
+        "belt": {
+          "hp": 20983,
+          "def": 563
+        },
+        "hands": {
+          "atk": 1384,
+          "def": 820
+        },
+        "feet": {
+          "hp": 11887,
+          "def": 820,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 13271,
+          "def": 820
+        },
+        "cloak": {
+          "hp": 6635,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 8839,
+          "aspd": 7
+        }
+      }
+    },
+    {
+      "item_level": 100,
+      "tier_id": "zhengdao",
+      "tier_name": "证道",
+      "region": "证道",
+      "names": {
+        "sword": "证道剑",
+        "blade": "证道刀",
+        "spear": "证道枪",
+        "staff": "证道杖",
+        "hammer": "证道锤",
+        "bow": "证道弓",
+        "head": "证道帽",
+        "chest": "证道衣",
+        "legs": "证道裤",
+        "belt": "证道带",
+        "hands": "证道护手",
+        "feet": "证道靴",
+        "inner": "证道内甲",
+        "cloak": "证道披风",
+        "title": "真仙称号",
+        "necklace": "证道坠",
+        "earring": "证道耳环",
+        "ring": "证道戒"
+      },
+      "white": {
+        "title": {
+          "atk": 454,
+          "crit": 2
+        },
+        "necklace": {
+          "hp": 9583,
+          "atk": 661
+        },
+        "earring": {
+          "hp": 7125,
+          "crit": 2
+        },
+        "ring": {
+          "atk": 1115
+        },
+        "head": {
+          "hp": 8013,
+          "def": 661
+        },
+        "chest": {
+          "hp": 24039,
+          "def": 2003
+        },
+        "legs": {
+          "hp": 19145,
+          "def": 1549
+        },
+        "belt": {
+          "hp": 16914,
+          "def": 454
+        },
+        "hands": {
+          "atk": 1115,
+          "def": 661
+        },
+        "feet": {
+          "hp": 9583,
+          "def": 661,
+          "ms": 3
+        },
+        "inner": {
+          "hp": 10698,
+          "def": 661
+        },
+        "cloak": {
+          "hp": 5349,
+          "ms": 2
+        },
+        "weapon": {
+          "atk": 7125,
+          "aspd": 5
+        }
+      },
+      "darkgold": {
+        "title": {
+          "atk": 627,
+          "crit": 3
+        },
+        "necklace": {
+          "hp": 13225,
+          "atk": 912
+        },
+        "earring": {
+          "hp": 9833,
+          "crit": 3
+        },
+        "ring": {
+          "atk": 1539
+        },
+        "head": {
+          "hp": 11058,
+          "def": 912
+        },
+        "chest": {
+          "hp": 33174,
+          "def": 2764
+        },
+        "legs": {
+          "hp": 26420,
+          "def": 2138
+        },
+        "belt": {
+          "hp": 23341,
+          "def": 627
+        },
+        "hands": {
+          "atk": 1539,
+          "def": 912
+        },
+        "feet": {
+          "hp": 13225,
+          "def": 912,
+          "ms": 4
+        },
+        "inner": {
+          "hp": 14763,
+          "def": 912
+        },
+        "cloak": {
+          "hp": 7382,
+          "ms": 3
+        },
+        "weapon": {
+          "atk": 9833,
+          "aspd": 7
+        }
+      }
+    }
+  ]
+}

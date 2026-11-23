@@ -1,0 +1,4757 @@
+{
+ "version": "0.4",
+ "meta": {
+  "title": "修仙小队·装备数值表",
+  "version": "0.4",
+  "date": "2026-11-20",
+  "owner": "创意部",
+  "status": "v0.3：老板 2026-11-20 04:38 定正式版单件 +30、试玩版 +10；其余【推荐】项老板可推翻",
+  "changelog": [
+   "v0.4：formula 全部改为数字字段（文字移到 note）",
+   "v0.4：补强化成功率/失败惩罚/绑银与炼器石消耗（正式版、试玩版）【推荐】",
+   "v0.4：补宝石掉率与开局赠送、角色逐级基础值、青石村怪物数值、每波掉落装备等级、试玩版通关验证【推荐】",
+   "v0.4：补 6 种武器各 7 档命名（names.by_weapon_type）",
+   "v0.4：明确 affix_forbidden 只管词条、不管主属性",
+   "v0.3：正式版单件强化上限 +30、全身 300；试玩版单件 +10、全身 100【已定 2026-11-20】，取代 v0.2 的「全程统一 +10」",
+   "v0.3：强化加成改为递减曲线 1~10 级每级 +5%、11~20 级每级 +2.5%、21~30 级每级 +1.5%，+10 共 +50%，+30 共 +90%【已定 2026-11-20】",
+   "v0.3：特效门槛正式版 >=61/181/223/271、试玩版 >=21/61/75/91，均由 thresholds_ratio 计算",
+   "v0.2：10 部位全开、第 2~5 题按推荐、新增 sets 表"
+  ],
+  "notes": [
+   "flat 数值 = 表中基础值 × V(装备等级) × 稀有度倍率 × 品相(0.95~1.05) × (1 + 强化累计加成 enhance.curve[等级].cum_pct/100)",
+   "百分比主属性(移速/命中)不随等级缩放，只乘稀有度倍率与强化",
+   "词条 1 点 = 约 0.5% 标准角色输出；flat 词条值 = 点数 × value_per_point × V(装备等级)"
+  ]
+ },
+ "stats": [
+  {
+   "id": "hp",
+   "name": "生命"
+  },
+  {
+   "id": "atk",
+   "name": "攻击"
+  },
+  {
+   "id": "def",
+   "name": "防御"
+  },
+  {
+   "id": "aspd",
+   "name": "攻速"
+  },
+  {
+   "id": "ms",
+   "name": "移速"
+  },
+  {
+   "id": "crit",
+   "name": "会心率"
+  },
+  {
+   "id": "critdmg",
+   "name": "会心伤害"
+  },
+  {
+   "id": "acc",
+   "name": "命中"
+  },
+  {
+   "id": "eva",
+   "name": "闪避"
+  },
+  {
+   "id": "elem",
+   "name": "属性伤害(冰/火/电/暗)"
+  },
+  {
+   "id": "res",
+   "name": "属性抗性"
+  }
+ ],
+ "formula": {
+  "g_curve": {
+   "base": 1.8,
+   "ref_level": 5,
+   "div": 10
+  },
+  "hero_base": {
+   "hp": 300,
+   "atk": 15,
+   "def": 6,
+   "acc_pct": 0,
+   "eva_pct": 0,
+   "crit_rate_pct": 5,
+   "crit_dmg_pct": 150,
+   "res_pct": {
+    "frost": 0,
+    "fire": 0,
+    "lightning": 0,
+    "shadow": 0
+   }
+  },
+  "def_k": 60,
+  "hit": {
+   "base": 0.95,
+   "shadow_per_stack": 0.04,
+   "per_level_diff": 0.02,
+   "min": 0.5,
+   "max": 1.0
+  },
+  "crit": {
+   "base_rate_pct": 5,
+   "cap_rate_pct": 60,
+   "base_dmg_pct": 150,
+   "cap_dmg_pct": 300
+  },
+  "level_mod": {
+   "per_level": 0.02,
+   "min": 0.7,
+   "max": 1.3
+  },
+  "variance": [
+   0.95,
+   1.05
+  ],
+  "mismatch_variance": [
+   0.7,
+   1.3
+  ],
+  "roll": {
+   "quality_range": [
+    0.95,
+    1.05
+   ],
+   "budget_roll": [
+    0.85,
+    1.0
+   ],
+   "affix_weight_range": [
+    0.6,
+    1.4
+   ],
+   "affix_pts_min": 5,
+   "affix_pts_max": 18
+  },
+  "caps": {
+   "aspd_pct": 100,
+   "ms_pct": 50,
+   "player_res_pct": 60,
+   "monster_res_pct": 75,
+   "eva_pct": 40,
+   "crit_rate_pct": 60,
+   "crit_dmg_pct": 300
+  },
+  "damage": {
+   "elem_ignores_def": true,
+   "skill_dmg_in_additive_buff": true,
+   "atk_pct_applies_to_total": true,
+   "lightning_vuln_per_stack": 0.04
+  },
+  "element_stack": {
+   "stack_base": 0.25,
+   "elem_over_atk_coef": 1.0,
+   "stack_cap": 0.6,
+   "max_stacks": 5,
+   "decay_s": 4.0,
+   "decay_stacks": 1
+  },
+  "elements": {
+   "frost": {
+    "slow_per_stack": 0.06,
+    "freeze_s": 1.5,
+    "clear_on_trigger": true,
+    "immune_s": 6.0,
+    "boss_slow": 0.5,
+    "boss_slow_s": 3.0
+   },
+   "fire": {
+    "burn_atk_pct_per_stack": 4,
+    "burn_tick_s": 1.0,
+    "burn_uses_def": false,
+    "burn_can_crit": false,
+    "burst_atk_mult": 1.5,
+    "burst_elem_mult": 3.0,
+    "burst_radius": 100,
+    "burst_consumes": 5,
+    "burst_can_crit": false
+   },
+   "lightning": {
+    "dmg_taken_per_stack": 0.04,
+    "stun_s": 1.0,
+    "clear_on_trigger": false,
+    "immune_s": 8.0,
+    "boss_interrupt": true
+   },
+   "shadow": {
+    "hit_down_per_stack": 0.04,
+    "fear_s": 2.0,
+    "immune_s": 8.0,
+    "boss_hit_down": 0.2,
+    "boss_hit_down_s": 4.0
+   }
+  },
+  "no_chain": {
+   "special_can_trigger_special": false,
+   "special_applies_stacks": false,
+   "burst_applies_stacks": false,
+   "burn_applies_stacks": false,
+   "clone_applies_stacks": false,
+   "clone_can_trigger_special": false
+  },
+  "note": {
+   "hit_rate": "命中率 = clamp(hit.base + 攻方命中% − 守方闪避% − 暗层×shadow_per_stack + 等级差×per_level_diff, min, max)",
+   "def_reduction": "防御减免 = DEF / (DEF + def_k × g(攻击方等级))，g(L)=g_curve.base^((L−ref_level)/div)",
+   "damage": "单次伤害 = [攻击×技能倍率×(1−防御减免) + Σ属性伤害×技能倍率×(1−抗性)] × 会心 × (1+Σ增伤) × (1+感电层×lightning_vuln_per_stack) × 等级修正 × 波动",
+   "level_mod": "等级修正 = clamp(1 + per_level×(攻方等级−守方等级), min, max)",
+   "variance": "variance=对口波动；mismatch_variance=学艺不精波动，期望都是 1",
+   "element_stack": "叠层概率 = min(stack_base + elem_over_atk_coef×该属性伤害/攻击, stack_cap)；decay_s 秒没叠层掉 decay_stacks 层",
+   "elements": "冰：每层减攻速/移速；火：每层每秒灼烧 攻击×burn_atk_pct_per_stack%，满层爆炸 攻击×burst_atk_mult + 火伤×burst_elem_mult；电：每层易伤；暗：每层降命中。Boss 免疫硬控，改用 boss_* 字段",
+   "no_chain": "特效、属性爆炸、灼烧、分身攻击造成的伤害都不叠属性层、不触发任何特效【已定】",
+   "hero_base": "角色基础 = hero_base × g(角色等级)；10 级内所有角色相同【已定】"
+  }
+ },
+ "heroes": {
+  "levels": [
+   {
+    "level": 1,
+    "g": 0.7905,
+    "hp": 237.1,
+    "atk": 11.9,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 4.7
+   },
+   {
+    "level": 2,
+    "g": 0.8383,
+    "hp": 251.5,
+    "atk": 12.6,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 5.0
+   },
+   {
+    "level": 3,
+    "g": 0.8891,
+    "hp": 266.7,
+    "atk": 13.3,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 5.3
+   },
+   {
+    "level": 4,
+    "g": 0.9429,
+    "hp": 282.9,
+    "atk": 14.1,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 5.7
+   },
+   {
+    "level": 5,
+    "g": 1.0,
+    "hp": 300.0,
+    "atk": 15.0,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 6.0
+   },
+   {
+    "level": 6,
+    "g": 1.0605,
+    "hp": 318.2,
+    "atk": 15.9,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 6.4
+   },
+   {
+    "level": 7,
+    "g": 1.1247,
+    "hp": 337.4,
+    "atk": 16.9,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 6.7
+   },
+   {
+    "level": 8,
+    "g": 1.1928,
+    "hp": 357.9,
+    "atk": 17.9,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 7.2
+   },
+   {
+    "level": 9,
+    "g": 1.2651,
+    "hp": 379.5,
+    "atk": 19.0,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 7.6
+   },
+   {
+    "level": 10,
+    "g": 1.3416,
+    "hp": 402.5,
+    "atk": 20.1,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 8.0
+   },
+   {
+    "level": 15,
+    "g": 1.8,
+    "hp": 540.0,
+    "atk": 27.0,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 10.8
+   },
+   {
+    "level": 20,
+    "g": 2.415,
+    "hp": 724.5,
+    "atk": 36.2,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 14.5
+   },
+   {
+    "level": 25,
+    "g": 3.24,
+    "hp": 972.0,
+    "atk": 48.6,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 19.4
+   },
+   {
+    "level": 30,
+    "g": 4.3469,
+    "hp": 1304.1,
+    "atk": 65.2,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 26.1
+   },
+   {
+    "level": 35,
+    "g": 5.832,
+    "hp": 1749.6,
+    "atk": 87.5,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 35.0
+   },
+   {
+    "level": 40,
+    "g": 7.8244,
+    "hp": 2347.3,
+    "atk": 117.4,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 46.9
+   },
+   {
+    "level": 45,
+    "g": 10.4976,
+    "hp": 3149.3,
+    "atk": 157.5,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 63.0
+   },
+   {
+    "level": 50,
+    "g": 14.084,
+    "hp": 4225.2,
+    "atk": 211.3,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 84.5
+   },
+   {
+    "level": 55,
+    "g": 18.8957,
+    "hp": 5668.7,
+    "atk": 283.4,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 113.4
+   },
+   {
+    "level": 60,
+    "g": 25.3512,
+    "hp": 7605.4,
+    "atk": 380.3,
+    "acc_pct": 0,
+    "eva_pct": 0,
+    "crit_rate_pct": 5,
+    "crit_dmg_pct": 150,
+    "res_pct": {
+     "frost": 0,
+     "fire": 0,
+     "lightning": 0,
+     "shadow": 0
+    },
+    "def": 152.1
+   }
+  ],
+  "note": "角色基础值逐级表（不含装备）；职业只决定动作、射程、攻速与技能，不改基础值【已定：10 级内相同】"
+ },
+ "monsters": {
+  "wolf": {
+   "name": "野狼",
+   "en": "Wolf",
+   "kind": "normal",
+   "coef": {
+    "hp": 170,
+    "atk": 45,
+    "def": 4
+   },
+   "acc_pct": 0,
+   "eva_pct": 5,
+   "res": {
+    "frost": 0,
+    "fire": 0,
+    "lightning": 0,
+    "shadow": 0
+   },
+   "attack_interval_s": 0.8,
+   "levels": [
+    {
+     "level": 2,
+     "hp": 143,
+     "atk": 37.7,
+     "acc_pct": 0,
+     "eva_pct": 5,
+     "res": {
+      "frost": 0,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 7,
+     "attack_interval_s": 0.8,
+     "def": 3.4
+    },
+    {
+     "level": 3,
+     "hp": 151,
+     "atk": 40.0,
+     "acc_pct": 0,
+     "eva_pct": 5,
+     "res": {
+      "frost": 0,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 7,
+     "attack_interval_s": 0.8,
+     "def": 3.6
+    },
+    {
+     "level": 8,
+     "hp": 203,
+     "atk": 53.7,
+     "acc_pct": 0,
+     "eva_pct": 5,
+     "res": {
+      "frost": 0,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 10,
+     "attack_interval_s": 0.8,
+     "def": 4.8
+    }
+   ]
+  },
+  "snake": {
+   "name": "毒蛇",
+   "en": "Viper",
+   "kind": "normal",
+   "coef": {
+    "hp": 130,
+    "atk": 50,
+    "def": 2
+   },
+   "acc_pct": 5,
+   "eva_pct": 10,
+   "res": {
+    "frost": -10,
+    "fire": 0,
+    "lightning": 0,
+    "shadow": 10
+   },
+   "attack_interval_s": 1.0,
+   "levels": [
+    {
+     "level": 4,
+     "hp": 123,
+     "atk": 47.1,
+     "acc_pct": 5,
+     "eva_pct": 10,
+     "res": {
+      "frost": -10,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 10
+     },
+     "bind_silver": 8,
+     "attack_interval_s": 1.0,
+     "def": 1.9
+    },
+    {
+     "level": 5,
+     "hp": 130,
+     "atk": 50.0,
+     "acc_pct": 5,
+     "eva_pct": 10,
+     "res": {
+      "frost": -10,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 10
+     },
+     "bind_silver": 8,
+     "attack_interval_s": 1.0,
+     "def": 2.0
+    }
+   ],
+   "note": "毒蛇怕冷（冰抗 −10%），暗抗 +10%；无毒属性（属性只有冰火电暗）"
+  },
+  "bandit": {
+   "name": "山贼",
+   "en": "Bandit",
+   "kind": "normal",
+   "coef": {
+    "hp": 220,
+    "atk": 48,
+    "def": 8
+   },
+   "acc_pct": 0,
+   "eva_pct": 0,
+   "res": {
+    "frost": 0,
+    "fire": 0,
+    "lightning": 0,
+    "shadow": 0
+   },
+   "attack_interval_s": 1.0,
+   "levels": [
+    {
+     "level": 6,
+     "hp": 233,
+     "atk": 50.9,
+     "acc_pct": 0,
+     "eva_pct": 0,
+     "res": {
+      "frost": 0,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 8,
+     "attack_interval_s": 1.0,
+     "def": 8.5
+    },
+    {
+     "level": 7,
+     "hp": 247,
+     "atk": 54.0,
+     "acc_pct": 0,
+     "eva_pct": 0,
+     "res": {
+      "frost": 0,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 9,
+     "attack_interval_s": 1.0,
+     "def": 9.0
+    },
+    {
+     "level": 8,
+     "hp": 262,
+     "atk": 57.3,
+     "acc_pct": 0,
+     "eva_pct": 0,
+     "res": {
+      "frost": 0,
+      "fire": 0,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 10,
+     "attack_interval_s": 1.0,
+     "def": 9.5
+    }
+   ]
+  },
+  "boar": {
+   "name": "山猪",
+   "en": "Wild Boar",
+   "kind": "elite",
+   "coef": {
+    "hp": 650,
+    "atk": 70,
+    "def": 12
+   },
+   "acc_pct": 0,
+   "eva_pct": 0,
+   "res": {
+    "frost": 0,
+    "fire": 10,
+    "lightning": 0,
+    "shadow": 0
+   },
+   "attack_interval_s": 1.2,
+   "levels": [
+    {
+     "level": 7,
+     "hp": 731,
+     "atk": 78.7,
+     "acc_pct": 0,
+     "eva_pct": 0,
+     "res": {
+      "frost": 0,
+      "fire": 10,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 45,
+     "attack_interval_s": 1.2,
+     "def": 13.5
+    },
+    {
+     "level": 9,
+     "hp": 822,
+     "atk": 88.6,
+     "acc_pct": 0,
+     "eva_pct": 0,
+     "res": {
+      "frost": 0,
+      "fire": 10,
+      "lightning": 0,
+      "shadow": 0
+     },
+     "bind_silver": 51,
+     "attack_interval_s": 1.2,
+     "def": 15.2
+    }
+   ]
+  },
+  "boss": {
+   "name": "山贼头目",
+   "en": "Bandit Chief",
+   "kind": "boss",
+   "coef": {
+    "hp": 8000,
+    "atk": 95,
+    "def": 16
+   },
+   "acc_pct": 5,
+   "eva_pct": 0,
+   "res": {
+    "frost": 10,
+    "fire": 10,
+    "lightning": 10,
+    "shadow": 10
+   },
+   "attack_interval_s": 1.4,
+   "levels": [
+    {
+     "level": 10,
+     "hp": 10733,
+     "atk": 127.5,
+     "acc_pct": 5,
+     "eva_pct": 0,
+     "res": {
+      "frost": 10,
+      "fire": 10,
+      "lightning": 10,
+      "shadow": 10
+     },
+     "bind_silver": 335,
+     "attack_interval_s": 1.4,
+     "def": 21.5
+    }
+   ],
+   "skill": {
+    "name": "震地",
+    "mult": 2.2,
+    "cd_s": 7.0,
+    "radius": 160,
+    "windup_s": 0.9,
+    "boss_immune_hard_cc": true
+   }
+  }
+ },
+ "monster_formula": {
+  "stat": "怪物属性 = coef × g(怪物等级)",
+  "bind_silver_coef": {
+   "normal": 8,
+   "elite": 40,
+   "boss": 250
+  },
+  "refine_stone_drop": {
+   "normal": 0.15,
+   "elite": 0.5,
+   "boss": 3
+  }
+ },
+ "qingshi": {
+  "maps": [
+   {
+    "map": 1,
+    "name": "村口麦田",
+    "levels": [
+     1,
+     2
+    ],
+    "monsters": [
+     "wolf"
+    ],
+    "item_levels": [
+     1
+    ]
+   },
+   {
+    "map": 2,
+    "name": "后山竹林",
+    "levels": [
+     3,
+     4
+    ],
+    "monsters": [
+     "wolf",
+     "snake"
+    ],
+    "item_levels": [
+     1,
+     5
+    ]
+   },
+   {
+    "map": 3,
+    "name": "溪边乱石",
+    "levels": [
+     5,
+     6
+    ],
+    "monsters": [
+     "snake",
+     "bandit"
+    ],
+    "elite": "boar",
+    "item_levels": [
+     5
+    ]
+   },
+   {
+    "map": 4,
+    "name": "山道哨卡",
+    "levels": [
+     7,
+     8
+    ],
+    "monsters": [
+     "bandit",
+     "wolf"
+    ],
+    "elite": "boar",
+    "item_levels": [
+     5,
+     10
+    ]
+   },
+   {
+    "map": 5,
+    "name": "山贼寨",
+    "levels": [
+     9,
+     10
+    ],
+    "monsters": [
+     "bandit"
+    ],
+    "elite": "boar",
+    "boss": "boss",
+    "item_levels": [
+     10
+    ]
+   }
+  ],
+  "sample": {
+   "hero_level": 10,
+   "waves": [
+    {
+     "wave": 1,
+     "spawn": {
+      "wolf": 5
+     },
+     "monster_level": 8,
+     "item_levels": [
+      5
+     ]
+    },
+    {
+     "wave": 2,
+     "spawn": {
+      "boar": 3,
+      "bandit": 3
+     },
+     "monster_level": {
+      "boar": 9,
+      "bandit": 8
+     },
+     "item_levels": [
+      5,
+      10
+     ]
+    },
+    {
+     "wave": 3,
+     "spawn": {
+      "boss": 1,
+      "bandit": 2,
+      "wolf": 2
+     },
+     "monster_level": {
+      "boss": 10,
+      "bandit": 8,
+      "wolf": 8
+     },
+     "item_levels": [
+      10
+     ]
+    }
+   ],
+   "wave_item_levels": [
+    [
+     5
+    ],
+    [
+     5,
+     10
+    ],
+    [
+     10
+    ]
+   ],
+   "farm_item_levels": [
+    10
+   ],
+   "note": "试玩样品 3 波；角色等级建议 10（Boss 为 10 级，验证按 10 级算）"
+  },
+  "wave_item_levels": [
+   [
+    5
+   ],
+   [
+    5,
+    10
+   ],
+   [
+    10
+   ]
+  ],
+  "farm_item_levels": [
+   10
+  ],
+  "wear_rule": {
+   "require_hero_level_ge_item_level": true,
+   "note": "【推荐】装备等级 = 穿戴需求等级"
+  }
+ },
+ "balance_check": {
+  "assumptions": {
+   "team": 3,
+   "hero_level": 10,
+   "item_level": 10,
+   "slots": 10,
+   "attack_interval_s": 1.0,
+   "skill_dps_bonus_pct": 15,
+   "heal_pct_maxhp": 8,
+   "heal_cd_s": 8,
+   "boss_slam_mult": 2.2,
+   "boss_slam_cd_s": 7,
+   "only_boss_counted": true,
+   "pass_ratio_max": 0.9,
+   "stable_ratio_max": 0.8,
+   "note": "ratio = Boss 击杀时间 / 小队存活时间；<0.9 判定能通关（留 10% 余量），≤0.8 稳定通关"
+  },
+  "boss_rows": [
+   {
+    "case": "绿蓝混装 +0",
+    "enh": 0,
+    "rarity_mult": 1.1,
+    "affix_atk_pct": 15,
+    "affix_hp_pct": 15,
+    "hero_atk": 73.2,
+    "hero_hp": 1100,
+    "hero_def": 42.4,
+    "boss_hp": 10733,
+    "t_kill_s": 55.3,
+    "t_survive_s": 44.1,
+    "ratio": 1.25,
+    "verdict": "打不过"
+   },
+   {
+    "case": "绿蓝混装 +3",
+    "enh": 3,
+    "rarity_mult": 1.1,
+    "affix_atk_pct": 15,
+    "affix_hp_pct": 15,
+    "hero_atk": 80.8,
+    "hero_hp": 1196,
+    "hero_def": 47.5,
+    "boss_hp": 10733,
+    "t_kill_s": 50.1,
+    "t_survive_s": 50.9,
+    "ratio": 0.98,
+    "verdict": "勉强（≥0.9 视为不稳）"
+   },
+   {
+    "case": "绿蓝混装 +5",
+    "enh": 5,
+    "rarity_mult": 1.1,
+    "affix_atk_pct": 15,
+    "affix_hp_pct": 15,
+    "hero_atk": 85.8,
+    "hero_hp": 1260,
+    "hero_def": 50.9,
+    "boss_hp": 10733,
+    "t_kill_s": 47.2,
+    "t_survive_s": 55.8,
+    "ratio": 0.85,
+    "verdict": "能通关"
+   },
+   {
+    "case": "绿蓝混装 +6",
+    "enh": 6,
+    "rarity_mult": 1.1,
+    "affix_atk_pct": 15,
+    "affix_hp_pct": 15,
+    "hero_atk": 88.3,
+    "hero_hp": 1292,
+    "hero_def": 52.7,
+    "boss_hp": 10733,
+    "t_kill_s": 45.8,
+    "t_survive_s": 58.4,
+    "ratio": 0.78,
+    "verdict": "稳定通关"
+   },
+   {
+    "case": "绿蓝混装 +7",
+    "enh": 7,
+    "rarity_mult": 1.1,
+    "affix_atk_pct": 15,
+    "affix_hp_pct": 15,
+    "hero_atk": 90.8,
+    "hero_hp": 1324,
+    "hero_def": 54.4,
+    "boss_hp": 10733,
+    "t_kill_s": 44.6,
+    "t_survive_s": 61.1,
+    "ratio": 0.73,
+    "verdict": "稳定通关"
+   },
+   {
+    "case": "绿蓝混装 +10",
+    "enh": 10,
+    "rarity_mult": 1.1,
+    "affix_atk_pct": 15,
+    "affix_hp_pct": 15,
+    "hero_atk": 98.3,
+    "hero_hp": 1419,
+    "hero_def": 59.5,
+    "boss_hp": 10733,
+    "t_kill_s": 41.2,
+    "t_survive_s": 69.6,
+    "ratio": 0.59,
+    "verdict": "稳定通关"
+   },
+   {
+    "case": "全白 +0 无词条",
+    "enh": 0,
+    "rarity_mult": 1.0,
+    "affix_atk_pct": 0,
+    "affix_hp_pct": 0,
+    "hero_atk": 59.7,
+    "hero_hp": 906,
+    "hero_def": 39.2,
+    "boss_hp": 10733,
+    "t_kill_s": 67.8,
+    "t_survive_s": 34.4,
+    "ratio": 1.97,
+    "verdict": "打不过"
+   }
+  ],
+  "normal_rows": [
+   {
+    "monster": "野狼",
+    "mlv": 2,
+    "hero_lv": 2,
+    "item_lv": 1,
+    "rarity_mult": 1.0,
+    "enh": 1,
+    "hits_to_kill": 3.7,
+    "mon_hit_pct_hero_hp": 3.7
+   },
+   {
+    "monster": "毒蛇",
+    "mlv": 4,
+    "hero_lv": 4,
+    "item_lv": 5,
+    "rarity_mult": 1.05,
+    "enh": 2,
+    "hits_to_kill": 2.5,
+    "mon_hit_pct_hero_hp": 3.4
+   },
+   {
+    "monster": "山贼",
+    "mlv": 6,
+    "hero_lv": 6,
+    "item_lv": 5,
+    "rarity_mult": 1.07,
+    "enh": 3,
+    "hits_to_kill": 4.4,
+    "mon_hit_pct_hero_hp": 3.5
+   },
+   {
+    "monster": "山猪",
+    "mlv": 7,
+    "hero_lv": 7,
+    "item_lv": 5,
+    "rarity_mult": 1.07,
+    "enh": 4,
+    "hits_to_kill": 13.8,
+    "mon_hit_pct_hero_hp": 5.1
+   },
+   {
+    "monster": "野狼",
+    "mlv": 8,
+    "hero_lv": 8,
+    "item_lv": 5,
+    "rarity_mult": 1.1,
+    "enh": 5,
+    "hits_to_kill": 3.4,
+    "mon_hit_pct_hero_hp": 3.3
+   },
+   {
+    "monster": "山贼",
+    "mlv": 8,
+    "hero_lv": 8,
+    "item_lv": 10,
+    "rarity_mult": 1.1,
+    "enh": 5,
+    "hits_to_kill": 3.8,
+    "mon_hit_pct_hero_hp": 2.9
+   },
+   {
+    "monster": "山猪",
+    "mlv": 9,
+    "hero_lv": 9,
+    "item_lv": 10,
+    "rarity_mult": 1.1,
+    "enh": 6,
+    "hits_to_kill": 12.2,
+    "mon_hit_pct_hero_hp": 4.3
+   }
+  ]
+ },
+ "gem_drop": {
+  "chance": {
+   "normal": 0.03,
+   "elite": 0.15,
+   "boss": 1.0
+  },
+  "boss_extra_chance": 0.3,
+  "type_weights": {
+   "ruby_atk": 12,
+   "jade_hp": 12,
+   "onyx_def": 12,
+   "star_crit": 12,
+   "dawn_acc": 12,
+   "crystal_frost": 10,
+   "crystal_fire": 10,
+   "crystal_lightning": 10,
+   "crystal_shadow": 10
+  },
+  "level_by_region": {
+   "青石村": [
+    1,
+    1
+   ],
+   "落枫镇": [
+    1,
+    2
+   ],
+   "天衡城": [
+    2,
+    3
+   ],
+   "玄朝国都": [
+    3,
+    4
+   ],
+   "南荒大陆": [
+    4,
+    5
+   ],
+   "中州": [
+    5,
+    6
+   ]
+  },
+  "slice_level": 1,
+  "level": 1
+ },
+ "starter_gems": {
+  "ruby_atk": 3,
+  "jade_hp": 2,
+  "onyx_def": 1,
+  "crystal_fire": 1,
+  "crystal_frost": 1
+ },
+ "starter_gear": {
+  "rarity": "白",
+  "level": 1,
+  "slots": [
+   "weapon",
+   "chest",
+   "feet"
+  ]
+ },
+ "gem_merge_count": 3,
+ "slice_economy": {
+  "kills_2h": {
+   "normal": 500,
+   "elite": 60,
+   "boss": 15
+  },
+  "avg_monster_level": 6,
+  "bind_silver_income": 10764,
+  "refine_stone_income": 150.0,
+  "gems_expected": 43.5,
+  "cost_10_items_to_+6": {
+   "silver": 5110,
+   "stones": 61.0
+  }
+ },
+ "slot_rules": {
+  "affix_forbidden_applies_to": "affixes_only",
+  "main_stats_affected_by_forbidden": false,
+  "note": "affix_forbidden 只限制随机词条，不限制主属性（例如耳环主属性是生命，生命在耳环禁出列表里也不影响主属性）。创意部同意开发部的理解。"
+ },
+ "rarities": [
+  {
+   "id": "white",
+   "name": "白",
+   "en": "White",
+   "color": "#e6e6e6",
+   "mult": 1.0,
+   "affix_count": 0,
+   "sockets": 0,
+   "affix_budget": 6,
+   "affix_chance": 0.3,
+   "special_scale": 0,
+   "can_be_set": false,
+   "special": "无",
+   "prefix": "—",
+   "index": 0,
+   "affix_note": "30% 概率带 1 条词条，否则 0 条"
+  },
+  {
+   "id": "green",
+   "name": "绿",
+   "en": "Green",
+   "color": "#46c35a",
+   "mult": 1.07,
+   "affix_count": 1,
+   "sockets": 0,
+   "affix_budget": 10,
+   "affix_chance": 1,
+   "special_scale": 0,
+   "can_be_set": false,
+   "special": "无",
+   "prefix": "精炼 Refined",
+   "index": 1
+  },
+  {
+   "id": "blue",
+   "name": "蓝",
+   "en": "Blue",
+   "color": "#3c82ff",
+   "mult": 1.15,
+   "affix_count": 2,
+   "sockets": 1,
+   "affix_budget": 22,
+   "affix_chance": 1,
+   "special_scale": 0,
+   "can_be_set": false,
+   "special": "无",
+   "prefix": "灵纹 Runed",
+   "index": 2
+  },
+  {
+   "id": "purple",
+   "name": "紫",
+   "en": "Purple",
+   "color": "#a855f7",
+   "mult": 1.3,
+   "affix_count": 3,
+   "sockets": 1,
+   "affix_budget": 36,
+   "affix_chance": 1,
+   "special_scale": 0,
+   "can_be_set": false,
+   "special": "无",
+   "prefix": "玄光 Arcane",
+   "index": 3
+  },
+  {
+   "id": "orange",
+   "name": "橙",
+   "en": "Orange",
+   "color": "#ff8a1e",
+   "mult": 1.5,
+   "affix_count": 3,
+   "sockets": 2,
+   "affix_budget": 42,
+   "affix_chance": 1,
+   "special_scale": 0.8,
+   "can_be_set": true,
+   "special": "1 条特效（参数×0.8）",
+   "prefix": "固定专名",
+   "index": 4
+  },
+  {
+   "id": "red",
+   "name": "红",
+   "en": "Red",
+   "color": "#ef3b3b",
+   "mult": 1.75,
+   "affix_count": 4,
+   "sockets": 2,
+   "affix_budget": 60,
+   "affix_chance": 1,
+   "special_scale": 0.9,
+   "can_be_set": true,
+   "special": "1 条特效（参数×0.9）",
+   "prefix": "固定专名",
+   "index": 5
+  },
+  {
+   "id": "darkgold",
+   "name": "暗金",
+   "en": "Dark Gold",
+   "color": "#d4a72c",
+   "mult": 2.0,
+   "affix_count": 4,
+   "sockets": 3,
+   "affix_budget": 68,
+   "affix_chance": 1,
+   "special_scale": 1.0,
+   "can_be_set": true,
+   "special": "1 条特效（参数×1.0）+ 槽位专属效果",
+   "prefix": "太初· Primordial",
+   "index": 6
+  }
+ ],
+ "slots": [
+  {
+   "id": "weapon",
+   "name": "武器",
+   "en": "Weapon",
+   "category": "武器",
+   "shows_appearance": true,
+   "in_slice": true,
+   "base_white_lv5": {
+    "atk": 20
+   },
+   "main_stats": [
+    "atk"
+   ],
+   "affix_pool": [
+    "atk",
+    "atk_pct",
+    "aspd",
+    "crit",
+    "critdmg",
+    "acc",
+    "elem",
+    "skill"
+   ],
+   "special_pool": [
+    "starfall",
+    "twin_phantom",
+    "aftershock",
+    "thunder_call",
+    "afterimage"
+   ],
+   "darkgold_exclusive": "攻击 +8%",
+   "affix_forbidden": [
+    "hp",
+    "hp_pct",
+    "def",
+    "ms",
+    "eva",
+    "res",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "head",
+   "name": "头",
+   "en": "Head",
+   "category": "防具",
+   "shows_appearance": true,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 60,
+    "def": 4
+   },
+   "main_stats": [
+    "hp",
+    "def"
+   ],
+   "affix_pool": [
+    "hp",
+    "hp_pct",
+    "def",
+    "crit",
+    "acc",
+    "res"
+   ],
+   "special_pool": [
+    "spirit_ward"
+   ],
+   "darkgold_exclusive": "会心率 +4%",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "aspd",
+    "ms",
+    "critdmg",
+    "eva",
+    "elem",
+    "skill",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "chest",
+   "name": "衣服",
+   "en": "Robe",
+   "category": "防具",
+   "shows_appearance": true,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 100,
+    "def": 8
+   },
+   "main_stats": [
+    "hp",
+    "def"
+   ],
+   "affix_pool": [
+    "hp",
+    "hp_pct",
+    "def",
+    "eva",
+    "res",
+    "regen"
+   ],
+   "special_pool": [
+    "spirit_ward"
+   ],
+   "darkgold_exclusive": "受到伤害 −5%",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "aspd",
+    "ms",
+    "crit",
+    "critdmg",
+    "acc",
+    "elem",
+    "skill"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "hands",
+   "name": "护手",
+   "en": "Bracers",
+   "category": "防具",
+   "shows_appearance": true,
+   "in_slice": true,
+   "base_white_lv5": {
+    "atk": 5,
+    "def": 3
+   },
+   "main_stats": [
+    "atk",
+    "def"
+   ],
+   "affix_pool": [
+    "atk",
+    "aspd",
+    "crit",
+    "critdmg",
+    "def",
+    "acc"
+   ],
+   "special_pool": [
+    "twin_phantom"
+   ],
+   "darkgold_exclusive": "攻速 +6%",
+   "affix_forbidden": [
+    "atk_pct",
+    "hp",
+    "hp_pct",
+    "ms",
+    "eva",
+    "elem",
+    "res",
+    "skill",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "legs",
+   "name": "下装",
+   "en": "Leggings",
+   "category": "防具",
+   "shows_appearance": true,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 80,
+    "def": 6
+   },
+   "main_stats": [
+    "hp",
+    "def"
+   ],
+   "affix_pool": [
+    "hp",
+    "hp_pct",
+    "def",
+    "eva",
+    "res",
+    "ms"
+   ],
+   "special_pool": [
+    "spirit_ward"
+   ],
+   "darkgold_exclusive": "生命 +8%",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "aspd",
+    "crit",
+    "critdmg",
+    "acc",
+    "elem",
+    "skill",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "feet",
+   "name": "鞋",
+   "en": "Boots",
+   "category": "防具",
+   "shows_appearance": true,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 40,
+    "def": 3,
+    "ms_pct": 3
+   },
+   "main_stats": [
+    "hp",
+    "def",
+    "ms_pct"
+   ],
+   "affix_pool": [
+    "ms",
+    "eva",
+    "hp",
+    "def",
+    "res"
+   ],
+   "special_pool": [
+    "spirit_ward"
+   ],
+   "darkgold_exclusive": "移速 +8%、闪避 +2%",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "hp_pct",
+    "aspd",
+    "crit",
+    "critdmg",
+    "acc",
+    "elem",
+    "skill",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "belt",
+   "name": "腰带",
+   "en": "Belt",
+   "category": "防具",
+   "shows_appearance": false,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 70,
+    "def": 2
+   },
+   "main_stats": [
+    "hp",
+    "def"
+   ],
+   "affix_pool": [
+    "hp",
+    "hp_pct",
+    "def",
+    "regen",
+    "res",
+    "skill"
+   ],
+   "special_pool": [
+    "spirit_ward"
+   ],
+   "darkgold_exclusive": "每秒回复 0.5% 生命上限",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "aspd",
+    "ms",
+    "crit",
+    "critdmg",
+    "acc",
+    "eva",
+    "elem"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "earring",
+   "name": "耳环",
+   "en": "Earring",
+   "category": "饰品",
+   "shows_appearance": false,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 30,
+    "acc_pct": 1.5
+   },
+   "main_stats": [
+    "hp",
+    "acc_pct"
+   ],
+   "affix_pool": [
+    "acc",
+    "eva",
+    "crit",
+    "aspd",
+    "res",
+    "skill"
+   ],
+   "special_pool": [
+    "afterimage"
+   ],
+   "darkgold_exclusive": "全属性抗性 +8%",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "hp",
+    "hp_pct",
+    "def",
+    "ms",
+    "critdmg",
+    "elem",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "necklace",
+   "name": "项链",
+   "en": "Necklace",
+   "category": "饰品",
+   "shows_appearance": false,
+   "in_slice": true,
+   "base_white_lv5": {
+    "hp": 40,
+    "atk": 3
+   },
+   "main_stats": [
+    "hp",
+    "atk"
+   ],
+   "affix_pool": [
+    "skill",
+    "elem",
+    "critdmg",
+    "hp_pct",
+    "res",
+    "regen"
+   ],
+   "special_pool": [
+    "thunder_call",
+    "spirit_ward"
+   ],
+   "darkgold_exclusive": "技能伤害 +8%",
+   "affix_forbidden": [
+    "atk",
+    "atk_pct",
+    "hp",
+    "def",
+    "aspd",
+    "ms",
+    "crit",
+    "acc",
+    "eva"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  },
+  {
+   "id": "ring",
+   "name": "戒指",
+   "en": "Ring",
+   "category": "饰品",
+   "shows_appearance": false,
+   "in_slice": true,
+   "base_white_lv5": {
+    "atk": 5
+   },
+   "main_stats": [
+    "atk"
+   ],
+   "affix_pool": [
+    "atk",
+    "atk_pct",
+    "crit",
+    "critdmg",
+    "elem",
+    "acc"
+   ],
+   "special_pool": [
+    "starfall",
+    "thunder_call"
+   ],
+   "darkgold_exclusive": "会心伤害 +16%",
+   "affix_forbidden": [
+    "hp",
+    "hp_pct",
+    "def",
+    "aspd",
+    "ms",
+    "eva",
+    "res",
+    "skill",
+    "regen"
+   ],
+   "affix_forbidden_scope": "affixes_only"
+  }
+ ],
+ "level_curve": [
+  {
+   "item_level": 1,
+   "V": 0.8,
+   "hero_g": 0.7905,
+   "def_K": 47.4,
+   "white_base": {
+    "weapon": {
+     "atk": 16.0
+    },
+    "head": {
+     "hp": 48.0,
+     "def": 3.2
+    },
+    "chest": {
+     "hp": 80.0,
+     "def": 6.4
+    },
+    "hands": {
+     "atk": 4.0,
+     "def": 2.4
+    },
+    "legs": {
+     "hp": 64.0,
+     "def": 4.8
+    },
+    "feet": {
+     "hp": 32.0,
+     "def": 2.4,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 56.0,
+     "def": 1.6
+    },
+    "earring": {
+     "hp": 24.0,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 32.0,
+     "atk": 2.4
+    },
+    "ring": {
+     "atk": 4.0
+    }
+   }
+  },
+  {
+   "item_level": 5,
+   "V": 1.0,
+   "hero_g": 1.0,
+   "def_K": 60.0,
+   "white_base": {
+    "weapon": {
+     "atk": 20.0
+    },
+    "head": {
+     "hp": 60.0,
+     "def": 4.0
+    },
+    "chest": {
+     "hp": 100.0,
+     "def": 8.0
+    },
+    "hands": {
+     "atk": 5.0,
+     "def": 3.0
+    },
+    "legs": {
+     "hp": 80.0,
+     "def": 6.0
+    },
+    "feet": {
+     "hp": 40.0,
+     "def": 3.0,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 70.0,
+     "def": 2.0
+    },
+    "earring": {
+     "hp": 30.0,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 40.0,
+     "atk": 3.0
+    },
+    "ring": {
+     "atk": 5.0
+    }
+   }
+  },
+  {
+   "item_level": 10,
+   "V": 1.2,
+   "hero_g": 1.3416,
+   "def_K": 80.5,
+   "white_base": {
+    "weapon": {
+     "atk": 24.0
+    },
+    "head": {
+     "hp": 72.0,
+     "def": 4.8
+    },
+    "chest": {
+     "hp": 120.0,
+     "def": 9.6
+    },
+    "hands": {
+     "atk": 6.0,
+     "def": 3.6
+    },
+    "legs": {
+     "hp": 96.0,
+     "def": 7.2
+    },
+    "feet": {
+     "hp": 48.0,
+     "def": 3.6,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 84.0,
+     "def": 2.4
+    },
+    "earring": {
+     "hp": 36.0,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 48.0,
+     "atk": 3.6
+    },
+    "ring": {
+     "atk": 6.0
+    }
+   }
+  },
+  {
+   "item_level": 15,
+   "V": 1.8,
+   "hero_g": 1.8,
+   "def_K": 108.0,
+   "white_base": {
+    "weapon": {
+     "atk": 36.0
+    },
+    "head": {
+     "hp": 108.0,
+     "def": 7.2
+    },
+    "chest": {
+     "hp": 180.0,
+     "def": 14.4
+    },
+    "hands": {
+     "atk": 9.0,
+     "def": 5.4
+    },
+    "legs": {
+     "hp": 144.0,
+     "def": 10.8
+    },
+    "feet": {
+     "hp": 72.0,
+     "def": 5.4,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 126.0,
+     "def": 3.6
+    },
+    "earring": {
+     "hp": 54.0,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 72.0,
+     "atk": 5.4
+    },
+    "ring": {
+     "atk": 9.0
+    }
+   }
+  },
+  {
+   "item_level": 20,
+   "V": 2.16,
+   "hero_g": 2.415,
+   "def_K": 144.9,
+   "white_base": {
+    "weapon": {
+     "atk": 43.2
+    },
+    "head": {
+     "hp": 129.6,
+     "def": 8.6
+    },
+    "chest": {
+     "hp": 216.0,
+     "def": 17.3
+    },
+    "hands": {
+     "atk": 10.8,
+     "def": 6.5
+    },
+    "legs": {
+     "hp": 172.8,
+     "def": 13.0
+    },
+    "feet": {
+     "hp": 86.4,
+     "def": 6.5,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 151.2,
+     "def": 4.3
+    },
+    "earring": {
+     "hp": 64.8,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 86.4,
+     "atk": 6.5
+    },
+    "ring": {
+     "atk": 10.8
+    }
+   }
+  },
+  {
+   "item_level": 25,
+   "V": 3.24,
+   "hero_g": 3.24,
+   "def_K": 194.4,
+   "white_base": {
+    "weapon": {
+     "atk": 64.8
+    },
+    "head": {
+     "hp": 194.4,
+     "def": 13.0
+    },
+    "chest": {
+     "hp": 324.0,
+     "def": 25.9
+    },
+    "hands": {
+     "atk": 16.2,
+     "def": 9.7
+    },
+    "legs": {
+     "hp": 259.2,
+     "def": 19.4
+    },
+    "feet": {
+     "hp": 129.6,
+     "def": 9.7,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 226.8,
+     "def": 6.5
+    },
+    "earring": {
+     "hp": 97.2,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 129.6,
+     "atk": 9.7
+    },
+    "ring": {
+     "atk": 16.2
+    }
+   }
+  },
+  {
+   "item_level": 30,
+   "V": 3.888,
+   "hero_g": 4.3469,
+   "def_K": 260.8,
+   "white_base": {
+    "weapon": {
+     "atk": 77.8
+    },
+    "head": {
+     "hp": 233.3,
+     "def": 15.6
+    },
+    "chest": {
+     "hp": 388.8,
+     "def": 31.1
+    },
+    "hands": {
+     "atk": 19.4,
+     "def": 11.7
+    },
+    "legs": {
+     "hp": 311.0,
+     "def": 23.3
+    },
+    "feet": {
+     "hp": 155.5,
+     "def": 11.7,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 272.2,
+     "def": 7.8
+    },
+    "earring": {
+     "hp": 116.6,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 155.5,
+     "atk": 11.7
+    },
+    "ring": {
+     "atk": 19.4
+    }
+   }
+  },
+  {
+   "item_level": 35,
+   "V": 5.832,
+   "hero_g": 5.832,
+   "def_K": 349.9,
+   "white_base": {
+    "weapon": {
+     "atk": 116.6
+    },
+    "head": {
+     "hp": 349.9,
+     "def": 23.3
+    },
+    "chest": {
+     "hp": 583.2,
+     "def": 46.7
+    },
+    "hands": {
+     "atk": 29.2,
+     "def": 17.5
+    },
+    "legs": {
+     "hp": 466.6,
+     "def": 35.0
+    },
+    "feet": {
+     "hp": 233.3,
+     "def": 17.5,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 408.2,
+     "def": 11.7
+    },
+    "earring": {
+     "hp": 175.0,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 233.3,
+     "atk": 17.5
+    },
+    "ring": {
+     "atk": 29.2
+    }
+   }
+  },
+  {
+   "item_level": 40,
+   "V": 6.9984,
+   "hero_g": 7.8244,
+   "def_K": 469.5,
+   "white_base": {
+    "weapon": {
+     "atk": 140.0
+    },
+    "head": {
+     "hp": 419.9,
+     "def": 28.0
+    },
+    "chest": {
+     "hp": 699.8,
+     "def": 56.0
+    },
+    "hands": {
+     "atk": 35.0,
+     "def": 21.0
+    },
+    "legs": {
+     "hp": 559.9,
+     "def": 42.0
+    },
+    "feet": {
+     "hp": 279.9,
+     "def": 21.0,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 489.9,
+     "def": 14.0
+    },
+    "earring": {
+     "hp": 210.0,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 279.9,
+     "atk": 21.0
+    },
+    "ring": {
+     "atk": 35.0
+    }
+   }
+  },
+  {
+   "item_level": 45,
+   "V": 10.4976,
+   "hero_g": 10.4976,
+   "def_K": 629.9,
+   "white_base": {
+    "weapon": {
+     "atk": 210.0
+    },
+    "head": {
+     "hp": 629.9,
+     "def": 42.0
+    },
+    "chest": {
+     "hp": 1049.8,
+     "def": 84.0
+    },
+    "hands": {
+     "atk": 52.5,
+     "def": 31.5
+    },
+    "legs": {
+     "hp": 839.8,
+     "def": 63.0
+    },
+    "feet": {
+     "hp": 419.9,
+     "def": 31.5,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 734.8,
+     "def": 21.0
+    },
+    "earring": {
+     "hp": 314.9,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 419.9,
+     "atk": 31.5
+    },
+    "ring": {
+     "atk": 52.5
+    }
+   }
+  },
+  {
+   "item_level": 50,
+   "V": 12.5971,
+   "hero_g": 14.084,
+   "def_K": 845.0,
+   "white_base": {
+    "weapon": {
+     "atk": 251.9
+    },
+    "head": {
+     "hp": 755.8,
+     "def": 50.4
+    },
+    "chest": {
+     "hp": 1259.7,
+     "def": 100.8
+    },
+    "hands": {
+     "atk": 63.0,
+     "def": 37.8
+    },
+    "legs": {
+     "hp": 1007.8,
+     "def": 75.6
+    },
+    "feet": {
+     "hp": 503.9,
+     "def": 37.8,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 881.8,
+     "def": 25.2
+    },
+    "earring": {
+     "hp": 377.9,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 503.9,
+     "atk": 37.8
+    },
+    "ring": {
+     "atk": 63.0
+    }
+   }
+  },
+  {
+   "item_level": 55,
+   "V": 18.8957,
+   "hero_g": 18.8957,
+   "def_K": 1133.7,
+   "white_base": {
+    "weapon": {
+     "atk": 377.9
+    },
+    "head": {
+     "hp": 1133.7,
+     "def": 75.6
+    },
+    "chest": {
+     "hp": 1889.6,
+     "def": 151.2
+    },
+    "hands": {
+     "atk": 94.5,
+     "def": 56.7
+    },
+    "legs": {
+     "hp": 1511.7,
+     "def": 113.4
+    },
+    "feet": {
+     "hp": 755.8,
+     "def": 56.7,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 1322.7,
+     "def": 37.8
+    },
+    "earring": {
+     "hp": 566.9,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 755.8,
+     "atk": 56.7
+    },
+    "ring": {
+     "atk": 94.5
+    }
+   }
+  },
+  {
+   "item_level": 60,
+   "V": 22.6748,
+   "hero_g": 25.3512,
+   "def_K": 1521.1,
+   "white_base": {
+    "weapon": {
+     "atk": 453.5
+    },
+    "head": {
+     "hp": 1360.5,
+     "def": 90.7
+    },
+    "chest": {
+     "hp": 2267.5,
+     "def": 181.4
+    },
+    "hands": {
+     "atk": 113.4,
+     "def": 68.0
+    },
+    "legs": {
+     "hp": 1814.0,
+     "def": 136.0
+    },
+    "feet": {
+     "hp": 907.0,
+     "def": 68.0,
+     "ms_pct": 3
+    },
+    "belt": {
+     "hp": 1587.2,
+     "def": 45.3
+    },
+    "earring": {
+     "hp": 680.2,
+     "acc_pct": 1.5
+    },
+    "necklace": {
+     "hp": 907.0,
+     "atk": 68.0
+    },
+    "ring": {
+     "atk": 113.4
+    }
+   }
+  }
+ ],
+ "affixes": [
+  {
+   "id": "atk",
+   "name": "攻击",
+   "en": "Attack",
+   "type": "flat",
+   "value_per_point": 0.25,
+   "scales_with_level": true,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "hands",
+    "ring"
+   ],
+   "example_lv5_10pts": 2.5,
+   "example_lv30_10pts": 9.72
+  },
+  {
+   "id": "atk_pct",
+   "name": "攻击%",
+   "en": "Attack %",
+   "type": "pct",
+   "value_per_point": 0.5,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "ring"
+   ],
+   "example_lv5_10pts": 5.0,
+   "example_lv30_10pts": 5.0
+  },
+  {
+   "id": "hp",
+   "name": "生命",
+   "en": "Health",
+   "type": "flat",
+   "value_per_point": 3.5,
+   "scales_with_level": true,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet",
+    "belt"
+   ],
+   "example_lv5_10pts": 35.0,
+   "example_lv30_10pts": 136.08
+  },
+  {
+   "id": "hp_pct",
+   "name": "生命%",
+   "en": "Health %",
+   "type": "pct",
+   "value_per_point": 0.6,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "head",
+    "chest",
+    "legs",
+    "belt",
+    "necklace"
+   ],
+   "example_lv5_10pts": 6.0,
+   "example_lv30_10pts": 6.0
+  },
+  {
+   "id": "def",
+   "name": "防御",
+   "en": "Defense",
+   "type": "flat",
+   "value_per_point": 0.3,
+   "scales_with_level": true,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt"
+   ],
+   "example_lv5_10pts": 3.0,
+   "example_lv30_10pts": 11.66
+  },
+  {
+   "id": "aspd",
+   "name": "攻速%",
+   "en": "Attack Speed %",
+   "type": "pct",
+   "value_per_point": 0.4,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "hands",
+    "earring"
+   ],
+   "example_lv5_10pts": 4.0,
+   "example_lv30_10pts": 4.0
+  },
+  {
+   "id": "ms",
+   "name": "移速%",
+   "en": "Move Speed %",
+   "type": "pct",
+   "value_per_point": 0.5,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "legs",
+    "feet"
+   ],
+   "example_lv5_10pts": 5.0,
+   "example_lv30_10pts": 5.0
+  },
+  {
+   "id": "crit",
+   "name": "会心率%",
+   "en": "Crit Rate %",
+   "type": "pct",
+   "value_per_point": 0.4,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "head",
+    "hands",
+    "earring",
+    "ring"
+   ],
+   "example_lv5_10pts": 4.0,
+   "example_lv30_10pts": 4.0
+  },
+  {
+   "id": "critdmg",
+   "name": "会心伤害%",
+   "en": "Crit Damage %",
+   "type": "pct",
+   "value_per_point": 1.2,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "hands",
+    "necklace",
+    "ring"
+   ],
+   "example_lv5_10pts": 12.0,
+   "example_lv30_10pts": 12.0
+  },
+  {
+   "id": "acc",
+   "name": "命中%",
+   "en": "Accuracy %",
+   "type": "pct",
+   "value_per_point": 0.3,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "head",
+    "hands",
+    "earring",
+    "ring"
+   ],
+   "example_lv5_10pts": 3.0,
+   "example_lv30_10pts": 3.0
+  },
+  {
+   "id": "eva",
+   "name": "闪避%",
+   "en": "Evasion %",
+   "type": "pct",
+   "value_per_point": 0.25,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "chest",
+    "legs",
+    "feet",
+    "earring"
+   ],
+   "example_lv5_10pts": 2.5,
+   "example_lv30_10pts": 2.5
+  },
+  {
+   "id": "elem",
+   "name": "属性伤害（冰/火/电/暗 4 选 1）",
+   "en": "Elemental Damage",
+   "type": "flat",
+   "value_per_point": 0.2,
+   "scales_with_level": true,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "necklace",
+    "ring"
+   ],
+   "example_lv5_10pts": 2.0,
+   "example_lv30_10pts": 7.78
+  },
+  {
+   "id": "res",
+   "name": "属性抗性%（4 选 1）",
+   "en": "Elemental Resist %",
+   "type": "pct",
+   "value_per_point": 0.8,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet",
+    "belt",
+    "earring",
+    "necklace"
+   ],
+   "example_lv5_10pts": 8.0,
+   "example_lv30_10pts": 8.0
+  },
+  {
+   "id": "skill",
+   "name": "技能伤害%",
+   "en": "Skill Damage %",
+   "type": "pct",
+   "value_per_point": 0.6,
+   "scales_with_level": false,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "weapon",
+    "belt",
+    "earring",
+    "necklace"
+   ],
+   "example_lv5_10pts": 6.0,
+   "example_lv30_10pts": 6.0
+  },
+  {
+   "id": "regen",
+   "name": "生命回复/秒",
+   "en": "Health Regen /s",
+   "type": "flat",
+   "value_per_point": 0.12,
+   "scales_with_level": true,
+   "pts_min": 5,
+   "pts_max": 18,
+   "slots": [
+    "chest",
+    "belt",
+    "necklace"
+   ],
+   "example_lv5_10pts": 1.2,
+   "example_lv30_10pts": 4.67
+  }
+ ],
+ "special_affixes": [
+  {
+   "id": "starfall",
+   "name": "坠星",
+   "en": "Starfall",
+   "trigger": "攻击命中时",
+   "chance": 0.07,
+   "mult": 3.5,
+   "hits": 1,
+   "cd": 3,
+   "area": "目标处半径 120px 圆形",
+   "avg_targets": 3,
+   "slots": [
+    "weapon",
+    "ring"
+   ],
+   "desc": "召唤一颗坠星，造成攻击力 350% 范围伤害",
+   "doc_single_equiv_pct": 24.5,
+   "group_equiv_pct": 73.5,
+   "cd_adj_aps1_pct": 20.2,
+   "cd_adj_aps2_pct": 17.3,
+   "by_rarity_single_pct": {
+    "橙": 19.6,
+    "红": 22.1,
+    "暗金": 24.5
+   }
+  },
+  {
+   "id": "twin_phantom",
+   "name": "分光剑影",
+   "en": "Twin Phantoms",
+   "trigger": "攻击命中时",
+   "chance": 0.2,
+   "mult": 0.6,
+   "hits": 2,
+   "cd": 1.5,
+   "area": "朝目标方向直线 400px，穿透",
+   "avg_targets": 2.5,
+   "slots": [
+    "weapon",
+    "hands"
+   ],
+   "desc": "飞出 2 道所持武器的虚影，每道 60%，同一目标每道各中一次",
+   "doc_single_equiv_pct": 24.0,
+   "group_equiv_pct": 60.0,
+   "cd_adj_aps1_pct": 18.5,
+   "cd_adj_aps2_pct": 15.0,
+   "by_rarity_single_pct": {
+    "橙": 19.2,
+    "红": 21.6,
+    "暗金": 24.0
+   }
+  },
+  {
+   "id": "aftershock",
+   "name": "余波",
+   "en": "Aftershock",
+   "trigger": "每次普攻命中",
+   "chance": 1.0,
+   "mult": 0.25,
+   "hits": 1,
+   "cd": 0,
+   "area": "主目标周围 80px（不含主目标）",
+   "avg_targets": 2.5,
+   "slots": [
+    "weapon"
+   ],
+   "single_target_factor": 0,
+   "desc": "对主目标周围敌人造成 25% 溅射伤害；橙 20% / 红 22% / 暗金 25%（本条按倍率缩放，不按概率）",
+   "doc_single_equiv_pct": 0.0,
+   "group_equiv_pct": 62.5,
+   "cd_adj_aps1_pct": 0.0,
+   "cd_adj_aps2_pct": 0.0,
+   "by_rarity_single_pct": {
+    "橙": 0.0,
+    "红": 0.0,
+    "暗金": 0.0
+   }
+  },
+  {
+   "id": "thunder_call",
+   "name": "引雷",
+   "en": "Thunder Call",
+   "trigger": "攻击命中时",
+   "chance": 0.1,
+   "mult": 2.6,
+   "hits": 1,
+   "cd": 2,
+   "area": "单体",
+   "avg_targets": 1,
+   "slots": [
+    "weapon",
+    "ring",
+    "necklace"
+   ],
+   "desc": "引一道天雷劈中目标，造成攻击力 260% 伤害",
+   "doc_single_equiv_pct": 26.0,
+   "group_equiv_pct": 26.0,
+   "cd_adj_aps1_pct": 21.7,
+   "cd_adj_aps2_pct": 18.6,
+   "by_rarity_single_pct": {
+    "橙": 20.8,
+    "红": 23.4,
+    "暗金": 26.0
+   }
+  },
+  {
+   "id": "afterimage",
+   "name": "残影",
+   "en": "Afterimage",
+   "trigger": "攻击命中时",
+   "chance": 0.08,
+   "mult": 0.5,
+   "hits": 6,
+   "cd": 10,
+   "area": "分身攻击当前目标（单体）",
+   "avg_targets": 1,
+   "slots": [
+    "weapon",
+    "earring"
+   ],
+   "desc": "召唤 1 个分身，持续 6 秒，继承 50% 攻击、与本体同攻速；同时最多 1 个；分身攻击不叠属性层、不触发特效",
+   "doc_single_equiv_pct": 24.0,
+   "group_equiv_pct": 24.0,
+   "cd_adj_aps1_pct": 13.3,
+   "cd_adj_aps2_pct": 9.2,
+   "by_rarity_single_pct": {
+    "橙": 19.2,
+    "红": 21.6,
+    "暗金": 24.0
+   }
+  },
+  {
+   "id": "spirit_ward",
+   "name": "护体灵罡",
+   "en": "Spirit Ward",
+   "trigger": "受到攻击时",
+   "chance": 0.08,
+   "mult": 0.1,
+   "hits": 1,
+   "cd": 10,
+   "area": "自身",
+   "avg_targets": 1,
+   "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet",
+    "belt",
+    "necklace"
+   ],
+   "defensive": true,
+   "desc": "获得生命上限 10% 的护盾，持续 4 秒",
+   "equiv_note": "按每秒受击 1 次：约每 22.5 秒触发一次；30 秒战斗约 1.33 次 × 10% 生命 ≈ 等效生命 +13%（防御类上限 +30%）",
+   "doc_single_equiv_pct": null,
+   "group_equiv_pct": null,
+   "cd_adj_aps1_pct": null,
+   "cd_adj_aps2_pct": null,
+   "equiv_survival_pct": 13.3
+  }
+ ],
+ "gems": [
+  {
+   "id": "ruby_atk",
+   "name": "赤玉",
+   "en": "Crimson Jade",
+   "kind": "数值石",
+   "stat": "攻击",
+   "type": "flat",
+   "lv1": 2,
+   "growth": 1.6,
+   "slots": [
+    "weapon",
+    "hands",
+    "ring",
+    "necklace"
+   ],
+   "levels": [
+    2.0,
+    3.2,
+    5.12,
+    8.19,
+    13.11,
+    20.97,
+    33.55,
+    53.69
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "jade_hp",
+   "name": "翠玉",
+   "en": "Verdant Jade",
+   "kind": "数值石",
+   "stat": "生命",
+   "type": "flat",
+   "lv1": 25,
+   "growth": 1.6,
+   "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet",
+    "belt",
+    "necklace",
+    "earring"
+   ],
+   "levels": [
+    25.0,
+    40.0,
+    64.0,
+    102.4,
+    163.84,
+    262.14,
+    419.43,
+    671.09
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "onyx_def",
+   "name": "玄玉",
+   "en": "Onyx Jade",
+   "kind": "数值石",
+   "stat": "防御",
+   "type": "flat",
+   "lv1": 2,
+   "growth": 1.6,
+   "slots": [
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt"
+   ],
+   "levels": [
+    2.0,
+    3.2,
+    5.12,
+    8.19,
+    13.11,
+    20.97,
+    33.55,
+    53.69
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "star_crit",
+   "name": "星玉",
+   "en": "Star Jade",
+   "kind": "数值石",
+   "stat": "会心率%",
+   "type": "pct",
+   "lv1": 0.8,
+   "growth": 1.25,
+   "slots": [
+    "weapon",
+    "hands",
+    "ring",
+    "earring",
+    "head"
+   ],
+   "levels": [
+    0.8,
+    1.0,
+    1.25,
+    1.56,
+    1.95,
+    2.44,
+    3.05,
+    3.81
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "dawn_acc",
+   "name": "明玉",
+   "en": "Dawn Jade",
+   "kind": "数值石",
+   "stat": "命中%",
+   "type": "pct",
+   "lv1": 0.8,
+   "growth": 1.25,
+   "slots": [
+    "weapon",
+    "earring",
+    "head",
+    "ring"
+   ],
+   "levels": [
+    0.8,
+    1.0,
+    1.25,
+    1.56,
+    1.95,
+    2.44,
+    3.05,
+    3.81
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "crystal_frost",
+   "name": "冰灵晶",
+   "en": "Frost Crystal",
+   "kind": "属性石",
+   "stat": "冰属性伤害（武器/饰品）或 冰抗性%（防具）",
+   "type": "mixed",
+   "lv1": 1.5,
+   "growth": 1.6,
+   "lv1_res_pct": 3,
+   "res_growth": 1.25,
+   "slots": [
+    "weapon",
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt",
+    "earring",
+    "necklace",
+    "ring"
+   ],
+   "levels": [
+    1.5,
+    2.4,
+    3.84,
+    6.14,
+    9.83,
+    15.73,
+    25.17,
+    40.27
+   ],
+   "res_levels": [
+    3.0,
+    3.75,
+    4.69,
+    5.86,
+    7.32,
+    9.16,
+    11.44,
+    14.31
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "crystal_fire",
+   "name": "火灵晶",
+   "en": "Fire Crystal",
+   "kind": "属性石",
+   "stat": "火属性伤害（武器/饰品）或 火抗性%（防具）",
+   "type": "mixed",
+   "lv1": 1.5,
+   "growth": 1.6,
+   "lv1_res_pct": 3,
+   "res_growth": 1.25,
+   "slots": [
+    "weapon",
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt",
+    "earring",
+    "necklace",
+    "ring"
+   ],
+   "levels": [
+    1.5,
+    2.4,
+    3.84,
+    6.14,
+    9.83,
+    15.73,
+    25.17,
+    40.27
+   ],
+   "res_levels": [
+    3.0,
+    3.75,
+    4.69,
+    5.86,
+    7.32,
+    9.16,
+    11.44,
+    14.31
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "crystal_lightning",
+   "name": "电灵晶",
+   "en": "Lightning Crystal",
+   "kind": "属性石",
+   "stat": "电属性伤害（武器/饰品）或 电抗性%（防具）",
+   "type": "mixed",
+   "lv1": 1.5,
+   "growth": 1.6,
+   "lv1_res_pct": 3,
+   "res_growth": 1.25,
+   "slots": [
+    "weapon",
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt",
+    "earring",
+    "necklace",
+    "ring"
+   ],
+   "levels": [
+    1.5,
+    2.4,
+    3.84,
+    6.14,
+    9.83,
+    15.73,
+    25.17,
+    40.27
+   ],
+   "res_levels": [
+    3.0,
+    3.75,
+    4.69,
+    5.86,
+    7.32,
+    9.16,
+    11.44,
+    14.31
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  },
+  {
+   "id": "crystal_shadow",
+   "name": "暗灵晶",
+   "en": "Shadow Crystal",
+   "kind": "属性石",
+   "stat": "暗属性伤害（武器/饰品）或 暗抗性%（防具）",
+   "type": "mixed",
+   "lv1": 1.5,
+   "growth": 1.6,
+   "lv1_res_pct": 3,
+   "res_growth": 1.25,
+   "slots": [
+    "weapon",
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt",
+    "earring",
+    "necklace",
+    "ring"
+   ],
+   "levels": [
+    1.5,
+    2.4,
+    3.84,
+    6.14,
+    9.83,
+    15.73,
+    25.17,
+    40.27
+   ],
+   "res_levels": [
+    3.0,
+    3.75,
+    4.69,
+    5.86,
+    7.32,
+    9.16,
+    11.44,
+    14.31
+   ],
+   "merge": "同名同级 3 颗 → 下一级 1 颗，最高 8 级"
+  }
+ ],
+ "sockets_by_rarity": {
+  "白": 0,
+  "绿": 0,
+  "蓝": 1,
+  "紫": 1,
+  "橙": 2,
+  "红": 2,
+  "暗金": 3
+ },
+ "enhance": {
+  "item_cap": 30,
+  "slice_item_cap": 10,
+  "slots_counted": 10,
+  "total_cap": 300,
+  "slice_total_cap": 100,
+  "total_cap_formula": "cap × slots_counted",
+  "thresholds_ratio": [
+   0.2,
+   0.6,
+   0.74,
+   0.9
+  ],
+  "fx_thresholds_formula": "fx_thresholds[i] = floor(thresholds_ratio[i] × total_cap) + 1；判定：全身强化总和 >= fx_thresholds[i] 出特效 i+1",
+  "profiles": {
+   "formal": {
+    "name": "正式版",
+    "item_cap": 30,
+    "total_cap": 300,
+    "fx_thresholds": [
+     61,
+     181,
+     223,
+     271
+    ],
+    "exceed_values": [
+     60,
+     180,
+     222,
+     270
+    ],
+    "success_rates": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     0.95,
+     0.9,
+     0.85,
+     0.8,
+     0.75,
+     0.65,
+     0.6,
+     0.55,
+     0.5,
+     0.45,
+     0.45,
+     0.43,
+     0.41,
+     0.39,
+     0.37,
+     0.35,
+     0.33,
+     0.31,
+     0.29,
+     0.27,
+     0.25,
+     0.23,
+     0.21,
+     0.2,
+     0.2
+    ]
+   },
+   "slice": {
+    "name": "试玩版",
+    "item_cap": 10,
+    "total_cap": 100,
+    "fx_thresholds": [
+     21,
+     61,
+     75,
+     91
+    ],
+    "exceed_values": [
+     20,
+     60,
+     74,
+     90
+    ],
+    "success_rates": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     0.95,
+     0.9,
+     0.85,
+     0.8,
+     0.75
+    ]
+   }
+  },
+  "fx_thresholds": [
+   61,
+   181,
+   223,
+   271
+  ],
+  "slice_fx_thresholds": [
+   21,
+   61,
+   75,
+   91
+  ],
+  "curve_rule": "1~10 级每级 +5%，11~20 级每级 +2.5%，21~30 级每级 +1.5%（主属性）",
+  "curve": [
+   {
+    "level": 1,
+    "per_level_pct": 5.0,
+    "cum_pct": 5.0,
+    "main_stat_mult": 1.05
+   },
+   {
+    "level": 2,
+    "per_level_pct": 5.0,
+    "cum_pct": 10.0,
+    "main_stat_mult": 1.1
+   },
+   {
+    "level": 3,
+    "per_level_pct": 5.0,
+    "cum_pct": 15.0,
+    "main_stat_mult": 1.15
+   },
+   {
+    "level": 4,
+    "per_level_pct": 5.0,
+    "cum_pct": 20.0,
+    "main_stat_mult": 1.2
+   },
+   {
+    "level": 5,
+    "per_level_pct": 5.0,
+    "cum_pct": 25.0,
+    "main_stat_mult": 1.25
+   },
+   {
+    "level": 6,
+    "per_level_pct": 5.0,
+    "cum_pct": 30.0,
+    "main_stat_mult": 1.3
+   },
+   {
+    "level": 7,
+    "per_level_pct": 5.0,
+    "cum_pct": 35.0,
+    "main_stat_mult": 1.35
+   },
+   {
+    "level": 8,
+    "per_level_pct": 5.0,
+    "cum_pct": 40.0,
+    "main_stat_mult": 1.4
+   },
+   {
+    "level": 9,
+    "per_level_pct": 5.0,
+    "cum_pct": 45.0,
+    "main_stat_mult": 1.45
+   },
+   {
+    "level": 10,
+    "per_level_pct": 5.0,
+    "cum_pct": 50.0,
+    "main_stat_mult": 1.5
+   },
+   {
+    "level": 11,
+    "per_level_pct": 2.5,
+    "cum_pct": 52.5,
+    "main_stat_mult": 1.525
+   },
+   {
+    "level": 12,
+    "per_level_pct": 2.5,
+    "cum_pct": 55.0,
+    "main_stat_mult": 1.55
+   },
+   {
+    "level": 13,
+    "per_level_pct": 2.5,
+    "cum_pct": 57.5,
+    "main_stat_mult": 1.575
+   },
+   {
+    "level": 14,
+    "per_level_pct": 2.5,
+    "cum_pct": 60.0,
+    "main_stat_mult": 1.6
+   },
+   {
+    "level": 15,
+    "per_level_pct": 2.5,
+    "cum_pct": 62.5,
+    "main_stat_mult": 1.625
+   },
+   {
+    "level": 16,
+    "per_level_pct": 2.5,
+    "cum_pct": 65.0,
+    "main_stat_mult": 1.65
+   },
+   {
+    "level": 17,
+    "per_level_pct": 2.5,
+    "cum_pct": 67.5,
+    "main_stat_mult": 1.675
+   },
+   {
+    "level": 18,
+    "per_level_pct": 2.5,
+    "cum_pct": 70.0,
+    "main_stat_mult": 1.7
+   },
+   {
+    "level": 19,
+    "per_level_pct": 2.5,
+    "cum_pct": 72.5,
+    "main_stat_mult": 1.725
+   },
+   {
+    "level": 20,
+    "per_level_pct": 2.5,
+    "cum_pct": 75.0,
+    "main_stat_mult": 1.75
+   },
+   {
+    "level": 21,
+    "per_level_pct": 1.5,
+    "cum_pct": 76.5,
+    "main_stat_mult": 1.765
+   },
+   {
+    "level": 22,
+    "per_level_pct": 1.5,
+    "cum_pct": 78.0,
+    "main_stat_mult": 1.78
+   },
+   {
+    "level": 23,
+    "per_level_pct": 1.5,
+    "cum_pct": 79.5,
+    "main_stat_mult": 1.795
+   },
+   {
+    "level": 24,
+    "per_level_pct": 1.5,
+    "cum_pct": 81.0,
+    "main_stat_mult": 1.81
+   },
+   {
+    "level": 25,
+    "per_level_pct": 1.5,
+    "cum_pct": 82.5,
+    "main_stat_mult": 1.825
+   },
+   {
+    "level": 26,
+    "per_level_pct": 1.5,
+    "cum_pct": 84.0,
+    "main_stat_mult": 1.84
+   },
+   {
+    "level": 27,
+    "per_level_pct": 1.5,
+    "cum_pct": 85.5,
+    "main_stat_mult": 1.855
+   },
+   {
+    "level": 28,
+    "per_level_pct": 1.5,
+    "cum_pct": 87.0,
+    "main_stat_mult": 1.87
+   },
+   {
+    "level": 29,
+    "per_level_pct": 1.5,
+    "cum_pct": 88.5,
+    "main_stat_mult": 1.885
+   },
+   {
+    "level": 30,
+    "per_level_pct": 1.5,
+    "cum_pct": 90.0,
+    "main_stat_mult": 1.9
+   }
+  ],
+  "success_rates": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   0.95,
+   0.9,
+   0.85,
+   0.8,
+   0.75,
+   0.65,
+   0.6,
+   0.55,
+   0.5,
+   0.45,
+   0.45,
+   0.43,
+   0.41,
+   0.39,
+   0.37,
+   0.35,
+   0.33,
+   0.31,
+   0.29,
+   0.27,
+   0.25,
+   0.23,
+   0.21,
+   0.2,
+   0.2
+  ],
+  "slice_success_rates": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   0.95,
+   0.9,
+   0.85,
+   0.8,
+   0.75
+  ],
+  "success_index_note": "index 0 = 从 +0 强化到 +1；试玩版与正式版前 10 级相同",
+  "fail_drop": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "safe_floor": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   15,
+   15,
+   15,
+   15,
+   15,
+   20,
+   20,
+   20,
+   20,
+   20,
+   25,
+   25,
+   25,
+   25,
+   25
+  ],
+  "fail_material_only_until": 15,
+  "blessing_per_fail": 0.05,
+  "blessing_reset_on_success": true,
+  "destroy_on_fail": false,
+  "cost": {
+   "bind_silver_base": 20,
+   "bind_silver_mult": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    22,
+    24,
+    26,
+    28,
+    30,
+    32,
+    34,
+    36,
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50
+   ],
+   "refine_stones": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "formula": "每次尝试绑银 = bind_silver_base × V(装备等级) × bind_silver_mult[index]；炼器石 = refine_stones[index]"
+  },
+  "expected_cost": {
+   "+6@lv10": {
+    "tries": 6.1,
+    "silver": 511,
+    "stones": 6.1
+   },
+   "+7@lv10": {
+    "tries": 7.2,
+    "silver": 697,
+    "stones": 7.2
+   },
+   "+10@lv10": {
+    "tries": 10.9,
+    "silver": 1499,
+    "stones": 10.9
+   },
+   "+15@lv30": {
+    "tries": 19.6,
+    "silver": 15883,
+    "stones": 28.2
+   },
+   "+20@lv30": {
+    "tries": 62.5,
+    "silver": 97955,
+    "stones": 114.2
+   },
+   "+30@lv30": {
+    "tries": 434.2,
+    "silver": 1277824,
+    "stones": 1229.1
+   }
+  },
+  "cum_pct_at": {
+   "10": 50.0,
+   "20": 75.0,
+   "30": 90.0
+  },
+  "full_set_attack_gain_lv30": {
+   "white": {
+    "+10": 33.2,
+    "+20": 49.7,
+    "+30": 59.7
+   },
+   "red": {
+    "+10": 38.8,
+    "+20": 58.1,
+    "+30": 69.8
+   }
+  },
+  "note": "老板 2026-11-20 04:38 定：正式版单件 +30，试玩版 +10【已定】；取代 v0.2「全程统一 +10」",
+  "fail": "失败只掉 1 级强化，不碎装【已定】"
+ },
+ "sets": [
+  {
+   "set_id": "set_maplefire",
+   "name_zh": "枫火",
+   "name_en": "Maplefire Vestments",
+   "type": "防具套",
+   "region": "落枫镇",
+   "item_levels": [
+    15,
+    20
+   ],
+   "min_rarity": "橙",
+   "slots": [
+    "head",
+    "chest",
+    "hands",
+    "legs",
+    "feet",
+    "belt"
+   ],
+   "full_set_darkgold_appearance": true,
+   "tiers": [
+    {
+     "pieces": 2,
+     "bonus": "生命 +4.8%",
+     "stats": {
+      "hp_pct": 4.8
+     },
+     "budget_pts": 8
+    },
+    {
+     "pieces": 4,
+     "bonus": "赋予火属性：火属性伤害 +（10 点 × 0.2 × V(装备等级)），15 级 +3.6、20 级 +4.32",
+     "stats": {
+      "elem_fire_pts": 10
+     },
+     "budget_pts": 10
+    },
+    {
+     "pieces": 6,
+     "bonus": "火叠层概率 +8%、火爆炸伤害 +20%；集齐显示暗金外观",
+     "stats": {
+      "fire_stack_chance": 0.08,
+      "fire_burst_dmg_pct": 20
+     },
+     "budget_pts": 10
+    }
+   ],
+   "paid_pts": 25.2,
+   "total_bonus_pts": 28,
+   "premium_pts": 2.8,
+   "premium_output_pct": 1.4
+  },
+  {
+   "set_id": "set_autumnchime",
+   "name_zh": "秋声",
+   "name_en": "Autumn Chime",
+   "type": "饰品套",
+   "region": "落枫镇",
+   "item_levels": [
+    15,
+    20
+   ],
+   "min_rarity": "橙",
+   "slots": [
+    "earring",
+    "necklace",
+    "ring"
+   ],
+   "full_set_darkgold_appearance": false,
+   "appearance_note": "饰品不显示外观，集齐不改外观（暗金外观只由防具套触发）",
+   "tiers": [
+    {
+     "pieces": 2,
+     "bonus": "技能伤害 +3.6%",
+     "stats": {
+      "skill": 3.6
+     },
+     "budget_pts": 6
+    },
+    {
+     "pieces": 3,
+     "bonus": "会心率 +3.2%",
+     "stats": {
+      "crit": 3.2
+     },
+     "budget_pts": 8
+    }
+   ],
+   "paid_pts": 12.6,
+   "total_bonus_pts": 14,
+   "premium_pts": 1.4,
+   "premium_output_pct": 0.7
+  }
+ ],
+ "set_rules": {
+  "min_rarity": "橙",
+  "set_item_affix_budget_mult": 0.9,
+  "set_item_chance_in_orange_plus": 0.25,
+  "premium_cap_pts": 10,
+  "note": "套装件数值词条预算 ×0.9，省下的点数用来支付套装奖励；全身套装奖励净溢价 ≤ 10 点（≈ +5% 输出）；同一套装只算一次；第一版只留接口"
+ },
+ "drop_tables": {
+  "rarity_order": [
+   "白",
+   "绿",
+   "蓝",
+   "紫",
+   "橙",
+   "红",
+   "暗金"
+  ],
+  "by_monster": {
+   "normal": {
+    "name": "普通怪",
+    "equip_drop_chance": 0.08,
+    "count": 1,
+    "weights": [
+     60,
+     25,
+     10,
+     4,
+     0.8,
+     0.18,
+     0.02
+    ]
+   },
+   "elite": {
+    "name": "精英怪",
+    "equip_drop_chance": 0.35,
+    "count": 1,
+    "weights": [
+     25,
+     35,
+     25,
+     11,
+     3,
+     0.8,
+     0.2
+    ]
+   },
+   "boss": {
+    "name": "Boss",
+    "equip_drop_chance": 1.0,
+    "count": 2,
+    "weights": [
+     0,
+     25,
+     45,
+     20,
+     7,
+     2.5,
+     0.5
+    ]
+   }
+  },
+  "region_cap": [
+   {
+    "region": "青石村",
+    "levels": "1~10",
+    "max_rarity": "紫",
+    "normal": [
+     60.6,
+     25.3,
+     10.1,
+     4.0,
+     0,
+     0,
+     0
+    ],
+    "elite": [
+     26.0,
+     36.5,
+     26.0,
+     11.5,
+     0,
+     0,
+     0
+    ],
+    "boss": [
+     0.0,
+     27.8,
+     50.0,
+     22.2,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "region": "落枫镇",
+    "levels": "11~20",
+    "max_rarity": "橙",
+    "normal": [
+     60.1,
+     25.1,
+     10.0,
+     4.0,
+     0.8,
+     0,
+     0
+    ],
+    "elite": [
+     25.3,
+     35.4,
+     25.3,
+     11.1,
+     3.0,
+     0,
+     0
+    ],
+    "boss": [
+     0.0,
+     25.8,
+     46.4,
+     20.6,
+     7.2,
+     0,
+     0
+    ]
+   },
+   {
+    "region": "天衡城",
+    "levels": "21~30",
+    "max_rarity": "红",
+    "normal": [
+     60.0,
+     25.0,
+     10.0,
+     4.0,
+     0.8,
+     0.2,
+     0
+    ],
+    "elite": [
+     25.1,
+     35.1,
+     25.1,
+     11.0,
+     3.0,
+     0.8,
+     0
+    ],
+    "boss": [
+     0.0,
+     25.1,
+     45.2,
+     20.1,
+     7.0,
+     2.5,
+     0
+    ]
+   },
+   {
+    "region": "玄朝国都",
+    "levels": "31~40",
+    "max_rarity": "暗金",
+    "normal": [
+     60.0,
+     25.0,
+     10.0,
+     4.0,
+     0.8,
+     0.2,
+     0.0
+    ],
+    "elite": [
+     25.0,
+     35.0,
+     25.0,
+     11.0,
+     3.0,
+     0.8,
+     0.2
+    ],
+    "boss": [
+     0.0,
+     25.0,
+     45.0,
+     20.0,
+     7.0,
+     2.5,
+     0.5
+    ]
+   },
+   {
+    "region": "南荒大陆",
+    "levels": "41~50",
+    "max_rarity": "暗金",
+    "normal": [
+     60.0,
+     25.0,
+     10.0,
+     4.0,
+     0.8,
+     0.2,
+     0.0
+    ],
+    "elite": [
+     25.0,
+     35.0,
+     25.0,
+     11.0,
+     3.0,
+     0.8,
+     0.2
+    ],
+    "boss": [
+     0.0,
+     25.0,
+     45.0,
+     20.0,
+     7.0,
+     2.5,
+     0.5
+    ]
+   },
+   {
+    "region": "中州",
+    "levels": "51~60",
+    "max_rarity": "暗金",
+    "normal": [
+     60.0,
+     25.0,
+     10.0,
+     4.0,
+     0.8,
+     0.2,
+     0.0
+    ],
+    "elite": [
+     25.0,
+     35.0,
+     25.0,
+     11.0,
+     3.0,
+     0.8,
+     0.2
+    ],
+    "boss": [
+     0.0,
+     25.0,
+     45.0,
+     20.0,
+     7.0,
+     2.5,
+     0.5
+    ]
+   }
+  ],
+  "normalize": "超出区域上限的档位权重删除，其余按比例放大到 100%",
+  "pity": {
+   "after_misses": 5,
+   "min_rarity": "紫",
+   "note": "同一 Boss 连续 5 次未出紫或以上，第 6 次必出紫或以上（区域上限内）"
+  },
+  "endless": {
+   "every_waves": 10,
+   "shift_pct": 10,
+   "note": "无尽模式每 10 波，所有权重向高一档平移 10%（白→绿…）"
+  }
+ },
+ "names": {
+  "by_weapon_type": {
+   "sword": [
+    {
+     "rarity": "白",
+     "zh": "铁剑",
+     "en": "Iron Sword"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼铁剑",
+     "en": "Refined Iron Sword"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青钢剑",
+     "en": "Runed Bluesteel Sword"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁剑",
+     "en": "Arcane Coldiron Sword"
+    },
+    {
+     "rarity": "橙",
+     "zh": "坠星剑",
+     "en": "Starfall Sword"
+    },
+    {
+     "rarity": "红",
+     "zh": "焚霞剑",
+     "en": "Emberglow Sword"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·归墟剑",
+     "en": "Primordial Abyss Sword"
+    }
+   ],
+   "blade": [
+    {
+     "rarity": "白",
+     "zh": "厚背铁刀",
+     "en": "Heavyback Glaive"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼厚背铁刀",
+     "en": "Refined Heavyback Glaive"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青钢大刀",
+     "en": "Runed Bluesteel Glaive"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁大刀",
+     "en": "Arcane Coldiron Glaive"
+    },
+    {
+     "rarity": "橙",
+     "zh": "断岳刀",
+     "en": "Ridgecleaver Glaive"
+    },
+    {
+     "rarity": "红",
+     "zh": "赤炎斩马刀",
+     "en": "Crimson Flame Greatglaive"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·开天刀",
+     "en": "Primordial Skysplitter Glaive"
+    }
+   ],
+   "hammer": [
+    {
+     "rarity": "白",
+     "zh": "石锤",
+     "en": "Stone Hammer"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼石锤",
+     "en": "Refined Stone Hammer"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青钢锤",
+     "en": "Runed Bluesteel Hammer"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁锤",
+     "en": "Arcane Coldiron Hammer"
+    },
+    {
+     "rarity": "橙",
+     "zh": "震山锤",
+     "en": "Mountainquake Hammer"
+    },
+    {
+     "rarity": "红",
+     "zh": "熔岩重锤",
+     "en": "Magma Maul"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·镇岳锤",
+     "en": "Primordial Peakwarden Hammer"
+    }
+   ],
+   "spear": [
+    {
+     "rarity": "白",
+     "zh": "木杆枪",
+     "en": "Wooden Spear"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼木杆枪",
+     "en": "Refined Wooden Spear"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青钢枪",
+     "en": "Runed Bluesteel Spear"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁枪",
+     "en": "Arcane Coldiron Spear"
+    },
+    {
+     "rarity": "橙",
+     "zh": "引阵枪",
+     "en": "Formation-Guide Spear"
+    },
+    {
+     "rarity": "红",
+     "zh": "烈焰阵旗枪",
+     "en": "Blazing Banner Spear"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·星罗枪",
+     "en": "Primordial Starweave Spear"
+    }
+   ],
+   "staff": [
+    {
+     "rarity": "白",
+     "zh": "桃木杖",
+     "en": "Peachwood Staff"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼桃木杖",
+     "en": "Refined Peachwood Staff"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青竹杖",
+     "en": "Runed Jade-Bamboo Staff"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光紫檀杖",
+     "en": "Arcane Rosewood Staff"
+    },
+    {
+     "rarity": "橙",
+     "zh": "聚灵杖",
+     "en": "Spirit-Gathering Staff"
+    },
+    {
+     "rarity": "红",
+     "zh": "丹霞杖",
+     "en": "Cinnabar Cloud Staff"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·玄元杖",
+     "en": "Primordial Origin Staff"
+    }
+   ],
+   "bow": [
+    {
+     "rarity": "白",
+     "zh": "竹弓",
+     "en": "Bamboo Bow"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼竹弓",
+     "en": "Refined Bamboo Bow"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹牛角弓",
+     "en": "Runed Hornbow"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁弓",
+     "en": "Arcane Coldiron Bow"
+    },
+    {
+     "rarity": "橙",
+     "zh": "追星弓",
+     "en": "Starchaser Bow"
+    },
+    {
+     "rarity": "红",
+     "zh": "焚云弓",
+     "en": "Cloudburner Bow"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·贯虹弓",
+     "en": "Primordial Rainbow-Piercer Bow"
+    }
+   ]
+  },
+  "rule_weapon": "by_slot.weapon 保留剑的示例（兼容旧版）；各武器类型以 by_weapon_type 为准",
+  "rule": "白=[材质][部位]；绿=精炼+白名；蓝=灵纹+升级材质；紫=玄光+升级材质；橙/红=固定专名；暗金=太初·+专名；套装件名前加【套装名】",
+  "by_slot": {
+   "weapon": [
+    {
+     "rarity": "白",
+     "zh": "铁剑",
+     "en": "Iron Sword"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼铁剑",
+     "en": "Refined Iron Sword"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青钢剑",
+     "en": "Runed Bluesteel Sword"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁剑",
+     "en": "Arcane Coldiron Sword"
+    },
+    {
+     "rarity": "橙",
+     "zh": "坠星剑",
+     "en": "Starfall Sword"
+    },
+    {
+     "rarity": "红",
+     "zh": "焚霞剑",
+     "en": "Emberglow Sword"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·归墟剑",
+     "en": "Primordial Abyss Sword"
+    }
+   ],
+   "head": [
+    {
+     "rarity": "白",
+     "zh": "麻布头巾",
+     "en": "Hemp Headband"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼麻布头巾",
+     "en": "Refined Hemp Headband"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹云纹冠",
+     "en": "Runed Cloud Crown"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光玉簪冠",
+     "en": "Arcane Jade Crown"
+    },
+    {
+     "rarity": "橙",
+     "zh": "观星冠",
+     "en": "Stargazer Crown"
+    },
+    {
+     "rarity": "红",
+     "zh": "赤翎冠",
+     "en": "Crimson Plume Crown"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·天枢冠",
+     "en": "Primordial Pivot Crown"
+    }
+   ],
+   "chest": [
+    {
+     "rarity": "白",
+     "zh": "粗布短衫",
+     "en": "Coarse Tunic"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼粗布短衫",
+     "en": "Refined Coarse Tunic"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹青锦袍",
+     "en": "Runed Brocade Robe"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光云锦袍",
+     "en": "Arcane Cloudsilk Robe"
+    },
+    {
+     "rarity": "橙",
+     "zh": "流云法衣",
+     "en": "Driftcloud Vestment"
+    },
+    {
+     "rarity": "红",
+     "zh": "焚霞法衣",
+     "en": "Emberglow Vestment"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·无垢道袍",
+     "en": "Primordial Immaculate Robe"
+    }
+   ],
+   "hands": [
+    {
+     "rarity": "白",
+     "zh": "皮护手",
+     "en": "Leather Bracers"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼皮护手",
+     "en": "Refined Leather Bracers"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹铁护腕",
+     "en": "Runed Iron Bracers"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒铁护腕",
+     "en": "Arcane Coldiron Bracers"
+    },
+    {
+     "rarity": "橙",
+     "zh": "擒龙护腕",
+     "en": "Dragongrip Bracers"
+    },
+    {
+     "rarity": "红",
+     "zh": "烈阳护腕",
+     "en": "Blazing Sun Bracers"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·撼岳护腕",
+     "en": "Primordial Mountainshaker Bracers"
+    }
+   ],
+   "legs": [
+    {
+     "rarity": "白",
+     "zh": "麻布长裤",
+     "en": "Hemp Trousers"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼麻布长裤",
+     "en": "Refined Hemp Trousers"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹锦裤",
+     "en": "Runed Silk Leggings"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光云纹护膝",
+     "en": "Arcane Cloudguard Leggings"
+    },
+    {
+     "rarity": "橙",
+     "zh": "踏雾护膝",
+     "en": "Mistwalker Leggings"
+    },
+    {
+     "rarity": "红",
+     "zh": "赤岩战裙",
+     "en": "Redrock Tassets"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·不动战裙",
+     "en": "Primordial Immovable Tassets"
+    }
+   ],
+   "feet": [
+    {
+     "rarity": "白",
+     "zh": "草鞋",
+     "en": "Straw Sandals"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼草鞋",
+     "en": "Refined Straw Sandals"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹布靴",
+     "en": "Runed Cloth Boots"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光踏风靴",
+     "en": "Arcane Windstep Boots"
+    },
+    {
+     "rarity": "橙",
+     "zh": "追月靴",
+     "en": "Moonchaser Boots"
+    },
+    {
+     "rarity": "红",
+     "zh": "流火靴",
+     "en": "Flowing Fire Boots"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·缩地靴",
+     "en": "Primordial Earthfold Boots"
+    }
+   ],
+   "belt": [
+    {
+     "rarity": "白",
+     "zh": "麻绳腰带",
+     "en": "Rope Belt"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼麻绳腰带",
+     "en": "Refined Rope Belt"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹皮腰带",
+     "en": "Runed Leather Belt"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光玉扣带",
+     "en": "Arcane Jade-Buckle Belt"
+    },
+    {
+     "rarity": "橙",
+     "zh": "束灵带",
+     "en": "Spiritbind Sash"
+    },
+    {
+     "rarity": "红",
+     "zh": "炎纹宝带",
+     "en": "Flamemark Sash"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·周天带",
+     "en": "Primordial Orbit Sash"
+    }
+   ],
+   "earring": [
+    {
+     "rarity": "白",
+     "zh": "铜耳坠",
+     "en": "Copper Earring"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼铜耳坠",
+     "en": "Refined Copper Earring"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹银耳坠",
+     "en": "Runed Silver Earring"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光玉耳坠",
+     "en": "Arcane Jade Earring"
+    },
+    {
+     "rarity": "橙",
+     "zh": "听风坠",
+     "en": "Windlistener Earring"
+    },
+    {
+     "rarity": "红",
+     "zh": "霞光坠",
+     "en": "Rosy Dawn Earring"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·谛听坠",
+     "en": "Primordial Allhearing Earring"
+    }
+   ],
+   "necklace": [
+    {
+     "rarity": "白",
+     "zh": "木珠项链",
+     "en": "Wooden Bead Necklace"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼木珠项链",
+     "en": "Refined Wooden Bead Necklace"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹玉坠",
+     "en": "Runed Jade Pendant"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光灵珠链",
+     "en": "Arcane Spirit Pearl Chain"
+    },
+    {
+     "rarity": "橙",
+     "zh": "聚雷链",
+     "en": "Stormgather Chain"
+    },
+    {
+     "rarity": "红",
+     "zh": "朱焰璎珞",
+     "en": "Vermilion Flame Necklace"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·混元珠链",
+     "en": "Primordial Unity Chain"
+    }
+   ],
+   "ring": [
+    {
+     "rarity": "白",
+     "zh": "铁指环",
+     "en": "Iron Band"
+    },
+    {
+     "rarity": "绿",
+     "zh": "精炼铁指环",
+     "en": "Refined Iron Band"
+    },
+    {
+     "rarity": "蓝",
+     "zh": "灵纹银戒",
+     "en": "Runed Silver Ring"
+    },
+    {
+     "rarity": "紫",
+     "zh": "玄光寒玉戒",
+     "en": "Arcane Frostjade Ring"
+    },
+    {
+     "rarity": "橙",
+     "zh": "落星戒",
+     "en": "Fallen Star Ring"
+    },
+    {
+     "rarity": "红",
+     "zh": "焚心戒",
+     "en": "Heartfire Ring"
+    },
+    {
+     "rarity": "暗金",
+     "zh": "太初·乾坤戒",
+     "en": "Primordial Cosmos Ring"
+    }
+   ]
+  },
+  "weapon_types": [
+   {
+    "id": "sword",
+    "zh": "剑",
+    "en": "Sword"
+   },
+   {
+    "id": "blade",
+    "zh": "大刀",
+    "en": "Glaive"
+   },
+   {
+    "id": "hammer",
+    "zh": "锤",
+    "en": "Hammer"
+   },
+   {
+    "id": "spear",
+    "zh": "枪",
+    "en": "Spear"
+   },
+   {
+    "id": "staff",
+    "zh": "法杖",
+    "en": "Staff"
+   },
+   {
+    "id": "bow",
+    "zh": "弓",
+    "en": "Bow"
+   }
+  ],
+  "materials": [
+   {
+    "levels": "1~10",
+    "zh": "粗铁/麻布/木",
+    "en": "Iron/Hemp/Wood"
+   },
+   {
+    "levels": "11~20",
+    "zh": "青钢/青锦",
+    "en": "Bluesteel/Brocade"
+   },
+   {
+    "levels": "21~30",
+    "zh": "寒铁/云锦",
+    "en": "Coldiron/Cloudsilk"
+   },
+   {
+    "levels": "31~40",
+    "zh": "玄金/灵蚕丝",
+    "en": "Darkgold/Spirit Silk"
+   },
+   {
+    "levels": "41~50",
+    "zh": "陨星铁/霞绡",
+    "en": "Meteor Iron/Dawn Gauze"
+   },
+   {
+    "levels": "51~60",
+    "zh": "天外金/星纱",
+    "en": "Skymetal/Stargauze"
+   }
+  ]
+ }
+}

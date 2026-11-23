@@ -1,0 +1,22 @@
+﻿kind,id,name,en,type/trigger,value_per_point,pts_min,pts_max,chance,mult,cd_s,area,doc_single_equiv_pct,group_equiv_pct,slots
+numeric,atk,攻击,Attack,flat,0.25,5,18,,,,,,,weapon|hands|ring
+numeric,atk_pct,攻击%,Attack %,pct,0.5,5,18,,,,,,,weapon|ring
+numeric,hp,生命,Health,flat,3.5,5,18,,,,,,,head|chest|legs|feet|belt
+numeric,hp_pct,生命%,Health %,pct,0.6,5,18,,,,,,,head|chest|legs|belt|necklace
+numeric,def,防御,Defense,flat,0.3,5,18,,,,,,,head|chest|hands|legs|feet|belt
+numeric,aspd,攻速%,Attack Speed %,pct,0.4,5,18,,,,,,,weapon|hands|earring
+numeric,ms,移速%,Move Speed %,pct,0.5,5,18,,,,,,,legs|feet
+numeric,crit,会心率%,Crit Rate %,pct,0.4,5,18,,,,,,,weapon|head|hands|earring|ring
+numeric,critdmg,会心伤害%,Crit Damage %,pct,1.2,5,18,,,,,,,weapon|hands|necklace|ring
+numeric,acc,命中%,Accuracy %,pct,0.3,5,18,,,,,,,weapon|head|hands|earring|ring
+numeric,eva,闪避%,Evasion %,pct,0.25,5,18,,,,,,,chest|legs|feet|earring
+numeric,elem,属性伤害（冰/火/电/暗 4 选 1）,Elemental Damage,flat,0.2,5,18,,,,,,,weapon|necklace|ring
+numeric,res,属性抗性%（4 选 1）,Elemental Resist %,pct,0.8,5,18,,,,,,,head|chest|legs|feet|belt|earring|necklace
+numeric,skill,技能伤害%,Skill Damage %,pct,0.6,5,18,,,,,,,weapon|belt|earring|necklace
+numeric,regen,生命回复/秒,Health Regen /s,flat,0.12,5,18,,,,,,,chest|belt|necklace
+special,starfall,坠星,Starfall,攻击命中时,,,,0.07,3.5,3,目标处半径 120px 圆形,24.5,73.5,weapon|ring
+special,twin_phantom,分光剑影,Twin Phantoms,攻击命中时,,,,0.2,0.6,1.5,朝目标方向直线 400px，穿透,24.0,60.0,weapon|hands
+special,aftershock,余波,Aftershock,每次普攻命中,,,,1.0,0.25,0,主目标周围 80px（不含主目标）,0.0,62.5,weapon
+special,thunder_call,引雷,Thunder Call,攻击命中时,,,,0.1,2.6,2,单体,26.0,26.0,weapon|ring|necklace
+special,afterimage,残影,Afterimage,攻击命中时,,,,0.08,0.5,10,分身攻击当前目标（单体）,24.0,24.0,weapon|earring
+special,spirit_ward,护体灵罡,Spirit Ward,受到攻击时,,,,0.08,0.1,10,自身,,,head|chest|legs|feet|belt|necklace

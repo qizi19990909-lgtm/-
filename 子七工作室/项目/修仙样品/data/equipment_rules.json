@@ -1,0 +1,90 @@
+{
+ "_说明": "v0.4 起，数值以 data/equipment.json 为准（加载时覆盖同名键，来源见 AUTOTEST 输出 param_source）。这里只剩表里还没有的，全部是占位/工程设置。",
+ "enhance_profile": "slice",
+ "region": "青石村",
+ "element_names": {
+  "frost": "冰",
+  "fire": "火",
+  "lightning": "电",
+  "shadow": "暗"
+ },
+ "_element_names_说明": "占位：表里没有属性显示名",
+ "hero_weapon_type": {
+  "warrior": "sword",
+  "archer": "bow",
+  "mage": "staff"
+ },
+ "default_weapon_type": "sword",
+ "_hero_weapon_type_说明": "占位：表里没有职业→武器类型映射。老板决定 2026-11-20 起不再限制职业（config.equip_class_restriction=false），这里只用于开局武器类型和命名",
+ "loot_auto_pickup_s": 2.5,
+ "_loot_说明": "工程设置：掉落物自动拾取秒数",
+ "sim_presets": {
+  "_说明": "tools/sim_difficulty.py 用：每个部位从 rarities 随机一档、等级 level、强化在 enhance 区间随机；10 个部位全穿。item_level 10 / 绿蓝混装 按 v0.4 balance_check.assumptions",
+  "white": {
+   "rarities": [
+    "白"
+   ],
+   "level": 10,
+   "enhance": [
+    0,
+    0
+   ]
+  },
+  "avg5": {
+   "rarities": [
+    "绿",
+    "蓝"
+   ],
+   "level": 10,
+   "enhance": [
+    5,
+    5
+   ]
+  },
+  "bluepurple5": {
+   "rarities": [
+    "蓝",
+    "紫"
+   ],
+   "level": 10,
+   "enhance": [
+    5,
+    5
+   ]
+  },
+  "purple10": {
+   "rarities": [
+    "紫"
+   ],
+   "level": 10,
+   "enhance": [
+    10,
+    10
+   ]
+  },
+  "starter": {
+   "use_new_game": true,
+   "_说明": "新手流程：开局实际装备（config.starter_gear_override，10 部位 10 级白 +0），掉落会进背包但不换装"
+  },
+  "starter_autoequip": {
+   "use_new_game": true,
+   "auto_equip": true,
+   "_说明": "新手流程：开局实际装备，每波开始时自动换上背包里更好的掉落（按稀有度>等级>强化）"
+  },
+  "retry_campaign": {
+   "use_new_game": true,
+   "auto_equip": true,
+   "campaign": true,
+   "max_attempts": 30,
+   "_说明": "新手开局，输了从已解锁最高波次重打（背包/装备保留、满血），每波开始自动换上更好的掉落；最多 30 局"
+  },
+  "retry_campaign_w1": {
+   "use_new_game": true,
+   "auto_equip": true,
+   "campaign": true,
+   "max_attempts": 30,
+   "retry_from": "first",
+   "_说明": "对照：输了每次从第 1 波重打（多刷前几波掉落），其余同 retry_campaign"
+  }
+ }
+}

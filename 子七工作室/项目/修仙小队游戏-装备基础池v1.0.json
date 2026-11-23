@@ -1,0 +1,4116 @@
+{
+  "version": "1.0",
+  "meta": {
+    "title": "修仙小队装备基础池 v1.0",
+    "status": "设计讨论稿，未入库、未改游戏",
+    "date": "2026-11-21",
+    "timezone": "Asia/Shanghai",
+    "order": "先定裸装，再定怪物，最后定强化。老板提到的数值和百分比都只是比喻，实际由整体平衡给出。",
+    "changes_from_v0.9": [
+      "强化不再用全等级固定的 10/15/20：同一等级段内所有品质加值相同，等级越高每级加得越多。对比三种挂钩后采用「该级白装武器攻击的固定比例」。",
+      "被吞噬装备上的灵石直接消失，已定稿；强化等级也不转移。",
+      "取消「全身红约几天」这类目标，只公布每次击杀独立判定的爆率，并给出期望/中位数/90%分位作参考。",
+      "传承建议只转移锁定的技能词条，不转移强化和灵石，与吞噬规则一致（费用仍为草案）。"
+    ],
+    "script": "/workspace/sim_equip_growth/sim_equip_balance_v1.0.py",
+    "untested": true,
+    "all_boss_numbers_are_metaphors": true
+  },
+  "level_curve": {
+    "note": "不再用单一每10级倍率。为同时满足「40橙≈30红」和「50橙≈40暗金」，30到40只涨约4%，40到50涨约11%。白装武器攻击是裸装锚点，强化按它的固定比例加值。",
+    "white_weapon_atk": {
+      "1": 6,
+      "10": 32,
+      "20": 96,
+      "30": 240,
+      "40": 250,
+      "50": 279,
+      "60": 310,
+      "70": 345
+    },
+    "char_atk": {
+      "1": 8,
+      "10": 16,
+      "20": 32,
+      "30": 50,
+      "40": 60,
+      "50": 72,
+      "60": 84,
+      "70": 96
+    }
+  },
+  "base_formula": {
+    "unenhanced": "先定各等级白装武器，再乘品质倍率 1.00/1.03/1.06/1.10/1.15/1.20/1.28。其他部位按与武器的固定比例缩放。",
+    "enhance_hook": "推荐方案 A：每次强化加值 = 该级白武器攻击 × 固定比例。+1～+10 为 10/240，+11～+15 为 15/240，+16～+20 为 20/240。30 级上正好是 10/15/20，+20 共 +275。同一等级白装和红装加值完全相同。",
+    "enhance_rejected": {
+      "B_linear_level": "以 30 级 10/15/20 为锚，按 装备等级/30 缩放。10 级+10 偏强，50～70 级红+20 打怪低于 3 次。",
+      "C_from_monsters": "按目标打怪次数反推。中后期与 A 几乎重合，但每次加值要查怪物表，不直观。"
+    },
+    "gem_flat": "每颗同级攻击石约为该级白武器攻击的10%，是额外属性，按当前阶段怪来平衡，不跟下一阶段装备比。",
+    "layer": "人物基础 + 装备裸装 + 强化固定值 + 词条/石头固定值 = 底层。再乘百分比，最后结算会心、技能、元素和防御。",
+    "damage": "打怪伤害 = max(1, 攻击 - 怪物防御)。按单人主攻手估算。",
+    "display": "强化和石头显示固定值，四舍五入到 1 位小数或整数。"
+  },
+  "rarities": [
+    {
+      "name": "白",
+      "mult": 1.0,
+      "affix_count": 0,
+      "skill_exception": "衣服、武器可出 1 条技能",
+      "sockets": 0,
+      "sell_base": 2,
+      "note": "与暗金未强化只差 28%。差距主要靠强化和进阶（词条、孔槽）。"
+    },
+    {
+      "name": "绿",
+      "mult": 1.03,
+      "affix_count": 1,
+      "sockets": 0,
+      "sell_base": 5,
+      "note": ""
+    },
+    {
+      "name": "蓝",
+      "mult": 1.06,
+      "affix_count": 2,
+      "sockets": 1,
+      "sell_base": 12,
+      "note": ""
+    },
+    {
+      "name": "紫",
+      "mult": 1.1,
+      "affix_count": 3,
+      "sockets": 1,
+      "sell_base": 28,
+      "note": ""
+    },
+    {
+      "name": "橙",
+      "mult": 1.15,
+      "affix_count": 4,
+      "sockets": 2,
+      "sell_base": 60,
+      "note": ""
+    },
+    {
+      "name": "红",
+      "mult": 1.2,
+      "affix_count": 5,
+      "sockets": 2,
+      "sell_base": 130,
+      "note": "可培养顶点。未强化只比白高 20%。"
+    },
+    {
+      "name": "暗金",
+      "mult": 1.28,
+      "affix_count": 6,
+      "sockets": 3,
+      "sell_base": 280,
+      "drop_only": true,
+      "note": "掉落限定。未强化是橙的 1.113 倍，使下阶段橙正好等于本阶段暗金。"
+    }
+  ],
+  "skill_slots": {
+    "independent_max": 2,
+    "set_max": 1,
+    "only_if_slot_unlocked_for_rarity": true,
+    "unlock": {
+      "白": [
+        "chest",
+        "weapon"
+      ],
+      "绿": [
+        "chest",
+        "weapon",
+        "hands"
+      ],
+      "蓝": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt"
+      ],
+      "紫": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet"
+      ],
+      "橙": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet",
+        "legs"
+      ],
+      "红": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet",
+        "legs",
+        "inner"
+      ],
+      "暗金": [
+        "chest",
+        "weapon",
+        "hands",
+        "belt",
+        "feet",
+        "legs",
+        "inner",
+        "cloak",
+        "head",
+        "title",
+        "necklace",
+        "earring",
+        "ring"
+      ]
+    }
+  },
+  "slots": [
+    {
+      "id": "title",
+      "name": "称号",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "atk": 2,
+        "crit_pct": 1.0
+      },
+      "stat_affixes": [
+        "atk",
+        "crit",
+        "critdmg",
+        "hp"
+      ],
+      "skill_affixes": [
+        "zhenyue_ming",
+        "pojun_hao",
+        "qingxin_chi",
+        "wendao_yin"
+      ]
+    },
+    {
+      "id": "necklace",
+      "name": "项链",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "hp": 43,
+        "atk": 3.2
+      },
+      "stat_affixes": [
+        "atk",
+        "hp",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "ningshen_pei",
+        "yuanji_suo",
+        "lingchao_zhui",
+        "huichun_ling"
+      ]
+    },
+    {
+      "id": "earring",
+      "name": "耳环",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "hp": 32,
+        "crit_pct": 1.5
+      },
+      "stat_affixes": [
+        "aspd",
+        "crit",
+        "hp",
+        "ms"
+      ],
+      "skill_affixes": [
+        "wenfeng_er",
+        "xingshen_ding",
+        "kongling_er",
+        "huiyin_zhui"
+      ]
+    },
+    {
+      "id": "ring",
+      "name": "戒指",
+      "group": "jewelry",
+      "base_lv10_white": {
+        "atk": 5.4
+      },
+      "stat_affixes": [
+        "atk",
+        "aspd",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "liekong_jie",
+        "dieren_huan",
+        "shihun_yin",
+        "shuangxin_jie"
+      ]
+    },
+    {
+      "id": "head",
+      "name": "帽子",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 36,
+        "def": 3.0
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "crit"
+      ],
+      "skill_affixes": [
+        "pangguan_chenxin",
+        "tiee",
+        "ningshen_guan",
+        "xieli_kui"
+      ]
+    },
+    {
+      "id": "chest",
+      "name": "衣服",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 108,
+        "def": 8.6
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "crit",
+        "critdmg",
+        "ms"
+      ],
+      "skill_affixes": [
+        "zhenyue_zhiyi",
+        "yufeng_zhouqi",
+        "xueqi_fenshen",
+        "jinshen_zhao",
+        "jingji_fanshi",
+        "tieyi_huajin",
+        "yishan_bu"
+      ]
+    },
+    {
+      "id": "legs",
+      "name": "裤子",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 86,
+        "def": 6.5
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "ms",
+        "crit"
+      ],
+      "skill_affixes": [
+        "panyuan_bu",
+        "liedi_huixiang",
+        "budong_rushan",
+        "fuyue_chenshen"
+      ]
+    },
+    {
+      "id": "belt",
+      "name": "腰带",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 76,
+        "def": 2.2
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "guben_shuyao",
+        "chenqi_huyuan",
+        "xuenu_shu",
+        "nahai_dai"
+      ]
+    },
+    {
+      "id": "hands",
+      "name": "护手",
+      "group": "armor",
+      "base_lv10_white": {
+        "atk": 5.4,
+        "def": 3.2
+      },
+      "stat_affixes": [
+        "atk",
+        "aspd",
+        "def",
+        "crit",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "zhenwan_kaishan",
+        "dielang_lianji",
+        "gedang_yujin",
+        "zhaixing_tanzhua"
+      ]
+    },
+    {
+      "id": "feet",
+      "name": "鞋",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 43,
+        "def": 3.2,
+        "ms_pct": 3
+      },
+      "stat_affixes": [
+        "ms",
+        "hp",
+        "def",
+        "aspd"
+      ],
+      "skill_affixes": [
+        "talang_lv",
+        "jifeng_ta",
+        "tuixuan_bu",
+        "qianjin_zhui"
+      ]
+    },
+    {
+      "id": "inner",
+      "name": "内甲",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 48,
+        "def": 3.0
+      },
+      "stat_affixes": [
+        "hp",
+        "def",
+        "critdmg"
+      ],
+      "skill_affixes": [
+        "ruanjia_huajin",
+        "huxin_lin",
+        "fuxi_jia",
+        "cangfeng_yi"
+      ]
+    },
+    {
+      "id": "cloak",
+      "name": "披风",
+      "group": "armor",
+      "base_lv10_white": {
+        "hp": 24,
+        "ms_pct": 2
+      },
+      "stat_affixes": [
+        "hp",
+        "ms",
+        "def"
+      ],
+      "skill_affixes": [
+        "fengxing_chang",
+        "yinwu_pi",
+        "yanyue",
+        "biri"
+      ]
+    },
+    {
+      "id": "weapon",
+      "name": "武器",
+      "group": "weapon",
+      "base_lv10_white": {
+        "atk": 22
+      },
+      "stat_affixes": [
+        "atk",
+        "aspd",
+        "crit",
+        "critdmg",
+        "elem"
+      ],
+      "skill_affixes": [
+        "kaishan_yubo",
+        "shuangyi_feichui",
+        "hanshuang_liedi",
+        "jinglei_za",
+        "juhun_zhenqi",
+        "bengyue_yiji",
+        "zhuihun_canxiang"
+      ],
+      "note": "不进套装。元素只出在武器和宝石上。"
+    }
+  ],
+  "slot_count": {
+    "total": 13,
+    "jewelry": 4,
+    "armor": 8,
+    "weapon": 1,
+    "implementation": "现有样品约 3 槽，需扩到 13 槽。帽子加回。新增称号、内甲、披风。新增槽基础偏低，原槽基础略降，避免总战力暴涨。"
+  },
+  "level_thresholds": [
+    {
+      "item_level": 10,
+      "region": "青石村",
+      "prefix": "精铁"
+    },
+    {
+      "item_level": 20,
+      "region": "落枫镇",
+      "prefix": "玄纹"
+    },
+    {
+      "item_level": 30,
+      "region": "天衡城",
+      "prefix": "天衡"
+    },
+    {
+      "item_level": 40,
+      "region": "玄朝国都",
+      "prefix": "龙阙"
+    },
+    {
+      "item_level": 50,
+      "region": "苍溟",
+      "prefix": "苍溟"
+    },
+    {
+      "item_level": 60,
+      "region": "太虚",
+      "prefix": "太虚"
+    },
+    {
+      "item_level": 70,
+      "region": "归真",
+      "prefix": "归真"
+    }
+  ],
+  "future_mid_tiers": [
+    7,
+    13,
+    26
+  ],
+  "advance": {
+    "name": "吞灵",
+    "same_slot_only": true,
+    "any_rarity_can_eat_any": true,
+    "whites_to_green": 15,
+    "same_tier_materials": {
+      "绿→蓝": 4,
+      "蓝→紫": 5,
+      "紫→橙": 6,
+      "橙→红": 8
+    },
+    "inherent_xp": [
+      1,
+      16,
+      80,
+      480,
+      3360,
+      30240,
+      37800
+    ],
+    "bar_xp": [
+      15,
+      64,
+      400,
+      2880,
+      26880,
+      null,
+      null
+    ],
+    "stored_xp_keep_ratio": 1.0,
+    "same_rarity_inherent_as_bar_pct": 12.5,
+    "swap_example": "50% 进度的橙喂给新橙，新橙进度 62.5%",
+    "level_gap_discount": "0.85 ^ max(0, 目标等级 − 材料等级)",
+    "red_is_cap": true,
+    "darkgold_cannot_advance": true,
+    "cost_bind_silver": "2 × 目标品质卖价基础 × W(L) / W(10)"
+  },
+  "enhance": {
+    "name": "强化",
+    "same_for_all_rarities_at_same_level": true,
+    "scales_with_item_level": true,
+    "hook": "A_white_weapon_ratio",
+    "ratio_plus1_to_plus10": "10/240",
+    "ratio_plus11_to_plus15": "15/240",
+    "ratio_plus16_to_plus20": "20/240",
+    "cap_below_30": 10,
+    "cap_at_or_above_30": 20,
+    "table": {
+      "1": {
+        "上限": 10,
+        "每次+1到+10": 0.25,
+        "每次+11到+15": null,
+        "每次+16到+20": null,
+        "+10累计": 2.5,
+        "+20累计": null,
+        "生命等比_每跳+1到+10": 1.23,
+        "防御等比_每跳+1到+10": 0.1
+      },
+      "10": {
+        "上限": 10,
+        "每次+1到+10": 1.33,
+        "每次+11到+15": null,
+        "每次+16到+20": null,
+        "+10累计": 13.3,
+        "+20累计": null,
+        "生命等比_每跳+1到+10": 6.55,
+        "防御等比_每跳+1到+10": 0.52
+      },
+      "20": {
+        "上限": 10,
+        "每次+1到+10": 4.0,
+        "每次+11到+15": null,
+        "每次+16到+20": null,
+        "+10累计": 40.0,
+        "+20累计": null,
+        "生命等比_每跳+1到+10": 19.64,
+        "防御等比_每跳+1到+10": 1.56
+      },
+      "30": {
+        "上限": 20,
+        "每次+1到+10": 10.0,
+        "每次+11到+15": 15.0,
+        "每次+16到+20": 20.0,
+        "+10累计": 100.0,
+        "+20累计": 275.0,
+        "生命等比_每跳+1到+10": 49.09,
+        "防御等比_每跳+1到+10": 3.91
+      },
+      "40": {
+        "上限": 20,
+        "每次+1到+10": 10.42,
+        "每次+11到+15": 15.62,
+        "每次+16到+20": 20.83,
+        "+10累计": 104.2,
+        "+20累计": 286.5,
+        "生命等比_每跳+1到+10": 51.14,
+        "防御等比_每跳+1到+10": 4.07
+      },
+      "50": {
+        "上限": 20,
+        "每次+1到+10": 11.62,
+        "每次+11到+15": 17.44,
+        "每次+16到+20": 23.25,
+        "+10累计": 116.2,
+        "+20累计": 319.7,
+        "生命等比_每跳+1到+10": 57.07,
+        "防御等比_每跳+1到+10": 4.54
+      },
+      "60": {
+        "上限": 20,
+        "每次+1到+10": 12.92,
+        "每次+11到+15": 19.38,
+        "每次+16到+20": 25.83,
+        "+10累计": 129.2,
+        "+20累计": 355.2,
+        "生命等比_每跳+1到+10": 63.41,
+        "防御等比_每跳+1到+10": 5.05
+      },
+      "70": {
+        "上限": 20,
+        "每次+1到+10": 14.38,
+        "每次+11到+15": 21.56,
+        "每次+16到+20": 28.75,
+        "+10累计": 143.8,
+        "+20累计": 395.3,
+        "生命等比_每跳+1到+10": 70.57,
+        "防御等比_每跳+1到+10": 5.62
+      }
+    },
+    "hp_per_weapon_atk": 4.909,
+    "def_per_weapon_atk": 0.391,
+    "fail_plus1_to_plus10": "失败退1级，不碎",
+    "fail_plus11_to_plus15": "失败不退级、不碎，只耗材料",
+    "fail_plus16_to_plus20": "失败本应碎装。固灵符保住当前等级，不退级。也可用12个强化石合成。",
+    "success_rates_plus1_to_plus20": [
+      0.95,
+      0.9,
+      0.85,
+      0.75,
+      0.7,
+      0.65,
+      0.58,
+      0.55,
+      0.52,
+      0.51,
+      0.3,
+      0.26,
+      0.23,
+      0.2,
+      0.18,
+      0.16,
+      0.14,
+      0.12,
+      0.11,
+      0.1
+    ],
+    "stone_cost_plus1_to_plus20": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      24
+    ],
+    "silver_cost_draft": "每次尝试消耗 8 × (装备等级/10) × (当前强化+1) 绑银。清图绑银约 36 × 地图档。30 级 13 件到 +20，绑银约 2.9 天，仍低于强化石约 8.6 天。",
+    "does_not_transfer_on_devour": true
+  },
+  "inherit": {
+    "name": "传承",
+    "rule": "把锁定的 1～2 条技能词条转到同部位新装备。源装备销毁。目标至少绿，品质降 1 档。",
+    "enhance_and_gems": "建议强化等级和灵石都不转移，与吞噬一致。源装备上的石头随装备销毁。",
+    "cost_is_draft": true
+  },
+  "darkgold": {
+    "drop_only": true,
+    "cannot_advance_rarity": true,
+    "first_appears_at": 40,
+    "note": "爆率见 drop 表。只能掉落。技能词条用传承带走。"
+  },
+  "sets": {
+    "rule": "同名同底，套装少 1 个技能词条。",
+    "drop_convert_chance": 0.12,
+    "first_version_drop": "只转化体修套",
+    "groups": [
+      {
+        "id": "jewelry",
+        "name": "首饰组",
+        "slots": [
+          "title",
+          "necklace",
+          "earring",
+          "ring"
+        ],
+        "breakpoints": [
+          2,
+          4
+        ]
+      },
+      {
+        "id": "armor",
+        "name": "防具组",
+        "slots": [
+          "head",
+          "chest",
+          "legs",
+          "belt",
+          "hands",
+          "feet",
+          "inner",
+          "cloak"
+        ],
+        "breakpoints": [
+          3,
+          5,
+          8
+        ]
+      }
+    ],
+    "quality_rule": "每档看该组第 N 好那件的品质。",
+    "trigger_pct_by_rarity": {
+      "白": 10,
+      "绿": 20,
+      "蓝": 30,
+      "紫": 40,
+      "橙": 50,
+      "红": 60,
+      "暗金": 70
+    },
+    "grouping_unconfirmed": true,
+    "grouping_proposal": "首饰 4 件（2/4 出效果）、防具 8 件（3/5/8 出效果）、武器另算。此前未表态，v1.0 仍待确认。"
+  },
+  "drop": {
+    "rule": "每次击杀独立判定。1% 表示每只怪 1%，打 100 只也不保证出一件，没有保底。Boss 每次击杀掉 2 件，每件独立抽品质。",
+    "independent": true,
+    "no_pity": true,
+    "boss_pieces": 2,
+    "clear_composition": {
+      "normal": 32,
+      "elite": 6,
+      "boss": 1
+    },
+    "maps": {
+      "10": {
+        "region": "青石村",
+        "prefix": "精铁",
+        "cap": "紫",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              72.0,
+              20.0,
+              6.5,
+              1.5,
+              0,
+              0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.1152,
+                "per_kill_pct": 11.52,
+                "first_drop": {
+                  "expected": 8.7,
+                  "median": 6,
+                  "p90": 19
+                }
+              },
+              "绿": {
+                "per_kill": 0.032,
+                "per_kill_pct": 3.2,
+                "first_drop": {
+                  "expected": 31.2,
+                  "median": 22,
+                  "p90": 71
+                }
+              },
+              "蓝": {
+                "per_kill": 0.0104,
+                "per_kill_pct": 1.04,
+                "first_drop": {
+                  "expected": 96.2,
+                  "median": 67,
+                  "p90": 221
+                }
+              },
+              "紫": {
+                "per_kill": 0.0024,
+                "per_kill_pct": 0.24,
+                "first_drop": {
+                  "expected": 416.7,
+                  "median": 289,
+                  "p90": 959
+                }
+              },
+              "橙": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "红": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              35.0,
+              38.0,
+              20.0,
+              7.0,
+              0,
+              0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.175,
+                "per_kill_pct": 17.5,
+                "first_drop": {
+                  "expected": 5.7,
+                  "median": 4,
+                  "p90": 12
+                }
+              },
+              "绿": {
+                "per_kill": 0.19,
+                "per_kill_pct": 19.0,
+                "first_drop": {
+                  "expected": 5.3,
+                  "median": 4,
+                  "p90": 11
+                }
+              },
+              "蓝": {
+                "per_kill": 0.1,
+                "per_kill_pct": 10.0,
+                "first_drop": {
+                  "expected": 10.0,
+                  "median": 7,
+                  "p90": 22
+                }
+              },
+              "紫": {
+                "per_kill": 0.035,
+                "per_kill_pct": 3.5,
+                "first_drop": {
+                  "expected": 28.6,
+                  "median": 20,
+                  "p90": 65
+                }
+              },
+              "橙": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "红": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              35.0,
+              48.0,
+              17.0,
+              0,
+              0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.35,
+                "per_kill_pct": 35.0,
+                "first_drop": {
+                  "expected": 2.9,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "蓝": {
+                "per_kill": 0.48,
+                "per_kill_pct": 48.0,
+                "first_drop": {
+                  "expected": 2.1,
+                  "median": 2,
+                  "p90": 4
+                }
+              },
+              "紫": {
+                "per_kill": 0.17,
+                "per_kill_pct": 17.0,
+                "first_drop": {
+                  "expected": 5.9,
+                  "median": 4,
+                  "p90": 13
+                }
+              },
+              "橙": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "红": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.9937,
+            "expected_count": 4.7364,
+            "first_clear": {
+              "expected": 1.01,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.9579,
+            "expected_count": 2.864,
+            "first_clear": {
+              "expected": 1.04,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.8972,
+            "expected_count": 1.8928,
+            "first_clear": {
+              "expected": 1.11,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.4849,
+            "expected_count": 0.6268,
+            "first_clear": {
+              "expected": 2.06,
+              "median": 2,
+              "p90": 4
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.0,
+            "expected_count": 0.0,
+            "first_clear": null
+          },
+          "红": {
+            "p_at_least_one": 0.0,
+            "expected_count": 0.0,
+            "first_clear": null
+          },
+          "暗金": {
+            "p_at_least_one": 0.0,
+            "expected_count": 0.0,
+            "first_clear": null
+          }
+        }
+      },
+      "20": {
+        "region": "落枫镇",
+        "prefix": "玄纹",
+        "cap": "橙",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              50.0,
+              28.0,
+              15.0,
+              6.0,
+              1.0,
+              0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.08,
+                "per_kill_pct": 8.0,
+                "first_drop": {
+                  "expected": 12.5,
+                  "median": 9,
+                  "p90": 28
+                }
+              },
+              "绿": {
+                "per_kill": 0.0448,
+                "per_kill_pct": 4.48,
+                "first_drop": {
+                  "expected": 22.3,
+                  "median": 16,
+                  "p90": 51
+                }
+              },
+              "蓝": {
+                "per_kill": 0.024,
+                "per_kill_pct": 2.4,
+                "first_drop": {
+                  "expected": 41.7,
+                  "median": 29,
+                  "p90": 95
+                }
+              },
+              "紫": {
+                "per_kill": 0.0096,
+                "per_kill_pct": 0.96,
+                "first_drop": {
+                  "expected": 104.2,
+                  "median": 72,
+                  "p90": 239
+                }
+              },
+              "橙": {
+                "per_kill": 0.0016,
+                "per_kill_pct": 0.16,
+                "first_drop": {
+                  "expected": 625.0,
+                  "median": 433,
+                  "p90": 1438
+                }
+              },
+              "红": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              15.0,
+              30.0,
+              32.0,
+              18.0,
+              5.0,
+              0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.075,
+                "per_kill_pct": 7.5,
+                "first_drop": {
+                  "expected": 13.3,
+                  "median": 9,
+                  "p90": 30
+                }
+              },
+              "绿": {
+                "per_kill": 0.15,
+                "per_kill_pct": 15.0,
+                "first_drop": {
+                  "expected": 6.7,
+                  "median": 5,
+                  "p90": 15
+                }
+              },
+              "蓝": {
+                "per_kill": 0.16,
+                "per_kill_pct": 16.0,
+                "first_drop": {
+                  "expected": 6.2,
+                  "median": 4,
+                  "p90": 14
+                }
+              },
+              "紫": {
+                "per_kill": 0.09,
+                "per_kill_pct": 9.0,
+                "first_drop": {
+                  "expected": 11.1,
+                  "median": 8,
+                  "p90": 25
+                }
+              },
+              "橙": {
+                "per_kill": 0.025,
+                "per_kill_pct": 2.5,
+                "first_drop": {
+                  "expected": 40.0,
+                  "median": 28,
+                  "p90": 91
+                }
+              },
+              "红": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              10.0,
+              35.0,
+              40.0,
+              15.0,
+              0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.1,
+                "per_kill_pct": 10.0,
+                "first_drop": {
+                  "expected": 10.0,
+                  "median": 7,
+                  "p90": 22
+                }
+              },
+              "蓝": {
+                "per_kill": 0.35,
+                "per_kill_pct": 35.0,
+                "first_drop": {
+                  "expected": 2.9,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "紫": {
+                "per_kill": 0.4,
+                "per_kill_pct": 40.0,
+                "first_drop": {
+                  "expected": 2.5,
+                  "median": 2,
+                  "p90": 5
+                }
+              },
+              "橙": {
+                "per_kill": 0.15,
+                "per_kill_pct": 15.0,
+                "first_drop": {
+                  "expected": 6.7,
+                  "median": 5,
+                  "p90": 15
+                }
+              },
+              "红": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.9565,
+            "expected_count": 3.01,
+            "first_clear": {
+              "expected": 1.05,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.9295,
+            "expected_count": 2.5336,
+            "first_clear": {
+              "expected": 1.08,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.9318,
+            "expected_count": 2.428,
+            "first_clear": {
+              "expected": 1.07,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.8499,
+            "expected_count": 1.6472,
+            "first_clear": {
+              "expected": 1.18,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.4103,
+            "expected_count": 0.5012,
+            "first_clear": {
+              "expected": 2.44,
+              "median": 2,
+              "p90": 5
+            }
+          },
+          "红": {
+            "p_at_least_one": 0.0,
+            "expected_count": 0.0,
+            "first_clear": null
+          },
+          "暗金": {
+            "p_at_least_one": 0.0,
+            "expected_count": 0.0,
+            "first_clear": null
+          }
+        }
+      },
+      "30": {
+        "region": "天衡城",
+        "prefix": "天衡",
+        "cap": "红",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              30.0,
+              30.0,
+              22.0,
+              12.0,
+              5.5,
+              0.5,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.048,
+                "per_kill_pct": 4.8,
+                "first_drop": {
+                  "expected": 20.8,
+                  "median": 15,
+                  "p90": 47
+                }
+              },
+              "绿": {
+                "per_kill": 0.048,
+                "per_kill_pct": 4.8,
+                "first_drop": {
+                  "expected": 20.8,
+                  "median": 15,
+                  "p90": 47
+                }
+              },
+              "蓝": {
+                "per_kill": 0.0352,
+                "per_kill_pct": 3.52,
+                "first_drop": {
+                  "expected": 28.4,
+                  "median": 20,
+                  "p90": 65
+                }
+              },
+              "紫": {
+                "per_kill": 0.0192,
+                "per_kill_pct": 1.92,
+                "first_drop": {
+                  "expected": 52.1,
+                  "median": 36,
+                  "p90": 119
+                }
+              },
+              "橙": {
+                "per_kill": 0.0088,
+                "per_kill_pct": 0.88,
+                "first_drop": {
+                  "expected": 113.6,
+                  "median": 79,
+                  "p90": 261
+                }
+              },
+              "红": {
+                "per_kill": 0.0008,
+                "per_kill_pct": 0.08,
+                "first_drop": {
+                  "expected": 1250.0,
+                  "median": 867,
+                  "p90": 2878
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              8.0,
+              18.0,
+              28.0,
+              28.0,
+              15.0,
+              3.0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.04,
+                "per_kill_pct": 4.0,
+                "first_drop": {
+                  "expected": 25.0,
+                  "median": 17,
+                  "p90": 57
+                }
+              },
+              "绿": {
+                "per_kill": 0.09,
+                "per_kill_pct": 9.0,
+                "first_drop": {
+                  "expected": 11.1,
+                  "median": 8,
+                  "p90": 25
+                }
+              },
+              "蓝": {
+                "per_kill": 0.14,
+                "per_kill_pct": 14.0,
+                "first_drop": {
+                  "expected": 7.1,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "紫": {
+                "per_kill": 0.14,
+                "per_kill_pct": 14.0,
+                "first_drop": {
+                  "expected": 7.1,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "橙": {
+                "per_kill": 0.075,
+                "per_kill_pct": 7.5,
+                "first_drop": {
+                  "expected": 13.3,
+                  "median": 9,
+                  "p90": 30
+                }
+              },
+              "红": {
+                "per_kill": 0.015,
+                "per_kill_pct": 1.5,
+                "first_drop": {
+                  "expected": 66.7,
+                  "median": 46,
+                  "p90": 153
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              0.0,
+              15.0,
+              35.0,
+              38.0,
+              12.0,
+              0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "蓝": {
+                "per_kill": 0.15,
+                "per_kill_pct": 15.0,
+                "first_drop": {
+                  "expected": 6.7,
+                  "median": 5,
+                  "p90": 15
+                }
+              },
+              "紫": {
+                "per_kill": 0.35,
+                "per_kill_pct": 35.0,
+                "first_drop": {
+                  "expected": 2.9,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "橙": {
+                "per_kill": 0.38,
+                "per_kill_pct": 38.0,
+                "first_drop": {
+                  "expected": 2.6,
+                  "median": 2,
+                  "p90": 5
+                }
+              },
+              "红": {
+                "per_kill": 0.12,
+                "per_kill_pct": 12.0,
+                "first_drop": {
+                  "expected": 8.3,
+                  "median": 6,
+                  "p90": 19
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.8378,
+            "expected_count": 1.776,
+            "first_clear": {
+              "expected": 1.19,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.8823,
+            "expected_count": 2.076,
+            "first_clear": {
+              "expected": 1.13,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.9071,
+            "expected_count": 2.2664,
+            "first_clear": {
+              "expected": 1.1,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.9081,
+            "expected_count": 2.1544,
+            "first_clear": {
+              "expected": 1.1,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.8185,
+            "expected_count": 1.4916,
+            "first_clear": {
+              "expected": 1.22,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "红": {
+            "p_at_least_one": 0.3106,
+            "expected_count": 0.3556,
+            "first_clear": {
+              "expected": 3.22,
+              "median": 2,
+              "p90": 7
+            }
+          },
+          "暗金": {
+            "p_at_least_one": 0.0,
+            "expected_count": 0.0,
+            "first_clear": null
+          }
+        }
+      },
+      "40": {
+        "region": "玄朝国都",
+        "prefix": "龙阙",
+        "cap": "暗金",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              18.0,
+              25.0,
+              25.0,
+              18.0,
+              10.0,
+              3.96,
+              0.04
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0288,
+                "per_kill_pct": 2.88,
+                "first_drop": {
+                  "expected": 34.7,
+                  "median": 24,
+                  "p90": 79
+                }
+              },
+              "绿": {
+                "per_kill": 0.04,
+                "per_kill_pct": 4.0,
+                "first_drop": {
+                  "expected": 25.0,
+                  "median": 17,
+                  "p90": 57
+                }
+              },
+              "蓝": {
+                "per_kill": 0.04,
+                "per_kill_pct": 4.0,
+                "first_drop": {
+                  "expected": 25.0,
+                  "median": 17,
+                  "p90": 57
+                }
+              },
+              "紫": {
+                "per_kill": 0.0288,
+                "per_kill_pct": 2.88,
+                "first_drop": {
+                  "expected": 34.7,
+                  "median": 24,
+                  "p90": 79
+                }
+              },
+              "橙": {
+                "per_kill": 0.016,
+                "per_kill_pct": 1.6,
+                "first_drop": {
+                  "expected": 62.5,
+                  "median": 43,
+                  "p90": 143
+                }
+              },
+              "红": {
+                "per_kill": 0.0063,
+                "per_kill_pct": 0.6336,
+                "first_drop": {
+                  "expected": 157.8,
+                  "median": 110,
+                  "p90": 363
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0001,
+                "per_kill_pct": 0.0064,
+                "first_drop": {
+                  "expected": 15625.0,
+                  "median": 10831,
+                  "p90": 35977
+                }
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              4.0,
+              10.0,
+              20.0,
+              28.0,
+              24.0,
+              13.88,
+              0.12
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.02,
+                "per_kill_pct": 2.0,
+                "first_drop": {
+                  "expected": 50.0,
+                  "median": 35,
+                  "p90": 114
+                }
+              },
+              "绿": {
+                "per_kill": 0.05,
+                "per_kill_pct": 5.0,
+                "first_drop": {
+                  "expected": 20.0,
+                  "median": 14,
+                  "p90": 45
+                }
+              },
+              "蓝": {
+                "per_kill": 0.1,
+                "per_kill_pct": 10.0,
+                "first_drop": {
+                  "expected": 10.0,
+                  "median": 7,
+                  "p90": 22
+                }
+              },
+              "紫": {
+                "per_kill": 0.14,
+                "per_kill_pct": 14.0,
+                "first_drop": {
+                  "expected": 7.1,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "橙": {
+                "per_kill": 0.12,
+                "per_kill_pct": 12.0,
+                "first_drop": {
+                  "expected": 8.3,
+                  "median": 6,
+                  "p90": 19
+                }
+              },
+              "红": {
+                "per_kill": 0.0694,
+                "per_kill_pct": 6.94,
+                "first_drop": {
+                  "expected": 14.4,
+                  "median": 10,
+                  "p90": 33
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0006,
+                "per_kill_pct": 0.06,
+                "first_drop": {
+                  "expected": 1666.7,
+                  "median": 1155,
+                  "p90": 3837
+                }
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              0.0,
+              8.0,
+              22.0,
+              36.0,
+              33.6,
+              0.4
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "蓝": {
+                "per_kill": 0.08,
+                "per_kill_pct": 8.0,
+                "first_drop": {
+                  "expected": 12.5,
+                  "median": 9,
+                  "p90": 28
+                }
+              },
+              "紫": {
+                "per_kill": 0.22,
+                "per_kill_pct": 22.0,
+                "first_drop": {
+                  "expected": 4.5,
+                  "median": 3,
+                  "p90": 10
+                }
+              },
+              "橙": {
+                "per_kill": 0.36,
+                "per_kill_pct": 36.0,
+                "first_drop": {
+                  "expected": 2.8,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "红": {
+                "per_kill": 0.336,
+                "per_kill_pct": 33.6,
+                "first_drop": {
+                  "expected": 3.0,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "暗金": {
+                "per_kill": 0.004,
+                "per_kill_pct": 0.4,
+                "first_drop": {
+                  "expected": 250.0,
+                  "median": 173,
+                  "p90": 575
+                }
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.6523,
+            "expected_count": 1.0416,
+            "first_clear": {
+              "expected": 1.53,
+              "median": 1,
+              "p90": 3
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.8009,
+            "expected_count": 1.58,
+            "first_clear": {
+              "expected": 1.25,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.8782,
+            "expected_count": 2.04,
+            "first_clear": {
+              "expected": 1.14,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.9034,
+            "expected_count": 2.2016,
+            "first_clear": {
+              "expected": 1.11,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.8865,
+            "expected_count": 1.952,
+            "first_clear": {
+              "expected": 1.13,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "红": {
+            "p_at_least_one": 0.7663,
+            "expected_count": 1.2912,
+            "first_clear": {
+              "expected": 1.3,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "暗金": {
+            "p_at_least_one": 0.0136,
+            "expected_count": 0.0136,
+            "first_clear": {
+              "expected": 73.68,
+              "median": 51,
+              "p90": 169
+            }
+          }
+        }
+      },
+      "50": {
+        "region": "苍溟",
+        "prefix": "苍溟",
+        "cap": "暗金",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              14.0,
+              22.0,
+              24.0,
+              20.0,
+              13.0,
+              6.9,
+              0.1
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0224,
+                "per_kill_pct": 2.24,
+                "first_drop": {
+                  "expected": 44.6,
+                  "median": 31,
+                  "p90": 102
+                }
+              },
+              "绿": {
+                "per_kill": 0.0352,
+                "per_kill_pct": 3.52,
+                "first_drop": {
+                  "expected": 28.4,
+                  "median": 20,
+                  "p90": 65
+                }
+              },
+              "蓝": {
+                "per_kill": 0.0384,
+                "per_kill_pct": 3.84,
+                "first_drop": {
+                  "expected": 26.0,
+                  "median": 18,
+                  "p90": 59
+                }
+              },
+              "紫": {
+                "per_kill": 0.032,
+                "per_kill_pct": 3.2,
+                "first_drop": {
+                  "expected": 31.2,
+                  "median": 22,
+                  "p90": 71
+                }
+              },
+              "橙": {
+                "per_kill": 0.0208,
+                "per_kill_pct": 2.08,
+                "first_drop": {
+                  "expected": 48.1,
+                  "median": 33,
+                  "p90": 110
+                }
+              },
+              "红": {
+                "per_kill": 0.011,
+                "per_kill_pct": 1.104,
+                "first_drop": {
+                  "expected": 90.6,
+                  "median": 63,
+                  "p90": 208
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0002,
+                "per_kill_pct": 0.016,
+                "first_drop": {
+                  "expected": 6250.0,
+                  "median": 4332,
+                  "p90": 14391
+                }
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              2.0,
+              8.0,
+              16.0,
+              26.0,
+              26.0,
+              21.7,
+              0.3
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.01,
+                "per_kill_pct": 1.0,
+                "first_drop": {
+                  "expected": 100.0,
+                  "median": 69,
+                  "p90": 230
+                }
+              },
+              "绿": {
+                "per_kill": 0.04,
+                "per_kill_pct": 4.0,
+                "first_drop": {
+                  "expected": 25.0,
+                  "median": 17,
+                  "p90": 57
+                }
+              },
+              "蓝": {
+                "per_kill": 0.08,
+                "per_kill_pct": 8.0,
+                "first_drop": {
+                  "expected": 12.5,
+                  "median": 9,
+                  "p90": 28
+                }
+              },
+              "紫": {
+                "per_kill": 0.13,
+                "per_kill_pct": 13.0,
+                "first_drop": {
+                  "expected": 7.7,
+                  "median": 5,
+                  "p90": 17
+                }
+              },
+              "橙": {
+                "per_kill": 0.13,
+                "per_kill_pct": 13.0,
+                "first_drop": {
+                  "expected": 7.7,
+                  "median": 5,
+                  "p90": 17
+                }
+              },
+              "红": {
+                "per_kill": 0.1085,
+                "per_kill_pct": 10.85,
+                "first_drop": {
+                  "expected": 9.2,
+                  "median": 7,
+                  "p90": 21
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0015,
+                "per_kill_pct": 0.15,
+                "first_drop": {
+                  "expected": 666.7,
+                  "median": 462,
+                  "p90": 1534
+                }
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              0.0,
+              5.0,
+              18.0,
+              34.0,
+              42.0,
+              1.0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "蓝": {
+                "per_kill": 0.05,
+                "per_kill_pct": 5.0,
+                "first_drop": {
+                  "expected": 20.0,
+                  "median": 14,
+                  "p90": 45
+                }
+              },
+              "紫": {
+                "per_kill": 0.18,
+                "per_kill_pct": 18.0,
+                "first_drop": {
+                  "expected": 5.6,
+                  "median": 4,
+                  "p90": 12
+                }
+              },
+              "橙": {
+                "per_kill": 0.34,
+                "per_kill_pct": 34.0,
+                "first_drop": {
+                  "expected": 2.9,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "红": {
+                "per_kill": 0.42,
+                "per_kill_pct": 42.0,
+                "first_drop": {
+                  "expected": 2.4,
+                  "median": 2,
+                  "p90": 5
+                }
+              },
+              "暗金": {
+                "per_kill": 0.01,
+                "per_kill_pct": 1.0,
+                "first_drop": {
+                  "expected": 100.0,
+                  "median": 69,
+                  "p90": 230
+                }
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.544,
+            "expected_count": 0.7768,
+            "first_clear": {
+              "expected": 1.84,
+              "median": 1,
+              "p90": 3
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.7513,
+            "expected_count": 1.3664,
+            "first_clear": {
+              "expected": 1.33,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.8437,
+            "expected_count": 1.8088,
+            "first_clear": {
+              "expected": 1.19,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.897,
+            "expected_count": 2.164,
+            "first_clear": {
+              "expected": 1.11,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.9036,
+            "expected_count": 2.1256,
+            "first_clear": {
+              "expected": 1.11,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "红": {
+            "p_at_least_one": 0.8816,
+            "expected_count": 1.8443,
+            "first_clear": {
+              "expected": 1.13,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "暗金": {
+            "p_at_least_one": 0.0336,
+            "expected_count": 0.0341,
+            "first_clear": {
+              "expected": 29.72,
+              "median": 21,
+              "p90": 68
+            }
+          }
+        }
+      },
+      "60": {
+        "region": "太虚",
+        "prefix": "太虚",
+        "cap": "暗金",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              12.0,
+              20.0,
+              24.0,
+              21.0,
+              14.0,
+              8.8,
+              0.2
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0192,
+                "per_kill_pct": 1.92,
+                "first_drop": {
+                  "expected": 52.1,
+                  "median": 36,
+                  "p90": 119
+                }
+              },
+              "绿": {
+                "per_kill": 0.032,
+                "per_kill_pct": 3.2,
+                "first_drop": {
+                  "expected": 31.2,
+                  "median": 22,
+                  "p90": 71
+                }
+              },
+              "蓝": {
+                "per_kill": 0.0384,
+                "per_kill_pct": 3.84,
+                "first_drop": {
+                  "expected": 26.0,
+                  "median": 18,
+                  "p90": 59
+                }
+              },
+              "紫": {
+                "per_kill": 0.0336,
+                "per_kill_pct": 3.36,
+                "first_drop": {
+                  "expected": 29.8,
+                  "median": 21,
+                  "p90": 68
+                }
+              },
+              "橙": {
+                "per_kill": 0.0224,
+                "per_kill_pct": 2.24,
+                "first_drop": {
+                  "expected": 44.6,
+                  "median": 31,
+                  "p90": 102
+                }
+              },
+              "红": {
+                "per_kill": 0.0141,
+                "per_kill_pct": 1.408,
+                "first_drop": {
+                  "expected": 71.0,
+                  "median": 49,
+                  "p90": 163
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0003,
+                "per_kill_pct": 0.032,
+                "first_drop": {
+                  "expected": 3125.0,
+                  "median": 2166,
+                  "p90": 7195
+                }
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              1.0,
+              6.0,
+              14.0,
+              24.0,
+              27.0,
+              27.4,
+              0.6
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.005,
+                "per_kill_pct": 0.5,
+                "first_drop": {
+                  "expected": 200.0,
+                  "median": 139,
+                  "p90": 460
+                }
+              },
+              "绿": {
+                "per_kill": 0.03,
+                "per_kill_pct": 3.0,
+                "first_drop": {
+                  "expected": 33.3,
+                  "median": 23,
+                  "p90": 76
+                }
+              },
+              "蓝": {
+                "per_kill": 0.07,
+                "per_kill_pct": 7.0,
+                "first_drop": {
+                  "expected": 14.3,
+                  "median": 10,
+                  "p90": 32
+                }
+              },
+              "紫": {
+                "per_kill": 0.12,
+                "per_kill_pct": 12.0,
+                "first_drop": {
+                  "expected": 8.3,
+                  "median": 6,
+                  "p90": 19
+                }
+              },
+              "橙": {
+                "per_kill": 0.135,
+                "per_kill_pct": 13.5,
+                "first_drop": {
+                  "expected": 7.4,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "红": {
+                "per_kill": 0.137,
+                "per_kill_pct": 13.7,
+                "first_drop": {
+                  "expected": 7.3,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "暗金": {
+                "per_kill": 0.003,
+                "per_kill_pct": 0.3,
+                "first_drop": {
+                  "expected": 333.3,
+                  "median": 231,
+                  "p90": 767
+                }
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              0.0,
+              4.0,
+              16.0,
+              32.0,
+              46.0,
+              2.0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "蓝": {
+                "per_kill": 0.04,
+                "per_kill_pct": 4.0,
+                "first_drop": {
+                  "expected": 25.0,
+                  "median": 17,
+                  "p90": 57
+                }
+              },
+              "紫": {
+                "per_kill": 0.16,
+                "per_kill_pct": 16.0,
+                "first_drop": {
+                  "expected": 6.2,
+                  "median": 4,
+                  "p90": 14
+                }
+              },
+              "橙": {
+                "per_kill": 0.32,
+                "per_kill_pct": 32.0,
+                "first_drop": {
+                  "expected": 3.1,
+                  "median": 2,
+                  "p90": 6
+                }
+              },
+              "红": {
+                "per_kill": 0.46,
+                "per_kill_pct": 46.0,
+                "first_drop": {
+                  "expected": 2.2,
+                  "median": 2,
+                  "p90": 4
+                }
+              },
+              "暗金": {
+                "per_kill": 0.02,
+                "per_kill_pct": 2.0,
+                "first_drop": {
+                  "expected": 50.0,
+                  "median": 35,
+                  "p90": 114
+                }
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.4782,
+            "expected_count": 0.6444,
+            "first_clear": {
+              "expected": 2.09,
+              "median": 2,
+              "p90": 4
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.7058,
+            "expected_count": 1.204,
+            "first_clear": {
+              "expected": 1.42,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.8297,
+            "expected_count": 1.7288,
+            "first_clear": {
+              "expected": 1.21,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.8902,
+            "expected_count": 2.1152,
+            "first_clear": {
+              "expected": 1.12,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.9062,
+            "expected_count": 2.1668,
+            "first_clear": {
+              "expected": 1.1,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "红": {
+            "p_at_least_one": 0.9235,
+            "expected_count": 2.1926,
+            "first_clear": {
+              "expected": 1.08,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "暗金": {
+            "p_at_least_one": 0.0664,
+            "expected_count": 0.0682,
+            "first_clear": {
+              "expected": 15.07,
+              "median": 11,
+              "p90": 34
+            }
+          }
+        }
+      },
+      "70": {
+        "region": "归真",
+        "prefix": "归真",
+        "cap": "暗金",
+        "independent": true,
+        "no_pity": true,
+        "boss_pieces": 2,
+        "composition": {
+          "normal": 32,
+          "elite": 6,
+          "boss": 1
+        },
+        "by_monster": {
+          "normal": {
+            "any": 0.16,
+            "weights": [
+              10.0,
+              18.0,
+              23.0,
+              22.0,
+              16.0,
+              10.6,
+              0.4
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.016,
+                "per_kill_pct": 1.6,
+                "first_drop": {
+                  "expected": 62.5,
+                  "median": 43,
+                  "p90": 143
+                }
+              },
+              "绿": {
+                "per_kill": 0.0288,
+                "per_kill_pct": 2.88,
+                "first_drop": {
+                  "expected": 34.7,
+                  "median": 24,
+                  "p90": 79
+                }
+              },
+              "蓝": {
+                "per_kill": 0.0368,
+                "per_kill_pct": 3.68,
+                "first_drop": {
+                  "expected": 27.2,
+                  "median": 19,
+                  "p90": 62
+                }
+              },
+              "紫": {
+                "per_kill": 0.0352,
+                "per_kill_pct": 3.52,
+                "first_drop": {
+                  "expected": 28.4,
+                  "median": 20,
+                  "p90": 65
+                }
+              },
+              "橙": {
+                "per_kill": 0.0256,
+                "per_kill_pct": 2.56,
+                "first_drop": {
+                  "expected": 39.1,
+                  "median": 27,
+                  "p90": 89
+                }
+              },
+              "红": {
+                "per_kill": 0.017,
+                "per_kill_pct": 1.696,
+                "first_drop": {
+                  "expected": 59.0,
+                  "median": 41,
+                  "p90": 135
+                }
+              },
+              "暗金": {
+                "per_kill": 0.0006,
+                "per_kill_pct": 0.064,
+                "first_drop": {
+                  "expected": 1562.5,
+                  "median": 1083,
+                  "p90": 3597
+                }
+              }
+            }
+          },
+          "elite": {
+            "any": 0.5,
+            "weights": [
+              0.0,
+              4.0,
+              12.0,
+              22.0,
+              28.0,
+              32.8,
+              1.2
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.02,
+                "per_kill_pct": 2.0,
+                "first_drop": {
+                  "expected": 50.0,
+                  "median": 35,
+                  "p90": 114
+                }
+              },
+              "蓝": {
+                "per_kill": 0.06,
+                "per_kill_pct": 6.0,
+                "first_drop": {
+                  "expected": 16.7,
+                  "median": 12,
+                  "p90": 38
+                }
+              },
+              "紫": {
+                "per_kill": 0.11,
+                "per_kill_pct": 11.0,
+                "first_drop": {
+                  "expected": 9.1,
+                  "median": 6,
+                  "p90": 20
+                }
+              },
+              "橙": {
+                "per_kill": 0.14,
+                "per_kill_pct": 14.0,
+                "first_drop": {
+                  "expected": 7.1,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "红": {
+                "per_kill": 0.164,
+                "per_kill_pct": 16.4,
+                "first_drop": {
+                  "expected": 6.1,
+                  "median": 4,
+                  "p90": 13
+                }
+              },
+              "暗金": {
+                "per_kill": 0.006,
+                "per_kill_pct": 0.6,
+                "first_drop": {
+                  "expected": 166.7,
+                  "median": 116,
+                  "p90": 383
+                }
+              }
+            }
+          },
+          "boss": {
+            "any": 1.0,
+            "weights": [
+              0.0,
+              0.0,
+              3.0,
+              14.0,
+              30.0,
+              49.0,
+              4.0
+            ],
+            "qualities": {
+              "白": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "绿": {
+                "per_kill": 0.0,
+                "per_kill_pct": 0.0,
+                "first_drop": null
+              },
+              "蓝": {
+                "per_kill": 0.03,
+                "per_kill_pct": 3.0,
+                "first_drop": {
+                  "expected": 33.3,
+                  "median": 23,
+                  "p90": 76
+                }
+              },
+              "紫": {
+                "per_kill": 0.14,
+                "per_kill_pct": 14.0,
+                "first_drop": {
+                  "expected": 7.1,
+                  "median": 5,
+                  "p90": 16
+                }
+              },
+              "橙": {
+                "per_kill": 0.3,
+                "per_kill_pct": 30.0,
+                "first_drop": {
+                  "expected": 3.3,
+                  "median": 2,
+                  "p90": 7
+                }
+              },
+              "红": {
+                "per_kill": 0.49,
+                "per_kill_pct": 49.0,
+                "first_drop": {
+                  "expected": 2.0,
+                  "median": 2,
+                  "p90": 4
+                }
+              },
+              "暗金": {
+                "per_kill": 0.04,
+                "per_kill_pct": 4.0,
+                "first_drop": {
+                  "expected": 25.0,
+                  "median": 17,
+                  "p90": 57
+                }
+              }
+            }
+          }
+        },
+        "by_clear": {
+          "白": {
+            "p_at_least_one": 0.4032,
+            "expected_count": 0.512,
+            "first_clear": {
+              "expected": 2.48,
+              "median": 2,
+              "p90": 5
+            }
+          },
+          "绿": {
+            "p_at_least_one": 0.6523,
+            "expected_count": 1.0416,
+            "first_clear": {
+              "expected": 1.53,
+              "median": 1,
+              "p90": 3
+            }
+          },
+          "蓝": {
+            "p_at_least_one": 0.8045,
+            "expected_count": 1.5976,
+            "first_clear": {
+              "expected": 1.24,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "紫": {
+            "p_at_least_one": 0.8832,
+            "expected_count": 2.0664,
+            "first_clear": {
+              "expected": 1.13,
+              "median": 1,
+              "p90": 2
+            }
+          },
+          "橙": {
+            "p_at_least_one": 0.9135,
+            "expected_count": 2.2592,
+            "first_clear": {
+              "expected": 1.09,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "红": {
+            "p_at_least_one": 0.9486,
+            "expected_count": 2.5067,
+            "first_clear": {
+              "expected": 1.05,
+              "median": 1,
+              "p90": 1
+            }
+          },
+          "暗金": {
+            "p_at_least_one": 0.1291,
+            "expected_count": 0.1365,
+            "first_clear": {
+              "expected": 7.75,
+              "median": 6,
+              "p90": 17
+            }
+          }
+        }
+      }
+    },
+    "note": "不设全身红装天数目标。期望/中位数/90%分位只说明独立概率下的分布，不是要打满的指标。"
+  },
+  "skill_affixes": [
+    {
+      "id": "zhenyue_zhiyi",
+      "name": "镇岳之意",
+      "slot": "chest",
+      "trigger": "自动，冷却 5 秒",
+      "effect": "半径 200 像素强制仇恨 4 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yufeng_zhouqi",
+      "name": "御风骤起",
+      "slot": "chest",
+      "trigger": "自动，冷却 10 秒",
+      "effect": "攻速 +25%，持续 5 秒",
+      "position": "自身"
+    },
+    {
+      "id": "xueqi_fenshen",
+      "name": "血气焚身",
+      "slot": "chest",
+      "trigger": "自动，冷却 20 秒",
+      "effect": "攻击 +100%，持续 7 秒",
+      "position": "自身"
+    },
+    {
+      "id": "jinshen_zhao",
+      "name": "金身罩",
+      "slot": "chest",
+      "trigger": "自动，冷却 12 秒",
+      "effect": "获得生命上限 15% 的护盾，持续 4 秒",
+      "position": "自身"
+    },
+    {
+      "id": "jingji_fanshi",
+      "name": "荆棘反噬",
+      "slot": "chest",
+      "trigger": "受击，内置 0.5 秒",
+      "effect": "对攻击自己的敌人返还攻击力 20% 的伤害",
+      "position": "自身"
+    },
+    {
+      "id": "tieyi_huajin",
+      "name": "铁衣化劲",
+      "slot": "chest",
+      "trigger": "受击 15%，冷却 8 秒",
+      "effect": "受伤 −20%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yishan_bu",
+      "name": "移山步",
+      "slot": "chest",
+      "trigger": "自动，冷却 15 秒",
+      "effect": "移速 +40%，持续 4 秒",
+      "position": "自身"
+    },
+    {
+      "id": "kaishan_yubo",
+      "name": "开山余波",
+      "slot": "weapon",
+      "trigger": "每次命中",
+      "effect": "目标周围 80 像素溅射 35%",
+      "position": "怪物处"
+    },
+    {
+      "id": "shuangyi_feichui",
+      "name": "双仪飞锤",
+      "slot": "weapon",
+      "trigger": "命中时 25%",
+      "effect": "额外从自身发出 2 把飞锤，各 50% 攻击",
+      "position": "角色处",
+      "no_chain": true
+    },
+    {
+      "id": "hanshuang_liedi",
+      "name": "寒霜裂地",
+      "slot": "weapon",
+      "trigger": "命中时 20%",
+      "effect": "半径 80 像素，冰冻小怪 1 秒；Boss 只减速",
+      "position": "怪物处"
+    },
+    {
+      "id": "jinglei_za",
+      "name": "惊雷砸",
+      "slot": "weapon",
+      "trigger": "命中时 15%",
+      "effect": "落雷，150% 伤害",
+      "position": "怪物处"
+    },
+    {
+      "id": "juhun_zhenqi",
+      "name": "惧魂阵旗",
+      "slot": "weapon",
+      "trigger": "命中时 18%",
+      "effect": "在目标脚下生成恐惧阵，小怪乱跑最长 2 秒，可刷新",
+      "position": "怪物处"
+    },
+    {
+      "id": "bengyue_yiji",
+      "name": "崩岳一击",
+      "slot": "weapon",
+      "trigger": "命中时 20%",
+      "effect": "小怪眩晕 1 秒（受递减规则）",
+      "position": "怪物处"
+    },
+    {
+      "id": "zhuihun_canxiang",
+      "name": "追魂残响",
+      "slot": "weapon",
+      "trigger": "装备后常驻",
+      "effect": "每秒生成 1 枚追踪残影，暴击后保留，最多 8 枚",
+      "position": "角色处",
+      "no_chain": true
+    },
+    {
+      "id": "panyuan_bu",
+      "name": "磐渊步",
+      "slot": "legs",
+      "trigger": "常驻",
+      "effect": "站立不动时每秒防御 +2%，最多 10 层，移动后清空",
+      "position": "自身"
+    },
+    {
+      "id": "liedi_huixiang",
+      "name": "裂地回响",
+      "slot": "legs",
+      "trigger": "受击 12%",
+      "effect": "对自身周围小范围造成 40% 攻击伤害",
+      "position": "自身周围"
+    },
+    {
+      "id": "budong_rushan",
+      "name": "不动如山",
+      "slot": "legs",
+      "trigger": "常驻",
+      "effect": "生命低于 40% 时，受伤 −15%",
+      "position": "自身"
+    },
+    {
+      "id": "fuyue_chenshen",
+      "name": "负岳沉身",
+      "slot": "legs",
+      "trigger": "自动，冷却 12 秒",
+      "effect": "半径 120 像素强制仇恨 2 秒",
+      "position": "自身"
+    },
+    {
+      "id": "zhenwan_kaishan",
+      "name": "振腕开山",
+      "slot": "hands",
+      "trigger": "命中时 15%",
+      "effect": "下一次攻击伤害 +40%",
+      "position": "自身"
+    },
+    {
+      "id": "dielang_lianji",
+      "name": "叠浪连击",
+      "slot": "hands",
+      "trigger": "常驻",
+      "effect": "连续命中同一目标时伤害逐次 +5%，最多 5 层",
+      "position": "自身"
+    },
+    {
+      "id": "gedang_yujin",
+      "name": "格挡余劲",
+      "slot": "hands",
+      "trigger": "受击 10%，冷却 6 秒",
+      "effect": "抵消该次伤害的 25%",
+      "position": "自身"
+    },
+    {
+      "id": "zhaixing_tanzhua",
+      "name": "摘星探爪",
+      "slot": "hands",
+      "trigger": "命中时 8%",
+      "effect": "拉近一名小怪；对 Boss 无效",
+      "position": "怪物处"
+    },
+    {
+      "id": "talang_lv",
+      "name": "踏浪履",
+      "slot": "feet",
+      "trigger": "常驻",
+      "effect": "移动后的首次攻击伤害 +25%",
+      "position": "自身"
+    },
+    {
+      "id": "jifeng_ta",
+      "name": "疾风踏",
+      "slot": "feet",
+      "trigger": "击杀小怪后",
+      "effect": "移速 +30%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "tuixuan_bu",
+      "name": "退玄步",
+      "slot": "feet",
+      "trigger": "生命低于 30%，冷却 15 秒",
+      "effect": "自动后跃一次",
+      "position": "自身"
+    },
+    {
+      "id": "qianjin_zhui",
+      "name": "千斤坠",
+      "slot": "feet",
+      "trigger": "站定时，冷却 8 秒",
+      "effect": "下一次攻击附带定身 0.5 秒；对 Boss 无效",
+      "position": "怪物处"
+    },
+    {
+      "id": "guben_shuyao",
+      "name": "固本束腰",
+      "slot": "belt",
+      "trigger": "常驻",
+      "effect": "每 10 秒回复生命上限 3%",
+      "position": "自身"
+    },
+    {
+      "id": "chenqi_huyuan",
+      "name": "沉气护元",
+      "slot": "belt",
+      "trigger": "受到致命伤害，冷却 60 秒",
+      "effect": "保留 1 点生命",
+      "position": "自身"
+    },
+    {
+      "id": "xuenu_shu",
+      "name": "血怒束",
+      "slot": "belt",
+      "trigger": "常驻",
+      "effect": "生命每降低 10%，攻击 +3%，最多 9 层",
+      "position": "自身"
+    },
+    {
+      "id": "nahai_dai",
+      "name": "纳海带",
+      "slot": "belt",
+      "trigger": "常驻",
+      "effect": "护盾类效果持续时间 +20%",
+      "position": "自身"
+    },
+    {
+      "id": "ningshen_pei",
+      "name": "凝神佩",
+      "slot": "necklace",
+      "trigger": "自动，冷却 15 秒",
+      "effect": "会心率 +50%，持续 6 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yuanji_suo",
+      "name": "远击索",
+      "slot": "necklace",
+      "trigger": "常驻",
+      "effect": "攻击距离 +15%",
+      "position": "自身"
+    },
+    {
+      "id": "lingchao_zhui",
+      "name": "灵潮坠",
+      "slot": "necklace",
+      "trigger": "常驻",
+      "effect": "技能词条冷却 −10%",
+      "position": "自身"
+    },
+    {
+      "id": "huichun_ling",
+      "name": "回春铃",
+      "slot": "necklace",
+      "trigger": "击杀后",
+      "effect": "回复 2% 生命",
+      "position": "自身"
+    },
+    {
+      "id": "wenfeng_er",
+      "name": "闻风珥",
+      "slot": "earring",
+      "trigger": "受击后",
+      "effect": "移速 +20%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "xingshen_ding",
+      "name": "醒神钉",
+      "slot": "earring",
+      "trigger": "会心后，冷却 6 秒",
+      "effect": "攻速 +15%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "kongling_er",
+      "name": "空灵耳",
+      "slot": "earring",
+      "trigger": "常驻",
+      "effect": "受到的控制时间 −30%",
+      "position": "自身"
+    },
+    {
+      "id": "huiyin_zhui",
+      "name": "回音坠",
+      "slot": "earring",
+      "trigger": "普攻命中时 10%",
+      "effect": "追加一次 40% 伤害（不是额外发射物，不连锁）",
+      "position": "怪物处",
+      "no_chain": true
+    },
+    {
+      "id": "liekong_jie",
+      "name": "裂空戒",
+      "slot": "ring",
+      "trigger": "命中时 12%",
+      "effect": "对目标再造成 80% 伤害",
+      "position": "怪物处"
+    },
+    {
+      "id": "dieren_huan",
+      "name": "叠刃环",
+      "slot": "ring",
+      "trigger": "常驻",
+      "effect": "每第 3 次普攻必定会心",
+      "position": "自身"
+    },
+    {
+      "id": "shihun_yin",
+      "name": "噬魂印",
+      "slot": "ring",
+      "trigger": "命中时",
+      "effect": "回复造成伤害的 4%",
+      "position": "自身"
+    },
+    {
+      "id": "shuangxin_jie",
+      "name": "霜心戒",
+      "slot": "ring",
+      "trigger": "会心时 20%",
+      "effect": "减速目标 30%，持续 2 秒；对 Boss 效果减弱",
+      "position": "怪物处"
+    },
+    {
+      "id": "pangguan_chenxin",
+      "name": "磐冠沉心",
+      "slot": "head",
+      "trigger": "常驻",
+      "effect": "受到的会心伤害 −10%",
+      "position": "自身"
+    },
+    {
+      "id": "tiee",
+      "name": "铁额",
+      "slot": "head",
+      "trigger": "受击 12%，冷却 8 秒",
+      "effect": "抵消该次伤害的 20%",
+      "position": "自身"
+    },
+    {
+      "id": "ningshen_guan",
+      "name": "凝神冠",
+      "slot": "head",
+      "trigger": "自动，冷却 16 秒",
+      "effect": "会心率 +20%，持续 5 秒",
+      "position": "自身"
+    },
+    {
+      "id": "xieli_kui",
+      "name": "卸力盔",
+      "slot": "head",
+      "trigger": "常驻",
+      "effect": "生命低于 35% 时，防御 +12%",
+      "position": "自身"
+    },
+    {
+      "id": "ruanjia_huajin",
+      "name": "软甲化劲",
+      "slot": "inner",
+      "trigger": "受击 15%，冷却 7 秒",
+      "effect": "受伤 −15%，持续 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "huxin_lin",
+      "name": "护心鳞",
+      "slot": "inner",
+      "trigger": "受到致命伤害，冷却 75 秒",
+      "effect": "保留 1 点生命并获得 8% 生命护盾 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "fuxi_jia",
+      "name": "伏息甲",
+      "slot": "inner",
+      "trigger": "常驻",
+      "effect": "脱离战斗 2 秒后，每秒回复 1.5% 生命",
+      "position": "自身"
+    },
+    {
+      "id": "cangfeng_yi",
+      "name": "藏锋衣",
+      "slot": "inner",
+      "trigger": "常驻",
+      "effect": "生命高于 70% 时，攻击 +8%",
+      "position": "自身"
+    },
+    {
+      "id": "fengxing_chang",
+      "name": "风行氅",
+      "slot": "cloak",
+      "trigger": "常驻",
+      "effect": "移速 +12%",
+      "position": "自身"
+    },
+    {
+      "id": "yinwu_pi",
+      "name": "隐雾披",
+      "slot": "cloak",
+      "trigger": "生命低于 25%，冷却 20 秒",
+      "effect": "短暂降低被攻击优先级 3 秒",
+      "position": "自身"
+    },
+    {
+      "id": "yanyue",
+      "name": "掩月",
+      "slot": "cloak",
+      "trigger": "会心后，冷却 8 秒",
+      "effect": "下一次受击伤害 −25%",
+      "position": "自身"
+    },
+    {
+      "id": "biri",
+      "name": "蔽日",
+      "slot": "cloak",
+      "trigger": "自动，冷却 18 秒",
+      "effect": "周围小怪命中 −20%，持续 4 秒",
+      "position": "自身周围"
+    },
+    {
+      "id": "zhenyue_ming",
+      "name": "镇岳名",
+      "slot": "title",
+      "trigger": "常驻",
+      "effect": "嘲讽类效果半径 +15%",
+      "position": "自身"
+    },
+    {
+      "id": "pojun_hao",
+      "name": "破军号",
+      "slot": "title",
+      "trigger": "自动，冷却 16 秒",
+      "effect": "攻击 +18%，持续 5 秒",
+      "position": "自身"
+    },
+    {
+      "id": "qingxin_chi",
+      "name": "清心敕",
+      "slot": "title",
+      "trigger": "常驻",
+      "effect": "受到的控制时间 −15%",
+      "position": "自身"
+    },
+    {
+      "id": "wendao_yin",
+      "name": "问道印",
+      "slot": "title",
+      "trigger": "击杀后",
+      "effect": "回复 1.5% 生命",
+      "position": "自身"
+    }
+  ],
+  "trigger_no_chain": "触发类技能不能连锁。额外发射物只算第 0 代。",
+  "sim_estimate": {
+    "untested": true,
+    "script": "/workspace/sim_equip_growth/sim_equip_balance_v1.0.py",
+    "hours_per_day": 8,
+    "seeds": [
+      20261121,
+      7,
+      13,
+      29,
+      37,
+      101,
+      404
+    ],
+    "n_runs_per_seed": 2000,
+    "note": "pacing 只描述强化石、固灵符、灵石、绑银的材料消耗对照，不是全身红装天数目标。已删除 full_red_median_days。",
+    "pacing_materials_only": {
+      "lv10_plus10": {
+        "enhance": {
+          "target": 10,
+          "item_level": 10,
+          "seeds": [
+            20261121,
+            7,
+            13,
+            29,
+            37,
+            101,
+            404
+          ],
+          "n_runs_per_seed": 2000,
+          "per_item_tries_median": 28.0,
+          "per_item_stones_median": 70.0,
+          "per_item_protects_median": 0.0,
+          "per_item_silver_median": 1352.0,
+          "per_item_stones_p25_p75": [
+            46,
+            108
+          ],
+          "per_item_protects_p25_p75": [
+            0,
+            0
+          ],
+          "set13_stones": 910.0,
+          "set13_protects": 0.0,
+          "set13_silver": 17576.0
+        },
+        "income": {
+          "clears": 160,
+          "stones": 1728.0,
+          "charms": 60.8,
+          "gems": 23.68,
+          "silver": 57600
+        },
+        "days_1_weapon_enhance": 0.0405,
+        "days_13_enhance": 0.5266,
+        "days_13_gems_red": 1.098,
+        "days_13_gems_darkgold": 1.647,
+        "days_13_silver": 0.3051,
+        "charm_craft_extra_days": 0.0,
+        "note": "这是强化石/固灵符/石头的材料消耗对照，不是「全身红装要几天」的目标。"
+      },
+      "lv30_plus10": {
+        "enhance": {
+          "target": 10,
+          "item_level": 30,
+          "seeds": [
+            20261121,
+            7,
+            13,
+            29,
+            37,
+            101,
+            404
+          ],
+          "n_runs_per_seed": 2000,
+          "per_item_tries_median": 28.0,
+          "per_item_stones_median": 70.0,
+          "per_item_protects_median": 0.0,
+          "per_item_silver_median": 4056.0,
+          "per_item_stones_p25_p75": [
+            46,
+            108
+          ],
+          "per_item_protects_p25_p75": [
+            0,
+            0
+          ],
+          "set13_stones": 910.0,
+          "set13_protects": 0.0,
+          "set13_silver": 52728.0
+        },
+        "income": {
+          "clears": 120,
+          "stones": 1603.2,
+          "charms": 45.6,
+          "gems": 7.44,
+          "silver": 129600
+        },
+        "days_1_weapon_enhance": 0.0437,
+        "days_13_enhance": 0.5676,
+        "days_13_gems_red": 3.4946,
+        "days_13_gems_darkgold": 5.2419,
+        "days_13_silver": 0.4069,
+        "charm_craft_extra_days": 0.0,
+        "note": "这是强化石/固灵符/石头的材料消耗对照，不是「全身红装要几天」的目标。"
+      },
+      "lv30_plus20": {
+        "enhance": {
+          "target": 20,
+          "item_level": 30,
+          "seeds": [
+            20261121,
+            7,
+            13,
+            29,
+            37,
+            101,
+            404
+          ],
+          "n_runs_per_seed": 2000,
+          "per_item_tries_median": 92.0,
+          "per_item_stones_median": 1008.0,
+          "per_item_protects_median": 33.0,
+          "per_item_silver_median": 28752.0,
+          "per_item_stones_p25_p75": [
+            795,
+            1252
+          ],
+          "per_item_protects_p25_p75": [
+            23,
+            45
+          ],
+          "set13_stones": 13104.0,
+          "set13_protects": 429.0,
+          "set13_silver": 373776.0
+        },
+        "income": {
+          "clears": 120,
+          "stones": 1603.2,
+          "charms": 45.6,
+          "gems": 7.44,
+          "silver": 129600
+        },
+        "days_1_weapon_enhance": 0.6287,
+        "days_13_enhance": 8.5949,
+        "days_13_gems_red": 3.4946,
+        "days_13_gems_darkgold": 5.2419,
+        "days_13_silver": 2.8841,
+        "charm_craft_extra_days": 0.4213,
+        "note": "这是强化石/固灵符/石头的材料消耗对照，不是「全身红装要几天」的目标。"
+      },
+      "lv50_plus10": {
+        "enhance": {
+          "target": 10,
+          "item_level": 50,
+          "seeds": [
+            20261121,
+            7,
+            13,
+            29,
+            37,
+            101,
+            404
+          ],
+          "n_runs_per_seed": 2000,
+          "per_item_tries_median": 28.0,
+          "per_item_stones_median": 70.0,
+          "per_item_protects_median": 0.0,
+          "per_item_silver_median": 6760.0,
+          "per_item_stones_p25_p75": [
+            46,
+            108
+          ],
+          "per_item_protects_p25_p75": [
+            0,
+            0
+          ],
+          "set13_stones": 910.0,
+          "set13_protects": 0.0,
+          "set13_silver": 87880.0
+        },
+        "income": {
+          "clears": 120,
+          "stones": 1603.2,
+          "charms": 45.6,
+          "gems": 7.44,
+          "silver": 216000
+        },
+        "days_1_weapon_enhance": 0.0437,
+        "days_13_enhance": 0.5676,
+        "days_13_gems_red": 3.4946,
+        "days_13_gems_darkgold": 5.2419,
+        "days_13_silver": 0.4069,
+        "charm_craft_extra_days": 0.0,
+        "note": "这是强化石/固灵符/石头的材料消耗对照，不是「全身红装要几天」的目标。"
+      },
+      "lv50_plus20": {
+        "enhance": {
+          "target": 20,
+          "item_level": 50,
+          "seeds": [
+            20261121,
+            7,
+            13,
+            29,
+            37,
+            101,
+            404
+          ],
+          "n_runs_per_seed": 2000,
+          "per_item_tries_median": 92.0,
+          "per_item_stones_median": 1008.0,
+          "per_item_protects_median": 33.0,
+          "per_item_silver_median": 47920.0,
+          "per_item_stones_p25_p75": [
+            795,
+            1252
+          ],
+          "per_item_protects_p25_p75": [
+            23,
+            45
+          ],
+          "set13_stones": 13104.0,
+          "set13_protects": 429.0,
+          "set13_silver": 622960.0
+        },
+        "income": {
+          "clears": 120,
+          "stones": 1603.2,
+          "charms": 45.6,
+          "gems": 7.44,
+          "silver": 216000
+        },
+        "days_1_weapon_enhance": 0.6287,
+        "days_13_enhance": 8.5949,
+        "days_13_gems_red": 3.4946,
+        "days_13_gems_darkgold": 5.2419,
+        "days_13_silver": 2.8841,
+        "charm_craft_extra_days": 0.4213,
+        "note": "这是强化石/固灵符/石头的材料消耗对照，不是「全身红装要几天」的目标。"
+      }
+    }
+  },
+  "open_questions": [
+    "套装分组此前未表态：首饰 4 件（2/4 件出效果）、防具 8 件（3/5/8 件出效果）、武器另算。是否按此定？"
+  ],
+  "stone_drop": {
+    "lv10_qingshi": {
+      "normal": 0.15,
+      "elite": 0.5,
+      "boss": 3.0
+    },
+    "lv30_tianheng": {
+      "normal": 0.18,
+      "elite": 0.6,
+      "boss": 4.0
+    },
+    "charm_gu_ling_fu": {
+      "elite": 0.03,
+      "boss": 0.2
+    }
+  },
+  "gems": {
+    "name": "灵石",
+    "types": [
+      "攻击石",
+      "生命石",
+      "防御石"
+    ],
+    "tier_prefix": {
+      "1": "练气",
+      "10": "精铁",
+      "20": "玄纹",
+      "30": "天衡",
+      "40": "龙阙",
+      "50": "苍溟",
+      "60": "太虚",
+      "70": "归真"
+    },
+    "sockets_by_rarity": {
+      "白": 0,
+      "绿": 0,
+      "蓝": 1,
+      "紫": 1,
+      "橙": 2,
+      "红": 2,
+      "暗金": 3
+    },
+    "value_atk_by_level": {
+      "1": 0.6,
+      "10": 3.2,
+      "20": 9.6,
+      "30": 24.0,
+      "40": 25.0,
+      "50": 27.9,
+      "60": 31.0,
+      "70": 34.5
+    },
+    "value_rule": "攻击石 = 该级白武器×10%。生命石、防御石按 108/22、8.6/22 从攻击折算。",
+    "equip_rule": "只能镶在等级不低于石头的装备上。",
+    "on_devour_default": "被吞噬时石头随装备直接消失（已定稿）",
+    "does_not_transfer_as_enhance": true,
+    "drop": {
+      "lv10": {
+        "elite": 0.008,
+        "boss": 0.1,
+        "per_day_8h": 23.68
+      },
+      "lv30": {
+        "elite": 0.002,
+        "boss": 0.05,
+        "per_day_8h": 7.44
+      }
+    }
+  },
+  "weapon_table": {
+    "1": {
+      "白": 6.0,
+      "绿": 6.2,
+      "蓝": 6.4,
+      "紫": 6.6,
+      "橙": 6.9,
+      "红": 7.2,
+      "暗金": 7.7
+    },
+    "10": {
+      "白": 32.0,
+      "绿": 33.0,
+      "蓝": 33.9,
+      "紫": 35.2,
+      "橙": 36.8,
+      "红": 38.4,
+      "暗金": 41.0
+    },
+    "20": {
+      "白": 96.0,
+      "绿": 98.9,
+      "蓝": 101.8,
+      "紫": 105.6,
+      "橙": 110.4,
+      "红": 115.2,
+      "暗金": 122.9
+    },
+    "30": {
+      "白": 240.0,
+      "绿": 247.2,
+      "蓝": 254.4,
+      "紫": 264.0,
+      "橙": 276.0,
+      "红": 288.0,
+      "暗金": 307.2
+    },
+    "40": {
+      "白": 250.0,
+      "绿": 257.5,
+      "蓝": 265.0,
+      "紫": 275.0,
+      "橙": 287.5,
+      "红": 300.0,
+      "暗金": 320.0
+    },
+    "50": {
+      "白": 279.0,
+      "绿": 287.4,
+      "蓝": 295.7,
+      "紫": 306.9,
+      "橙": 320.8,
+      "红": 334.8,
+      "暗金": 357.1
+    },
+    "60": {
+      "白": 310.0,
+      "绿": 319.3,
+      "蓝": 328.6,
+      "紫": 341.0,
+      "橙": 356.5,
+      "红": 372.0,
+      "暗金": 396.8
+    },
+    "70": {
+      "白": 345.0,
+      "绿": 355.4,
+      "蓝": 365.7,
+      "紫": 379.5,
+      "橙": 396.7,
+      "红": 414.0,
+      "暗金": 441.6
+    }
+  },
+  "overlap": {
+    "30红": 288.0,
+    "40橙": 287.5,
+    "40暗金": 320.0,
+    "50蓝": 295.7,
+    "50橙": 320.8,
+    "50红": 334.8,
+    "50暗金": 357.1,
+    "60暗金": 396.8
+  },
+  "monsters": {
+    "1": {
+      "level": 1,
+      "hp": 98.0,
+      "def": 4.1,
+      "atk": 9.2
+    },
+    "10": {
+      "level": 10,
+      "hp": 395.0,
+      "def": 16.5,
+      "atk": 37.0
+    },
+    "20": {
+      "level": 20,
+      "hp": 1201.5,
+      "def": 80.8,
+      "atk": 103.9
+    },
+    "30": {
+      "level": 30,
+      "hp": 1642.5,
+      "def": 383.2,
+      "atk": 246.4
+    },
+    "40": {
+      "level": 40,
+      "hp": 1734.8,
+      "def": 404.7,
+      "atk": 260.2
+    },
+    "50": {
+      "level": 50,
+      "hp": 1950.9,
+      "def": 455.2,
+      "atk": 292.6
+    },
+    "60": {
+      "level": 60,
+      "hp": 2179.5,
+      "def": 508.6,
+      "atk": 326.9
+    },
+    "70": {
+      "level": 70,
+      "hp": 2432.9,
+      "def": 567.8,
+      "atk": 365.0
+    }
+  },
+  "kill_table": {
+    "1": {
+      "怪物": {
+        "level": 1,
+        "hp": 98.0,
+        "def": 4.1,
+        "atk": 9.2
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 18.4,
+          "次数": 6.87
+        },
+        "红裸": {
+          "攻击": 20.4,
+          "次数": 6.0
+        },
+        "红+10": {
+          "攻击": 22.9,
+          "次数": 5.2
+        },
+        "红+20": null,
+        "红+20镶满": null,
+        "暗金+20镶满": null
+      }
+    },
+    "10": {
+      "怪物": {
+        "level": 10,
+        "hp": 395.0,
+        "def": 16.5,
+        "atk": 37.0
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 71.3,
+          "次数": 7.21
+        },
+        "红裸": {
+          "攻击": 82.3,
+          "次数": 6.0
+        },
+        "红+10": {
+          "攻击": 95.7,
+          "次数": 4.99
+        },
+        "红+20": null,
+        "红+20镶满": null,
+        "暗金+20镶满": null
+      }
+    },
+    "20": {
+      "怪物": {
+        "level": 20,
+        "hp": 1201.5,
+        "def": 80.8,
+        "atk": 103.9
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 197.8,
+          "次数": 10.27
+        },
+        "红裸": {
+          "攻击": 231.0,
+          "次数": 8.0
+        },
+        "红+10": {
+          "攻击": 271.0,
+          "次数": 6.32
+        },
+        "红+20": null,
+        "红+20镶满": null,
+        "暗金+20镶满": null
+      }
+    },
+    "30": {
+      "怪物": {
+        "level": 30,
+        "hp": 1642.5,
+        "def": 383.2,
+        "atk": 246.4
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 464.5,
+          "次数": 20.19
+        },
+        "红裸": {
+          "攻击": 547.5,
+          "次数": 10.0
+        },
+        "红+10": {
+          "攻击": 647.5,
+          "次数": 6.22
+        },
+        "红+20": {
+          "攻击": 822.5,
+          "次数": 3.74
+        },
+        "红+20镶满": {
+          "攻击": 870.5,
+          "次数": 3.37
+        },
+        "暗金+20镶满": {
+          "攻击": 927.6,
+          "次数": 3.02
+        }
+      }
+    },
+    "40": {
+      "怪物": {
+        "level": 40,
+        "hp": 1734.8,
+        "def": 404.7,
+        "atk": 260.2
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 491.8,
+          "次数": 19.91
+        },
+        "红裸": {
+          "攻击": 578.2,
+          "次数": 10.0
+        },
+        "红+10": {
+          "攻击": 682.3,
+          "次数": 6.25
+        },
+        "红+20": {
+          "攻击": 864.6,
+          "次数": 3.77
+        },
+        "红+20镶满": {
+          "攻击": 914.6,
+          "次数": 3.4
+        },
+        "暗金+20镶满": {
+          "攻击": 974.2,
+          "次数": 3.05
+        }
+      }
+    },
+    "50": {
+      "怪物": {
+        "level": 50,
+        "hp": 1950.9,
+        "def": 455.2,
+        "atk": 292.6
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 553.9,
+          "次数": 19.76
+        },
+        "红裸": {
+          "攻击": 650.3,
+          "次数": 10.0
+        },
+        "红+10": {
+          "攻击": 766.5,
+          "次数": 6.27
+        },
+        "红+20": {
+          "攻击": 970.0,
+          "次数": 3.79
+        },
+        "红+20镶满": {
+          "攻击": 1025.8,
+          "次数": 3.42
+        },
+        "暗金+20镶满": {
+          "攻击": 1092.2,
+          "次数": 3.06
+        }
+      }
+    },
+    "60": {
+      "怪物": {
+        "level": 60,
+        "hp": 2179.5,
+        "def": 508.6,
+        "atk": 326.9
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 619.5,
+          "次数": 19.66
+        },
+        "红裸": {
+          "攻击": 726.5,
+          "次数": 10.0
+        },
+        "红+10": {
+          "攻击": 855.7,
+          "次数": 6.28
+        },
+        "红+20": {
+          "攻击": 1081.8,
+          "次数": 3.8
+        },
+        "红+20镶满": {
+          "攻击": 1143.8,
+          "次数": 3.43
+        },
+        "暗金+20镶满": {
+          "攻击": 1217.6,
+          "次数": 3.07
+        }
+      }
+    },
+    "70": {
+      "怪物": {
+        "level": 70,
+        "hp": 2432.9,
+        "def": 567.8,
+        "atk": 365.0
+      },
+      "配置": {
+        "白裸": {
+          "攻击": 691.9,
+          "次数": 19.6
+        },
+        "红裸": {
+          "攻击": 811.1,
+          "次数": 10.0
+        },
+        "红+10": {
+          "攻击": 954.8,
+          "次数": 6.29
+        },
+        "红+20": {
+          "攻击": 1206.4,
+          "次数": 3.81
+        },
+        "红+20镶满": {
+          "攻击": 1275.4,
+          "次数": 3.44
+        },
+        "暗金+20镶满": {
+          "攻击": 1357.6,
+          "次数": 3.08
+        }
+      }
+    }
+  },
+  "devour_enhance_rule": {
+    "same_slot_only": true,
+    "any_quality_can_eat_any_quality": true,
+    "transfers_advance_exp": true,
+    "enhance_level_does_not_transfer": true,
+    "gems_destroyed": true,
+    "note": "不能靠低品质强满再一路吞噬继承强化和石头。"
+  },
+  "overlap_enhanced": {
+    "50红+10": 451.1,
+    "60暗金裸": 396.8,
+    "50红+10是否强于60暗金裸": true,
+    "30红+20": 563.0,
+    "40橙裸": 287.5,
+    "50红裸": 334.8,
+    "50红+20": 654.5,
+    "40红+20": 586.5,
+    "50级+1": 11.62,
+    "10级+1": 1.33,
+    "50级+1是否大于10级+1": true,
+    "50白+1": 11.62,
+    "50红+1": 11.62,
+    "30级+1": 10.0,
+    "40级+1": 10.42
+  },
+  "swap": [
+    {
+      "情景": "36级角色，30级蓝武器+14，打到40级橙武",
+      "旧装": 414.4,
+      "新装裸": 287.5,
+      "新装追上需要强化": 12,
+      "说明": "橙武裸装低于旧蓝+14，可继续用蓝，或把橙强化到约 +12 再换。把蓝喂给橙时，强化等级和石头都不跟过去，石头随被吞噬装备消失。"
+    },
+    {
+      "情景": "30级红+20 进入40级",
+      "旧装": 563.0,
+      "40橙裸": 287.5,
+      "40红+20": 586.5,
+      "说明": "远强于40级任何裸装，可一路用过40级图。40红强满后略超或持平，值得换来留在新门槛上继续养。"
+    },
+    {
+      "情景": "30级红+20 进入50级",
+      "旧装": 563.0,
+      "50红裸": 334.8,
+      "50红+10": 451.1,
+      "50红+20": 654.5,
+      "新红追上需要强化": 17,
+      "说明": "50级红/暗金裸装仍低于30红+20。要把新红强化到接近满，才会稳定超过旧装。"
+    },
+    {
+      "情景": "50级红+10 对比60级暗金裸装",
+      "50红+10": 451.1,
+      "60暗金裸": 396.8,
+      "说明": "50红+10 强于60暗金裸装，强化有意义。"
+    }
+  ],
+  "reference_table": [
+    {
+      "项目": "30级红武器裸装攻击",
+      "参考值": "288",
+      "推荐值": "288",
+      "理由": "由 30 级白武器 240 × 红倍率 1.20 得出，刚好落在参考附近，作为中期锚点保留。"
+    },
+    {
+      "项目": "1级白武器攻击",
+      "参考值": "5～8",
+      "推荐值": "6",
+      "理由": "落在参考区间中位。暗金约 7.7，前期品质差很小。"
+    },
+    {
+      "项目": "40级橙 vs 30级红裸装",
+      "参考值": "重叠，约 280",
+      "推荐值": "都是 288",
+      "理由": "跨阶重叠按「N 级橙 ≈ (N-10) 级红/暗金」落实，40 橙与 30 红同为 288。"
+    },
+    {
+      "项目": "50级蓝裸装",
+      "参考值": "约 280",
+      "推荐值": "296",
+      "理由": "若压到 280，50 级蓝和 50 级白（279）几乎没差。296 仍低于 30 红+20（563），换装逻辑不变。"
+    },
+    {
+      "项目": "50级橙 vs 40级暗金裸装",
+      "参考值": "重叠",
+      "推荐值": "321 vs 320",
+      "理由": "几乎相等，跨阶重叠成立。"
+    },
+    {
+      "项目": "强化每次加值（30级举例）",
+      "参考值": "+1～+10 每次+20，+11～+15 每次+30，+16～+20 每次+40，满+20 共+550",
+      "推荐值": "30 级为每次 +10 / +15 / +20，满+20 共 +275；其他等级按该级白武器比例缩放",
+      "理由": "按参考的 +550，30 级红+20 打普通怪会到约 2 次，快于「强化后 3～5 次」的手感。+275 时约 3.7 次。50 级每次加 11.6 / 17.4 / 23.3，满+20 共 +320，高于 30 级。"
+    },
+    {
+      "项目": "10级装备+1",
+      "参考值": "和 50 级+1 相同的固定值（已被否定）",
+      "推荐值": "约 1.3 点武器攻击（50 级+1 约 11.6）",
+      "理由": "老板已明确不同等级加值不同。按白装比例，前期绝对量很小。"
+    },
+    {
+      "项目": "同级白装和红装+1",
+      "参考值": "一样",
+      "推荐值": "一样",
+      "理由": "强化只看装备等级，不看品质。有更好品质才会换来重新强化。"
+    },
+    {
+      "项目": "30级红装打普通怪次数",
+      "参考值": "裸装约 10 次，白装约 20 次，红+20 约 3～5 次",
+      "推荐值": "红裸 10.0，白裸 20.2，红+20 3.74，红+20 镶满 3.37",
+      "理由": "先按红裸 10 次定怪物，再让推荐强化落到 3～5 次区间。"
+    },
+    {
+      "项目": "30级前强化意义",
+      "参考值": "几乎没用，+10 加得很有限",
+      "推荐值": "1 级+10 只加约 3 点，10 级+10 约 13 点；1～10 级红+10 次数从 6 降到约 5",
+      "理由": "绝对加值小，升级又快，强化不划算。20 级红+10 次数从 8 降到 6.8，仍只是略快。"
+    },
+    {
+      "项目": "50红+10 vs 60暗金裸装",
+      "参考值": "强化后的本阶要强于下一阶裸装",
+      "推荐值": "武器 451 vs 397",
+      "理由": "强化有意义：没爆到 60 暗金时，把 50 红强化到 +10 仍然更强。"
+    },
+    {
+      "项目": "吞噬时强化和石头",
+      "参考值": "都不跟随；石头是消失还是退包未定",
+      "推荐值": "强化不转移；石头随被吞噬装备直接消失（已定稿）",
+      "理由": "不能靠白装强满再一路吞上去继承，强化成为真实消耗。"
+    },
+    {
+      "项目": "全身红大约几天",
+      "参考值": "约 6 天（此前未定）",
+      "推荐值": "不再设这类目标，只公布每次击杀的独立爆率",
+      "理由": "老板要求先把爆率设定好。1% 是每只怪 1%，不保底。表中的期望/中位数/90% 分位只作参考，不是设计目标。"
+    },
+    {
+      "项目": "暗金爆率",
+      "参考值": "国都 Boss 约 0.12%（旧建议，且是比喻）",
+      "推荐值": "40 级起才掉暗金。普通每只 0.0064%，精英每只 0.06%，Boss 每件 0.4%（每次 Boss 掉 2 件，独立）。50/60/70 级再逐步上调。",
+      "理由": "暗金只能掉落、不能进阶，应当稀有。按独立概率、无保底：40 级图一次清图至少出一件暗金约 1.36%，中位数约 51 次清图见到第一件（任意部位，约 3.4 小时）；指定武器中位数约 5.5 个挂机日（按每天 8 小时）。表中分位只作参考，不是设计目标。"
+    }
+  ],
+  "enhance_scheme_pick": {
+    "recommended": "A",
+    "name": "按该级白装武器攻击的固定比例",
+    "formula": "每次+1～+10 加该级白武器攻击的 10/240；+11～+15 为 15/240；+16～+20 为 20/240。同一等级白装和红装加值完全相同。",
+    "why": [
+      "30 级上与按打怪次数标定的 10/15/20 完全一致，红+20 约 3.7 次，不另调参数。",
+      "等级越高白装底子越高，50 级+1 自然大于 10 级+1；同等阶品质不加差。",
+      "1～20 级绝对加值很小（1 级+10 只加约 3 点，10 级+10 约 13 点），前期强化几乎没意义，符合升级快、换装勤的节奏。",
+      "怪物是按裸装定的，中后期方案 C（按怪反推）和方案 A 几乎重合，选 A 更直观，玩家能看懂。",
+      "50 红+10 仍强于 60 暗金裸装，30 红+20 仍强于 40、50 级任何裸装。"
+    ],
+    "why_not_B": "按等级线性会让 10 级+10 加约 33 点，前期强化偏明显；50～70 级+20 把红装打怪压到约 3 次以下，偏快。好处是 40 级每次加值明显高于 30 级。若希望换上新一阶装备后强化明显更赚，可以再讨论加一条很缓的等级系数。",
+    "why_not_C": "中后期与 A 几乎相同，但每次加值要查怪物表才能算，不好向玩家说明。前期若把目标次数设得温和，结果也回到 A。",
+    "caveat": "因为裸装在 30 到 40 级几乎持平（为了保住 40 橙≈30 红），方案 A 下 40 级+1 也只略高于 30 级+1。这是底子重叠带来的，不是计算错误。"
+  }
+}

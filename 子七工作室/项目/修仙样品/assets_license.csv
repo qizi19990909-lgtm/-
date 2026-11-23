@@ -1,0 +1,22 @@
+文件路径,素材名,作者/来源,来源链接,授权协议,是否修改,署名要求,获取日期
+assets/fonts/NotoSansSC-Subset.otf,Noto Sans CJK SC Regular（子集：GB2312 一级字+常用符号）,Google / Adobe（Noto CJK 项目）,https://github.com/notofonts/noto-cjk,SIL Open Font License 1.1（可商用）,是（字符子集化；未改名以外字形）,随附 assets/fonts/OFL.txt,2026-11-19
+assets/fonts/OFL.txt,Noto CJK 字体许可证全文,notofonts/noto-cjk,https://github.com/notofonts/noto-cjk/blob/main/Sans/LICENSE,SIL OFL 1.1,否,—,2026-11-19
+assets/warrior/*.png,战士动作序列帧（待机/移动/攻击/受击/死亡）,子七工作室创意部 AI 原创示意图（美术参考/战士动作/）,内部,工作室自有（仅样品占位，非最终资产）,是（去白底、统一裁切）,无,2026-11-19
+assets/heroes/archer.png,弓手立绘（占位）,子七工作室创意部 AI 原创示意图（美术参考/六职业男女白装_v8.jpg 裁切）,内部,工作室自有（仅样品占位）,是（裁切、去白底）,无,2026-11-19
+assets/heroes/mage.png,法师立绘（占位）,子七工作室创意部 AI 原创示意图（美术参考/六职业男女白装_v8.jpg 裁切）,内部,工作室自有（仅样品占位）,是（裁切、去白底）,无,2026-11-19
+assets/warrior/weapon/*.png、assets/heroes/archer_weapon.png、assets/heroes/mage_weapon.png,武器层（从上面的战士帧/弓手/法师立绘中抠出的武器像素，用于换色发光）,游戏开发部用 tools/extract_weapon_layers.py 从工作室自有占位图生成,内部,工作室自有（仅样品占位）,是（抠图、加透明留边）,无,2026-11-19
+（代码绘制）,地图、怪物、投射物、特效图形、换装换色/发光着色器,游戏开发部用 GDScript 绘制,—,工作室自有原创,—,无,2026-11-19
+（引擎）,Godot Engine 4.7.2,Godot Engine contributors,https://godotengine.org/license,MIT（随附 第三方许可/Godot_LICENSE.txt）,否,需随发行附带许可声明,2026-11-19
+assets/swordsman_tiers/front_body_0.png ~ front_body_6.png,剑修七品阶正面整身贴图 v2（1:1 头身，不含剑）,创意部 AI 生成参考图 + 开发部图生图 + 修改（参考图：美术参考/老板参考_剑修七品阶外观.jpg，老板 11-20 确认为创意部 AI 生成；按档裁切作图生图输入，工具 Grok Bot GenerateImage，2026-11-20；参考图切片本身未入库）,内部,工作室自有,是（去白底、拆出剑层、头部按 1:1 头身缩放、各档身体统一高度、统一脚底锚点，tools/make_swordsman_tiers.py）,无,2026-11-20
+assets/swordsman_tiers/side_body_0.png ~ side_body_6.png,剑修七品阶 3/4 侧面整身贴图 v2（朝右；朝左为程序镜像）,创意部 AI 生成参考图 + 开发部图生图 + 修改（以同档正面生成图 + 白档侧面生成图为图生图输入，工具 Grok Bot GenerateImage，2026-11-20）,内部,工作室自有,是（同上）,无,2026-11-20
+assets/swordsman_tiers/front_sword_*.png、side_sword_*.png,剑修剑层（含握剑的手，正面/侧面各 7 张）,创意部 AI 生成参考图 + 开发部图生图 + 修改（从上两行整身图拆出，Grok Bot GenerateImage，2026-11-20）,内部,工作室自有,是（拆层）,无,2026-11-20
+assets/swordsman_tiers/meta.json,剑修贴图锚点数据（脚底点、握剑点、剑尖）,开发部脚本生成,内部,工作室自有,—,无,2026-11-20
+assets/swordsman_tiers/raw/*.jpg,剑修 v2 AI 原图留档（正面/侧面各 7 张，.gdignore 不导入游戏）,创意部 AI 生成参考图 + 开发部图生图（Grok Bot GenerateImage，2026-11-20）,内部,工作室自有,否（原图留档）,无,2026-11-20
+assets/swordsman_tiers/_archive_v1/*,剑修 v1 七档（2.5 头身，已弃用，仅存档，.gdignore 不导入游戏）,AI 生成（Grok Bot GenerateImage，2026-11-20，文字提示 + 本组白档图生图）,内部,工作室自有,否,无,2026-11-20
+（剑修特效）,水雾/紫雾/金光/闪光点/火焰/光环/光柱/飞剑/刀光/披风摆动,开发部代码绘制（scripts/swordsman_rig.gd，贴图在运行时用代码生成）,内部,工作室自有,—,无,2026-11-20
+（装备系统界面）,背包/装备/详情卡/镶嵌/强化界面（按钮、色框、文字排版）,开发部代码绘制（scripts/inventory_ui.gd，Godot 内置控件 + StyleBoxFlat，无图片素材）,内部,工作室自有,—,无,2026-11-20
+（掉落物）,地上掉落宝箱/宝石图标、紫装光柱,开发部代码绘制（scripts/loot.gd）,内部,工作室自有,—,无,2026-11-20
+（全身强化特效）,4 档占位特效：青色光环/旋转符文阵/金色光柱+火星/白金光柱+环绕光球,开发部代码绘制（scripts/unit.gd，无图片素材；正式版需美术重做）,内部,工作室自有,—,无,2026-11-20
+data/equipment.json,修仙小队游戏装备数值表 v1.3（数值数据，非美术素材；名称与文案原创）,子七工作室 游戏开发部（按创意部/老板定稿平衡生成）,内部,工作室自有,是（v1.3 整数数值、爆率、怪物、技能词条）,无,2026-11-21
+（装备系统界面 v1.3）,13 部位背包/详情/对比/强化/吞噬/镶嵌/试玩统计（按钮、色框、文字排版）,开发部代码绘制（scripts/inventory_ui.gd、scripts/main.gd，Godot 内置控件 + StyleBoxFlat，无图片素材）,内部,工作室自有,—,无,2026-11-21
+（装备技能与套装名）,开山余波、铁壁之姿、体修套装等技能与套装名称文案,开发部原创文案,内部,工作室自有,—,无,2026-11-21

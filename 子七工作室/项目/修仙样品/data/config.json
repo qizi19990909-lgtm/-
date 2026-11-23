@@ -1,0 +1,283 @@
+{
+ "_说明": "修仙小队样品配置（总经理定的内容）。怪物/角色数值来自 data/equipment.json（创意部 v0.4）；这里只放表里没有的：职业技能与手感、怪物外形、波次编排、挑战波怪物、外观档规则、背包。标「占位」的是暂定值。",
+ "heroes": [
+  {
+   "id": "warrior",
+   "name": "战士",
+   "range": 70,
+   "interval": 0.9,
+   "speed": 130,
+   "ranged": false,
+   "weapon_kind": "blade",
+   "skill": {
+    "name": "旋风斩",
+    "type": "aoe",
+    "cd": 6.0,
+    "mult": 1.8,
+    "radius": 120
+   }
+  },
+  {
+   "id": "archer",
+   "name": "弓手",
+   "range": 330,
+   "interval": 1.0,
+   "speed": 120,
+   "ranged": true,
+   "proj_speed": 650,
+   "weapon_kind": "bow",
+   "skill": {
+    "name": "连珠箭",
+    "type": "multishot",
+    "cd": 7.0,
+    "mult": 1.0,
+    "count": 5
+   }
+  },
+  {
+   "id": "mage",
+   "name": "法师",
+   "range": 300,
+   "interval": 1.2,
+   "speed": 115,
+   "ranged": true,
+   "proj_speed": 520,
+   "weapon_kind": "staff",
+   "skill": {
+    "name": "回春术",
+    "type": "heal",
+    "cd": 8.0,
+    "mult": 2.5,
+    "pct": 0.08
+   }
+  }
+ ],
+ "monsters": {
+  "wolf": {
+   "name": "野狼",
+   "range": 50,
+   "speed": 150,
+   "size": 1.0,
+   "color": "#8a8f98"
+  },
+  "boar": {
+   "name": "山猪",
+   "range": 55,
+   "speed": 105,
+   "size": 1.15,
+   "color": "#7a5232"
+  },
+  "bandit": {
+   "name": "山贼",
+   "range": 55,
+   "speed": 115,
+   "size": 1.0,
+   "color": "#4b5a73"
+  },
+  "boss": {
+   "name": "山贼头目",
+   "range": 80,
+   "speed": 95,
+   "size": 2.0,
+   "color": "#9b2c2c",
+   "skill": {
+    "name": "震地",
+    "type": "slam",
+    "_说明": "倍率/冷却/范围/前摇读 equipment.json monsters.boss.skill"
+   }
+  },
+  "snake": {
+   "name": "毒蛇",
+   "range": 50,
+   "speed": 135,
+   "size": 0.85,
+   "color": "#5f8a3a"
+  },
+  "ch_bandit": {
+   "name": "山贼精锐",
+   "base": "bandit",
+   "level": 10,
+   "kind": "elite",
+   "mult": {
+    "hp": 1.35,
+    "atk": 1.15,
+    "def": 1.0
+   },
+   "range": 55,
+   "speed": 120,
+   "size": 1.1,
+   "color": "#2f3d56",
+   "_说明": "挑战波新怪：以 v0.4 山贼 coef × g(10) 为底再乘 mult（挑战波专用，可调）"
+  },
+  "ch_wolf": {
+   "name": "嗜血狼",
+   "base": "wolf",
+   "level": 10,
+   "kind": "normal",
+   "mult": {
+    "hp": 1.3,
+    "atk": 1.1,
+    "def": 1.0
+   },
+   "range": 50,
+   "speed": 165,
+   "size": 1.05,
+   "color": "#6d3b3b",
+   "_说明": "挑战波新怪：v0.4 野狼 coef × g(10) × mult"
+  },
+  "ch_guard": {
+   "name": "山贼护法",
+   "base": "boar",
+   "level": 10,
+   "kind": "elite",
+   "mult": {
+    "hp": 2.0,
+    "atk": 1.0,
+    "def": 1.0
+   },
+   "range": 60,
+   "speed": 110,
+   "size": 1.4,
+   "color": "#7a2f6b",
+   "_说明": "挑战波新怪：v0.4 山猪 coef × g(10) × mult"
+  }
+ },
+ "waves": [
+  {
+   "name": "第一波：野狼与毒蛇",
+   "kind": "normal",
+   "spawn": {
+    "wolf": 6,
+    "snake": 2
+   },
+   "monster_level": {
+    "wolf": 8,
+    "snake": 5
+   },
+   "item_levels": [
+    5
+   ]
+  },
+  {
+   "name": "第二波：狼群与山贼",
+   "kind": "normal",
+   "spawn": {
+    "wolf": 4,
+    "bandit": 3,
+    "boar": 1
+   },
+   "monster_level": {
+    "wolf": 8,
+    "bandit": 8,
+    "boar": 9
+   },
+   "item_levels": [
+    5
+   ]
+  },
+  {
+   "name": "第三波：山贼巡逻队",
+   "kind": "normal",
+   "spawn": {
+    "bandit": 5,
+    "wolf": 2,
+    "boar": 2
+   },
+   "monster_level": {
+    "wolf": 8,
+    "bandit": 8,
+    "boar": 9
+   },
+   "item_levels": [
+    5,
+    10
+   ]
+  },
+  {
+   "name": "第四波：山猪冲阵",
+   "kind": "normal",
+   "spawn": {
+    "boar": 3,
+    "bandit": 4,
+    "wolf": 2
+   },
+   "monster_level": {
+    "wolf": 8,
+    "bandit": 8,
+    "boar": 9
+   },
+   "item_levels": [
+    10
+   ]
+  },
+  {
+   "name": "第五波：山贼头目",
+   "kind": "boss",
+   "spawn": {
+    "boss": 1,
+    "bandit": 2,
+    "wolf": 2
+   },
+   "monster_level": {
+    "boss": 10,
+    "bandit": 8,
+    "wolf": 8
+   },
+   "item_levels": [
+    10
+   ]
+  },
+  {
+   "name": "挑战波：山贼精锐",
+   "kind": "challenge",
+   "spawn": {
+    "ch_guard": 2,
+    "ch_bandit": 6,
+    "ch_wolf": 6
+   },
+   "monster_level": {},
+   "item_levels": [
+    10
+   ]
+  }
+ ],
+ "wave_delay": 2.0,
+ "_waves_说明": "第 1~4 波小怪+精英（比 v0.4 qingshi.sample 每波多约 50%），第 5 波头目（v0.4 数值不改），之后挑战波（新内容，怪物可调）。monster_level 未写的用怪物自己的 level 或角色等级。",
+ "max_on_screen": 20,
+ "spawn_batch_interval_s": 0.4,
+ "look_tier_slots": [
+  "chest",
+  "head"
+ ],
+ "_look_说明": "外观档 = look_tier_slots 里稀有度最低的一件（空槽算白）；武器单独显示。饰品/腰带等不参与（总经理定）",
+ "bag": {
+  "capacity": 120,
+  "sell_rarities": [
+   "白",
+   "绿"
+  ],
+  "sell_price": {
+   "白": 2,
+   "绿": 5,
+   "蓝": 12,
+   "紫": 30
+  },
+  "sell_price_rule": "绑银 = sell_price[稀有度] × V(装备等级)",
+  "_占位": "数值表没有出售价，sell_price 为开发部占位，待创意部给正式值"
+ },
+ "starter_gear_override": {
+  "rarity": "白",
+  "level": 10,
+  "enhance": 0,
+  "slots": "all",
+  "_决定": "开局 3 人各送 13 部位 10 级白装 +0（v1.3）。覆盖数值表 starter_gear。",
+  "_表原值": "v0.4 starter_gear = {rarity 白, level 1, slots [weapon, chest, feet]}（删掉本键即恢复表原值）"
+ },
+ "equip_class_restriction": false,
+ "_equip_class_restriction_说明": "老板决定 2026-11-20：任何职业都可以装备任何装备（含武器类型 剑/大刀/锤/枪/法杖/弓）。武器只提供属性；角色的攻击方式、技能、手里的武器贴图仍按职业。掉落的武器类型从数值表 names.weapon_types 全部类型里随机。改成 true 可恢复旧的「职业→武器类型」限制（equipment_rules.json hero_weapon_type，占位）",
+ "endless": {
+  "hp_atk_growth": 0.08,
+  "template_wave": 0,
+  "note": "无尽模式：每波生命和攻击按上波的 8% 递增（复利）。组成复用 template_wave。掉落按该波的物品等级表。"
+ }
+}
