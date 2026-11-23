@@ -1,0 +1,6950 @@
+{
+  "version": "ranked-0.1",
+  "rank_order": [
+    "yellow",
+    "mystic",
+    "earth",
+    "heaven"
+  ],
+  "rank_names": [
+    "黄",
+    "玄",
+    "地",
+    "天"
+  ],
+  "drop_rank_weights": [
+    7000,
+    2400,
+    550,
+    50
+  ],
+  "stone_rank_weights": [
+    6500,
+    2700,
+    750,
+    50
+  ],
+  "skill_chance_percent": [
+    0,
+    0,
+    0,
+    8,
+    25,
+    40,
+    60
+  ],
+  "skills_by_slot": {
+    "weapon": [
+      "cleave",
+      "ember_sword",
+      "frost_sword",
+      "shadow_sword",
+      "battle_hammer",
+      "thunder_charge",
+      "fire_formation",
+      "thunder_formation",
+      "frost_formation",
+      "dark_formation",
+      "mage_fire",
+      "mage_ice",
+      "mage_thunder",
+      "mage_poison",
+      "piercing_arrow",
+      "frost_arrow",
+      "venom_arrow",
+      "arrow_rain"
+    ],
+    "legs": [
+      "mountain_fist",
+      "venom_fist",
+      "sword_guard",
+      "hard_training"
+    ],
+    "chest": [
+      "taunt",
+      "vital_form",
+      "sword_guard",
+      "iron_line",
+      "gold_body",
+      "shelter_arrow"
+    ],
+    "head": [
+      "taunt",
+      "vital_form",
+      "iron_line",
+      "gold_body",
+      "steady_breath",
+      "shelter_arrow"
+    ],
+    "feet": [
+      "swift_step",
+      "sword_focus",
+      "mend",
+      "steady_breath"
+    ],
+    "hands": [
+      "calm_mind",
+      "swift_step",
+      "sword_focus",
+      "hard_training"
+    ],
+    "necklace": [
+      "rally",
+      "clear_source",
+      "hold_line",
+      "ward_formation",
+      "mage_ward",
+      "war_heal"
+    ],
+    "ring": [
+      "rally",
+      "clear_source",
+      "mend",
+      "hold_line",
+      "ward_formation",
+      "mage_ward",
+      "war_heal"
+    ]
+  },
+  "slot_names": {
+    "weapon": "武器",
+    "head": "帽子",
+    "chest": "衣服",
+    "legs": "裤子",
+    "belt": "腰带",
+    "hands": "护手",
+    "feet": "鞋",
+    "inner": "内甲",
+    "cloak": "披风",
+    "title": "称号",
+    "necklace": "项链",
+    "earring": "耳环",
+    "ring": "戒指"
+  },
+  "skill_map_from_v15": {
+    "chengyuan_shu": "clear_source",
+    "ningshen": "calm_mind",
+    "jifeng": "swift_step",
+    "feishuang": "mage_ice",
+    "jingtin": "mage_thunder",
+    "guanhong": "piercing_arrow",
+    "dushi": "venom_arrow",
+    "xingluo": "arrow_rain"
+  },
+  "life_drain_chance_percent": 5,
+  "initial_adjustment_stones": 12,
+  "stone_drop_rate": {
+    "normal": 0.12,
+    "elite": 0.35,
+    "boss": 1.0
+  },
+  "pixels_per_meter": 60,
+  "skills": {
+    "taunt": {
+      "name": "嘲讽",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 2,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "taunt",
+              "forced_s": 2,
+              "threat_attack_pct": 500
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 5,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 3,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "taunt",
+              "forced_s": 2,
+              "threat_attack_pct": 500
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 10,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 4,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "taunt",
+              "forced_s": 2,
+              "threat_attack_pct": 500
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 15,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 5,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "taunt",
+              "forced_s": 2,
+              "threat_attack_pct": 500
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 20,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "cleave": {
+      "name": "溅射",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "on_basic_hit",
+      "stage_values": {
+        "yellow": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 3,
+          "center": "front_arc",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 30,
+              "flat": 0
+            }
+          ],
+          "arc_deg": 100,
+          "exclude_primary": true
+        },
+        "mystic": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 3,
+          "center": "front_arc",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 50,
+              "flat": 0
+            }
+          ],
+          "arc_deg": 100,
+          "exclude_primary": true
+        },
+        "earth": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 3,
+          "center": "front_arc",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 75,
+              "flat": 0
+            }
+          ],
+          "arc_deg": 100,
+          "exclude_primary": true
+        },
+        "heaven": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 3,
+          "center": "front_arc",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 100,
+              "flat": 0
+            }
+          ],
+          "arc_deg": 100,
+          "exclude_primary": true
+        }
+      }
+    },
+    "rally": {
+      "name": "振奋",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "self",
+          "radius_m": 2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 10,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "self",
+          "radius_m": 2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 13,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "self",
+          "radius_m": 2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 16,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "self",
+          "radius_m": 2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 20,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "clear_source": {
+      "name": "澄源术",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "ally_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 8,
+              "receiver": "lowest_ally"
+            }
+          ],
+          "hp_below_pct": 75
+        },
+        "mystic": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 9,
+              "receiver": "lowest_ally"
+            }
+          ],
+          "hp_below_pct": 75
+        },
+        "earth": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 11,
+              "receiver": "lowest_ally"
+            }
+          ],
+          "hp_below_pct": 75
+        },
+        "heaven": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 12,
+              "receiver": "lowest_ally"
+            }
+          ],
+          "hp_below_pct": 75
+        }
+      }
+    },
+    "vital_form": {
+      "name": "护元诀",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 10,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 6,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 13,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 8,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 15,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 10,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 18,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 12,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "calm_mind": {
+      "name": "凝神",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "on_crit",
+      "stage_values": {
+        "yellow": {
+          "trigger": "on_crit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 3,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "on_crit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "on_crit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "on_crit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_pct",
+              "magnitude": 5,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        }
+      }
+    },
+    "swift_step": {
+      "name": "疾风",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "on_basic_hit",
+      "stage_values": {
+        "yellow": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 3,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 5,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        }
+      }
+    },
+    "mend": {
+      "name": "回春诀",
+      "preferred_role": "general",
+      "role_name": "通用",
+      "trigger": "self_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 15,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 5,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "damage_reduction_pct",
+              "magnitude": 5,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 45
+        },
+        "mystic": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 15,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 6,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "damage_reduction_pct",
+              "magnitude": 7,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 45
+        },
+        "earth": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 15,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 8,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "damage_reduction_pct",
+              "magnitude": 8,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 45
+        },
+        "heaven": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 15,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 9,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "damage_reduction_pct",
+              "magnitude": 10,
+              "receiver": "caster",
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 45
+        }
+      }
+    },
+    "ember_sword": {
+      "name": "流火剑",
+      "preferred_role": "swordsman",
+      "role_name": "剑修",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 90,
+              "flat": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 105,
+              "flat": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 120,
+              "flat": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.1,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 135,
+              "flat": 0
+            }
+          ]
+        }
+      }
+    },
+    "frost_sword": {
+      "name": "凝霜剑",
+      "preferred_role": "swordsman",
+      "role_name": "剑修",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 85,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 20,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 100,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 25,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 110,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 30,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 125,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 35,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "shadow_sword": {
+      "name": "藏锋剑",
+      "preferred_role": "swordsman",
+      "role_name": "剑修",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 11,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "attack_pct": 160,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 8,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 11,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "attack_pct": 180,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 10,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 11,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "attack_pct": 200,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 13,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 11,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "attack_pct": 220,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 15,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "sword_guard": {
+      "name": "御剑护身",
+      "preferred_role": "swordsman",
+      "role_name": "剑修",
+      "trigger": "self_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 8,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "mystic": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 11,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "earth": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 13,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "heaven": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 16,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        }
+      }
+    },
+    "sword_focus": {
+      "name": "剑意连转",
+      "preferred_role": "swordsman",
+      "role_name": "剑修",
+      "trigger": "on_basic_hit",
+      "stage_values": {
+        "yellow": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 3,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "on_basic_hit",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 5,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        }
+      }
+    },
+    "battle_hammer": {
+      "name": "裂阵斩",
+      "preferred_role": "warrior",
+      "role_name": "战士",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_arc",
+          "radius_m": 1.6,
+          "target_limit": 4,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 100,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "defense_reduction_pct",
+              "magnitude": 8,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "arc_deg": 100
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_arc",
+          "radius_m": 1.6,
+          "target_limit": 4,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 120,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "defense_reduction_pct",
+              "magnitude": 10,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "arc_deg": 100
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_arc",
+          "radius_m": 1.6,
+          "target_limit": 4,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 135,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "defense_reduction_pct",
+              "magnitude": 12,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "arc_deg": 100
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_arc",
+          "radius_m": 1.6,
+          "target_limit": 4,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 155,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "defense_reduction_pct",
+              "magnitude": 14,
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "arc_deg": 100
+        }
+      }
+    },
+    "thunder_charge": {
+      "name": "震雷破",
+      "preferred_role": "warrior",
+      "role_name": "战士",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 110,
+              "flat": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 125,
+              "flat": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 145,
+              "flat": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 160,
+              "flat": 0
+            }
+          ]
+        }
+      }
+    },
+    "iron_line": {
+      "name": "铁壁",
+      "preferred_role": "warrior",
+      "role_name": "战士",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 12,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 6,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 16,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 8,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 20,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 10,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 24,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 12,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "hold_line": {
+      "name": "守阵令",
+      "preferred_role": "warrior",
+      "role_name": "战士",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 2.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 6,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 4,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 2.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 8,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 5,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 2.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 10,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 7,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 2.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 12,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 8,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "war_heal": {
+      "name": "战息",
+      "preferred_role": "warrior",
+      "role_name": "战士",
+      "trigger": "self_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 14,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 7,
+              "receiver": "caster"
+            }
+          ],
+          "hp_below_pct": 50
+        },
+        "mystic": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 14,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 9,
+              "receiver": "caster"
+            }
+          ],
+          "hp_below_pct": 50
+        },
+        "earth": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 14,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 10,
+              "receiver": "caster"
+            }
+          ],
+          "hp_below_pct": 50
+        },
+        "heaven": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 14,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 12,
+              "receiver": "caster"
+            }
+          ],
+          "hp_below_pct": 50
+        }
+      }
+    },
+    "mountain_fist": {
+      "name": "撼山拳",
+      "preferred_role": "brawler",
+      "role_name": "体修",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 110,
+              "flat": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 130,
+              "flat": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 150,
+              "flat": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "self",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "attack_pct": 170,
+              "flat": 0
+            }
+          ]
+        }
+      }
+    },
+    "venom_fist": {
+      "name": "蚀骨劲",
+      "preferred_role": "brawler",
+      "role_name": "体修",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 90,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 12,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 105,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 15,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 120,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 17,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 135,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 20,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        }
+      }
+    },
+    "gold_body": {
+      "name": "金身",
+      "preferred_role": "brawler",
+      "role_name": "体修",
+      "trigger": "self_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 16,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 14,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 8,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "mystic": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 16,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 17,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 10,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "earth": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 16,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 19,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 13,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "heaven": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 16,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 22,
+              "receiver": "caster",
+              "duration_s": 6,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 15,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        }
+      }
+    },
+    "steady_breath": {
+      "name": "回息",
+      "preferred_role": "brawler",
+      "role_name": "体修",
+      "trigger": "self_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 6,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "incoming_heal_pct",
+              "magnitude": 8,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 50
+        },
+        "mystic": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 7,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "incoming_heal_pct",
+              "magnitude": 10,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 50
+        },
+        "earth": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 9,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "incoming_heal_pct",
+              "magnitude": 13,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 50
+        },
+        "heaven": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 10,
+              "receiver": "caster"
+            },
+            {
+              "type": "buff",
+              "stat": "incoming_heal_pct",
+              "magnitude": 15,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 50
+        }
+      }
+    },
+    "hard_training": {
+      "name": "百炼劲",
+      "preferred_role": "brawler",
+      "role_name": "体修",
+      "trigger": "on_damage_taken",
+      "stage_values": {
+        "yellow": {
+          "trigger": "on_damage_taken",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 3,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "on_damage_taken",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "on_damage_taken",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 4,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "on_damage_taken",
+          "cooldown_s": 1,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 5,
+              "receiver": "caster",
+              "duration_s": 6,
+              "max_stacks": 4,
+              "stack_policy": "refresh_per_source"
+            }
+          ]
+        }
+      }
+    },
+    "fire_formation": {
+      "name": "燃火术",
+      "preferred_role": "formation",
+      "role_name": "阵法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "target",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 60,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "target",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 80,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "target",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 100,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "target",
+          "radius_m": 1,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 120,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        }
+      }
+    },
+    "thunder_formation": {
+      "name": "雷击术",
+      "preferred_role": "formation",
+      "role_name": "阵法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "thunder",
+              "attack_pct": 50,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "thunder",
+              "attack_pct": 65,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "thunder",
+              "attack_pct": 85,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 20,
+          "center": "self",
+          "radius_m": 3,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "thunder",
+              "attack_pct": 105,
+              "flat": 0,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        }
+      }
+    },
+    "frost_formation": {
+      "name": "寒域阵",
+      "preferred_role": "formation",
+      "role_name": "阵法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.7,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "ice",
+              "attack_pct": 24,
+              "flat": 60,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 20,
+              "duration_s": 2,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.7,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "ice",
+              "attack_pct": 24,
+              "flat": 60,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 23,
+              "duration_s": 2,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.7,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "ice",
+              "attack_pct": 24,
+              "flat": 60,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 27,
+              "duration_s": 2,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.7,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "ice",
+              "attack_pct": 24,
+              "flat": 60,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 30,
+              "duration_s": 2,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        }
+      }
+    },
+    "dark_formation": {
+      "name": "敛影阵",
+      "preferred_role": "formation",
+      "role_name": "阵法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.6,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "dark",
+              "attack_pct": 28,
+              "flat": 65,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 6,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.6,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "dark",
+              "attack_pct": 28,
+              "flat": 65,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 8,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.6,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "dark",
+              "attack_pct": 28,
+              "flat": 65,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 10,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 18,
+          "center": "target",
+          "radius_m": 1.6,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "dark",
+              "attack_pct": 28,
+              "flat": 65,
+              "base_hits": 5,
+              "base_duration_s": 5
+            },
+            {
+              "type": "debuff",
+              "stat": "res_dark_reduction_pct",
+              "magnitude": 12,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest",
+              "application": "after_each_successful_field_hit"
+            }
+          ]
+        }
+      }
+    },
+    "ward_formation": {
+      "name": "庇灵阵",
+      "preferred_role": "formation",
+      "role_name": "阵法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 17,
+          "center": "self",
+          "radius_m": 2.2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 8,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 5,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 17,
+          "center": "self",
+          "radius_m": 2.2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 10,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 7,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 17,
+          "center": "self",
+          "radius_m": 2.2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 13,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 8,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 17,
+          "center": "self",
+          "radius_m": 2.2,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 15,
+              "receiver": "allies",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "defense_pct",
+              "magnitude": 10,
+              "receiver": "allies",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "mage_fire": {
+      "name": "赤炎弹",
+      "preferred_role": "mage",
+      "role_name": "法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 95,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "fire",
+              "attack_pct_per_tick": 8,
+              "tick_s": 1,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 110,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "fire",
+              "attack_pct_per_tick": 10,
+              "tick_s": 1,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 130,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "fire",
+              "attack_pct_per_tick": 12,
+              "tick_s": 1,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 7,
+          "center": "target",
+          "radius_m": 1.4,
+          "target_limit": 3,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "fire",
+              "attack_pct": 145,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "fire",
+              "attack_pct_per_tick": 14,
+              "tick_s": 1,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        }
+      }
+    },
+    "mage_ice": {
+      "name": "飞霜点",
+      "preferred_role": "mage",
+      "role_name": "法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0.9,
+          "target_limit": 2,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 110,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 25,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0.9,
+          "target_limit": 2,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 125,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 30,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0.9,
+          "target_limit": 2,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 145,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 35,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "target",
+          "radius_m": 0.9,
+          "target_limit": 2,
+          "duration_s": 3,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 160,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 40,
+              "duration_s": 3,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "mage_thunder": {
+      "name": "惊霆",
+      "preferred_role": "mage",
+      "role_name": "法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 115,
+              "flat": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 130,
+              "flat": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 150,
+              "flat": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "thunder",
+              "attack_pct": 165,
+              "flat": 0
+            }
+          ]
+        }
+      }
+    },
+    "mage_poison": {
+      "name": "伏毒咒",
+      "preferred_role": "mage",
+      "role_name": "法师",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.2,
+          "target_limit": 3,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 14,
+              "tick_s": 1,
+              "duration_s": 6,
+              "max_stacks": 2,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.2,
+          "target_limit": 3,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 17,
+              "tick_s": 1,
+              "duration_s": 6,
+              "max_stacks": 2,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.2,
+          "target_limit": 3,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 19,
+              "tick_s": 1,
+              "duration_s": 6,
+              "max_stacks": 2,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 10,
+          "center": "target",
+          "radius_m": 1.2,
+          "target_limit": 3,
+          "duration_s": 6,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 22,
+              "tick_s": 1,
+              "duration_s": 6,
+              "max_stacks": 2,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        }
+      }
+    },
+    "mage_ward": {
+      "name": "护心咒",
+      "preferred_role": "mage",
+      "role_name": "法师",
+      "trigger": "ally_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 7,
+              "receiver": "lowest_ally"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 4,
+              "receiver": "lowest_ally",
+              "duration_s": 4,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 60
+        },
+        "mystic": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 9,
+              "receiver": "lowest_ally"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 5,
+              "receiver": "lowest_ally",
+              "duration_s": 4,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 60
+        },
+        "earth": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 10,
+              "receiver": "lowest_ally"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 7,
+              "receiver": "lowest_ally",
+              "duration_s": 4,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 60
+        },
+        "heaven": {
+          "trigger": "ally_hp_below",
+          "cooldown_s": 12,
+          "center": "self",
+          "radius_m": 4,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "heal",
+              "max_hp_pct": 12,
+              "receiver": "lowest_ally"
+            },
+            {
+              "type": "shield",
+              "max_hp_pct": 8,
+              "receiver": "lowest_ally",
+              "duration_s": 4,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 60
+        }
+      }
+    },
+    "piercing_arrow": {
+      "name": "贯虹",
+      "preferred_role": "archer",
+      "role_name": "弓手",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_line",
+          "radius_m": 0.8,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "pierce",
+              "element": "physical",
+              "attack_pct": 125,
+              "falloff_pct": [
+                100,
+                75,
+                55
+              ],
+              "temporary_crit_pct": 12
+            }
+          ],
+          "length_m": 5
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_line",
+          "radius_m": 0.8,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "pierce",
+              "element": "physical",
+              "attack_pct": 140,
+              "falloff_pct": [
+                100,
+                75,
+                55
+              ],
+              "temporary_crit_pct": 12
+            }
+          ],
+          "length_m": 5
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_line",
+          "radius_m": 0.8,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "pierce",
+              "element": "physical",
+              "attack_pct": 160,
+              "falloff_pct": [
+                100,
+                75,
+                55
+              ],
+              "temporary_crit_pct": 12
+            }
+          ],
+          "length_m": 5
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 9,
+          "center": "front_line",
+          "radius_m": 0.8,
+          "target_limit": 3,
+          "duration_s": 0,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "pierce",
+              "element": "physical",
+              "attack_pct": 175,
+              "falloff_pct": [
+                100,
+                75,
+                55
+              ],
+              "temporary_crit_pct": 12
+            }
+          ],
+          "length_m": 5
+        }
+      }
+    },
+    "frost_arrow": {
+      "name": "霜羽",
+      "preferred_role": "archer",
+      "role_name": "弓手",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 130,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 20,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 145,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 25,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 160,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 30,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 4,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "attack_pct": 175,
+              "flat": 0
+            },
+            {
+              "type": "debuff",
+              "stat": "move_speed_reduction_pct",
+              "magnitude": 35,
+              "duration_s": 4,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ]
+        }
+      }
+    },
+    "venom_arrow": {
+      "name": "毒蚀",
+      "preferred_role": "archer",
+      "role_name": "弓手",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 90,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 12,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 100,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 15,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 110,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 17,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 8,
+          "center": "target",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "attack_pct": 120,
+              "flat": 0
+            },
+            {
+              "type": "dot",
+              "element": "poison",
+              "attack_pct_per_tick": 20,
+              "tick_s": 1,
+              "duration_s": 5,
+              "max_stacks": 3,
+              "stack_policy": "refresh_per_source",
+              "drain_coefficient": 0
+            }
+          ]
+        }
+      }
+    },
+    "arrow_rain": {
+      "name": "星落",
+      "preferred_role": "archer",
+      "role_name": "弓手",
+      "trigger": "auto_enemy",
+      "stage_values": {
+        "yellow": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 16,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 20,
+              "flat": 30,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "mystic": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 16,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 20,
+              "flat": 30,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "earth": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 16,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 20,
+              "flat": 30,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        },
+        "heaven": {
+          "trigger": "auto_enemy",
+          "cooldown_s": 16,
+          "center": "target",
+          "radius_m": 1.5,
+          "target_limit": 3,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "attack_field",
+              "element": "fire",
+              "attack_pct": 20,
+              "flat": 30,
+              "base_hits": 5,
+              "base_duration_s": 5
+            }
+          ]
+        }
+      }
+    },
+    "shelter_arrow": {
+      "name": "回风护体",
+      "preferred_role": "archer",
+      "role_name": "弓手",
+      "trigger": "self_hp_below",
+      "stage_values": {
+        "yellow": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 8,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 8,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "mystic": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 10,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 10,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "earth": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 12,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 13,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        },
+        "heaven": {
+          "trigger": "self_hp_below",
+          "cooldown_s": 13,
+          "center": "self",
+          "radius_m": 0,
+          "target_limit": 1,
+          "duration_s": 5,
+          "emitters": 1,
+          "effects": [
+            {
+              "type": "shield",
+              "max_hp_pct": 14,
+              "receiver": "caster",
+              "duration_s": 5,
+              "stack_policy": "strongest"
+            },
+            {
+              "type": "buff",
+              "stat": "attack_speed_pct",
+              "magnitude": 15,
+              "receiver": "caster",
+              "duration_s": 5,
+              "max_stacks": 1,
+              "stack_policy": "strongest"
+            }
+          ],
+          "hp_below_pct": 55
+        }
+      }
+    }
+  },
+  "affixes": {
+    "atk_flat": {
+      "name": "攻击",
+      "scale": "flat_atk",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "蓝": [
+          6.5,
+          7.3,
+          8.2,
+          9.0
+        ],
+        "紫": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "橙": [
+          7.5,
+          8.7,
+          9.8,
+          11.0
+        ],
+        "红": [
+          8.0,
+          9.2,
+          10.3,
+          11.5
+        ],
+        "暗金": [
+          8.0,
+          9.3,
+          10.7,
+          12.0
+        ]
+      }
+    },
+    "hp_flat": {
+      "name": "生命",
+      "scale": "flat_hp",
+      "values_by_quality": {
+        "绿": [
+          8.0,
+          9.3,
+          10.7,
+          12.0
+        ],
+        "蓝": [
+          8.5,
+          9.8,
+          11.2,
+          12.5
+        ],
+        "紫": [
+          9.0,
+          10.3,
+          11.7,
+          13.0
+        ],
+        "橙": [
+          9.5,
+          11.0,
+          12.5,
+          14.0
+        ],
+        "红": [
+          10.0,
+          11.5,
+          13.0,
+          14.5
+        ],
+        "暗金": [
+          10.0,
+          11.7,
+          13.3,
+          15.0
+        ]
+      }
+    },
+    "def_flat": {
+      "name": "防御",
+      "scale": "flat_def",
+      "values_by_quality": {
+        "绿": [
+          8.0,
+          9.3,
+          10.7,
+          12.0
+        ],
+        "蓝": [
+          8.5,
+          9.8,
+          11.2,
+          12.5
+        ],
+        "紫": [
+          9.0,
+          10.3,
+          11.7,
+          13.0
+        ],
+        "橙": [
+          9.5,
+          11.0,
+          12.5,
+          14.0
+        ],
+        "红": [
+          10.0,
+          11.5,
+          13.0,
+          14.5
+        ],
+        "暗金": [
+          10.0,
+          11.7,
+          13.3,
+          15.0
+        ]
+      }
+    },
+    "atk_pct": {
+      "name": "攻击百分比",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "hp_pct": {
+      "name": "生命百分比",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "def_pct": {
+      "name": "防御百分比",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "aspd": {
+      "name": "攻速",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "蓝": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "紫": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "橙": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "红": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "暗金": [
+          3,
+          5,
+          8,
+          12
+        ]
+      }
+    },
+    "ms": {
+      "name": "移速",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          1.0,
+          1.3,
+          1.7,
+          2.0
+        ],
+        "蓝": [
+          1.0,
+          1.3,
+          1.7,
+          2.0
+        ],
+        "紫": [
+          1.0,
+          1.7,
+          2.3,
+          3.0
+        ],
+        "橙": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "红": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "暗金": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ]
+      }
+    },
+    "crit": {
+      "name": "会心率",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "蓝": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "紫": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "橙": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "红": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "暗金": [
+          2,
+          4,
+          6,
+          8
+        ]
+      }
+    },
+    "crit_dmg": {
+      "name": "会心伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "蓝": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "橙": [
+          5.0,
+          6.0,
+          7.0,
+          8.0
+        ],
+        "红": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "暗金": [
+          6.0,
+          7.3,
+          8.7,
+          10.0
+        ]
+      }
+    },
+    "crit_res": {
+      "name": "会心抵抗",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "crit_def": {
+      "name": "会心防御",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "蓝": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "橙": [
+          5.0,
+          6.0,
+          7.0,
+          8.0
+        ],
+        "红": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "暗金": [
+          6.0,
+          7.3,
+          8.7,
+          10.0
+        ]
+      }
+    },
+    "fire_dmg": {
+      "name": "火属性伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "蓝": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "紫": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "橙": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "红": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "暗金": [
+          3,
+          5,
+          8,
+          12
+        ]
+      }
+    },
+    "fire_res": {
+      "name": "火属性抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "thunder_dmg": {
+      "name": "雷属性伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "蓝": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "紫": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "橙": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "红": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "暗金": [
+          3,
+          5,
+          8,
+          12
+        ]
+      }
+    },
+    "thunder_res": {
+      "name": "雷属性抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "ice_dmg": {
+      "name": "冰属性伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "蓝": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "紫": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "橙": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "红": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "暗金": [
+          3,
+          5,
+          8,
+          12
+        ]
+      }
+    },
+    "ice_res": {
+      "name": "冰属性抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "poison_dmg": {
+      "name": "毒属性伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "蓝": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "紫": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "橙": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "红": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "暗金": [
+          3,
+          5,
+          8,
+          12
+        ]
+      }
+    },
+    "poison_res": {
+      "name": "毒属性抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "stun_res": {
+      "name": "眩晕抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "蓝": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "紫": [
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "橙": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "红": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "暗金": [
+          4.0,
+          5.3,
+          6.7,
+          8.0
+        ]
+      }
+    },
+    "hit": {
+      "name": "命中",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "蓝": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "紫": [
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "橙": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "红": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "暗金": [
+          4.0,
+          5.3,
+          6.7,
+          8.0
+        ]
+      }
+    },
+    "dodge": {
+      "name": "闪避",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "蓝": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "紫": [
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "橙": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "红": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "暗金": [
+          4.0,
+          5.3,
+          6.7,
+          8.0
+        ]
+      }
+    },
+    "atk_pct_adv": {
+      "name": "攻击百分比·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "红": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "hp_pct_adv": {
+      "name": "生命百分比·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "红": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "def_pct_adv": {
+      "name": "防御百分比·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "红": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "aspd_adv": {
+      "name": "攻速·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "蓝": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "紫": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "橙": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "红": [
+          6.0,
+          6.7,
+          9,
+          13
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          9,
+          13
+        ]
+      }
+    },
+    "crit_adv": {
+      "name": "会心率·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          5,
+          7,
+          9
+        ],
+        "蓝": [
+          4.0,
+          5,
+          7,
+          9
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          7,
+          9
+        ],
+        "橙": [
+          5.0,
+          5.7,
+          7,
+          9
+        ],
+        "红": [
+          6.0,
+          6.7,
+          7.3,
+          9
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          7.3,
+          9
+        ]
+      }
+    },
+    "crit_dmg_adv": {
+      "name": "会心伤害·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "蓝": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "紫": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ],
+        "橙": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          12.0
+        ]
+      }
+    },
+    "fire_dmg_adv": {
+      "name": "火属性伤害·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "蓝": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "紫": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "橙": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "红": [
+          6.0,
+          6.7,
+          9,
+          13
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          9,
+          13
+        ]
+      }
+    },
+    "thunder_dmg_adv": {
+      "name": "雷属性伤害·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "蓝": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "紫": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "橙": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "红": [
+          6.0,
+          6.7,
+          9,
+          13
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          9,
+          13
+        ]
+      }
+    },
+    "ice_dmg_adv": {
+      "name": "冰属性伤害·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "蓝": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "紫": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "橙": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "红": [
+          6.0,
+          6.7,
+          9,
+          13
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          9,
+          13
+        ]
+      }
+    },
+    "poison_dmg_adv": {
+      "name": "毒属性伤害·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "蓝": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "紫": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "橙": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "红": [
+          6.0,
+          6.7,
+          9,
+          13
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          9,
+          13
+        ]
+      }
+    },
+    "def_pen": {
+      "name": "无视防御",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "elite_dmg": {
+      "name": "对精英伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "boss_dmg": {
+      "name": "对首领伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "dr": {
+      "name": "减伤",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "蓝": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "紫": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "橙": [
+          4.0,
+          4.3,
+          4.7,
+          5.0
+        ],
+        "红": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "暗金": [
+          5.0,
+          5.3,
+          5.7,
+          6.0
+        ]
+      }
+    },
+    "life_drain": {
+      "name": "生命汲取",
+      "scale": "drain",
+      "values_by_quality": {
+        "绿": [
+          1,
+          2,
+          4,
+          6
+        ],
+        "蓝": [
+          1,
+          2,
+          4,
+          6
+        ],
+        "紫": [
+          1,
+          2,
+          4,
+          6
+        ],
+        "橙": [
+          1,
+          2,
+          4,
+          6
+        ],
+        "红": [
+          1,
+          2,
+          4,
+          6
+        ],
+        "暗金": [
+          1,
+          2,
+          4,
+          6
+        ]
+      }
+    },
+    "cdr": {
+      "name": "冷却缩短",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "蓝": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "橙": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "红": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ]
+      }
+    },
+    "stun_res_adv": {
+      "name": "眩晕抗性·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "橙": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "红": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ],
+        "暗金": [
+          8.0,
+          9.3,
+          10.7,
+          12.0
+        ]
+      }
+    },
+    "crit_res_adv": {
+      "name": "会心抵抗·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "蓝": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "橙": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "红": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ]
+      }
+    },
+    "shield_str": {
+      "name": "护盾效果",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "heal_bonus": {
+      "name": "治疗效果",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4,
+          7,
+          10,
+          14
+        ],
+        "蓝": [
+          4,
+          7,
+          10,
+          14
+        ],
+        "紫": [
+          4,
+          7,
+          10,
+          14
+        ],
+        "橙": [
+          4,
+          7,
+          10,
+          14
+        ],
+        "红": [
+          4,
+          7,
+          10,
+          14
+        ],
+        "暗金": [
+          4,
+          7,
+          10,
+          14
+        ]
+      }
+    },
+    "boss_dmg_rare": {
+      "name": "对首领伤害·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ],
+        "蓝": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ],
+        "紫": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "橙": [
+          10.0,
+          11.0,
+          12.0,
+          13.0
+        ],
+        "红": [
+          11.0,
+          12.0,
+          13.0,
+          14.0
+        ],
+        "暗金": [
+          12.0,
+          13.0,
+          14.0,
+          15.0
+        ]
+      }
+    },
+    "dr_rare": {
+      "name": "减伤·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.3,
+          5.7,
+          6.0
+        ],
+        "蓝": [
+          5.0,
+          5.3,
+          5.7,
+          6.0
+        ],
+        "紫": [
+          6.0,
+          6.3,
+          6.7,
+          7.0
+        ],
+        "橙": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "红": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "def_pen_rare": {
+      "name": "无视防御·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ],
+        "蓝": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ],
+        "紫": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "橙": [
+          10.0,
+          11.0,
+          12.0,
+          13.0
+        ],
+        "红": [
+          11.0,
+          12.0,
+          13.0,
+          14.0
+        ],
+        "暗金": [
+          12.0,
+          13.0,
+          14.0,
+          15.0
+        ]
+      }
+    },
+    "all_elem_res": {
+      "name": "全属性抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "蓝": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "紫": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "橙": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "红": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ]
+      }
+    },
+    "fire_dmg_rare": {
+      "name": "火属性伤害·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "蓝": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "紫": [
+          8.0,
+          8.7,
+          10,
+          14
+        ],
+        "橙": [
+          8.0,
+          9.0,
+          10.0,
+          14
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          14
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          14
+        ]
+      }
+    },
+    "thunder_dmg_rare": {
+      "name": "雷属性伤害·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "蓝": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "紫": [
+          8.0,
+          8.7,
+          10,
+          14
+        ],
+        "橙": [
+          8.0,
+          9.0,
+          10.0,
+          14
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          14
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          14
+        ]
+      }
+    },
+    "ice_dmg_rare": {
+      "name": "冰属性伤害·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "蓝": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "紫": [
+          8.0,
+          8.7,
+          10,
+          14
+        ],
+        "橙": [
+          8.0,
+          9.0,
+          10.0,
+          14
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          14
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          14
+        ]
+      }
+    },
+    "poison_dmg_rare": {
+      "name": "毒属性伤害·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "蓝": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "紫": [
+          8.0,
+          8.7,
+          10,
+          14
+        ],
+        "橙": [
+          8.0,
+          9.0,
+          10.0,
+          14
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          14
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          14
+        ]
+      }
+    },
+    "generic_dmg": {
+      "name": "伤害加深",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "tenacity": {
+      "name": "韧性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "橙": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          12.0
+        ]
+      }
+    },
+    "dark_dmg": {
+      "name": "暗属性伤害",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "蓝": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "紫": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "橙": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "红": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "暗金": [
+          3,
+          5,
+          8,
+          12
+        ]
+      }
+    },
+    "dark_res": {
+      "name": "暗属性抗性",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "蓝": [
+          2.0,
+          2.3,
+          2.7,
+          3.0
+        ],
+        "紫": [
+          2.0,
+          2.7,
+          3.3,
+          4.0
+        ],
+        "橙": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "红": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "暗金": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ]
+      }
+    },
+    "dark_dmg_adv": {
+      "name": "暗属性伤害·强",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "蓝": [
+          4.0,
+          6,
+          9,
+          13
+        ],
+        "紫": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "橙": [
+          5.0,
+          6,
+          9,
+          13
+        ],
+        "红": [
+          6.0,
+          6.7,
+          9,
+          13
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          9,
+          13
+        ]
+      }
+    },
+    "dark_dmg_rare": {
+      "name": "暗属性伤害·极",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "蓝": [
+          7.0,
+          7.7,
+          10,
+          14
+        ],
+        "紫": [
+          8.0,
+          8.7,
+          10,
+          14
+        ],
+        "橙": [
+          8.0,
+          9.0,
+          10.0,
+          14
+        ],
+        "红": [
+          9.0,
+          10.0,
+          11.0,
+          14
+        ],
+        "暗金": [
+          10.0,
+          10.7,
+          11.3,
+          14
+        ]
+      }
+    },
+    "ele_pen": {
+      "name": "属性穿透",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "蓝": [
+          3.0,
+          3.3,
+          3.7,
+          4.0
+        ],
+        "紫": [
+          3.0,
+          3.7,
+          4.3,
+          5.0
+        ],
+        "橙": [
+          4.0,
+          4.3,
+          4.7,
+          5.0
+        ],
+        "红": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "暗金": [
+          5.0,
+          5.3,
+          5.7,
+          6.0
+        ]
+      }
+    },
+    "fengrui": {
+      "name": "锋锐",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ],
+        "蓝": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "紫": [
+          4.0,
+          4.7,
+          5.3,
+          6.0
+        ],
+        "橙": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "红": [
+          5.0,
+          6.0,
+          7.0,
+          8.0
+        ],
+        "暗金": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ]
+      }
+    },
+    "panshi": {
+      "name": "磐石",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "lingdong": {
+      "name": "灵动",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "橙": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "红": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "暗金": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ]
+      }
+    },
+    "dongxu": {
+      "name": "洞虚",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "紫": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "橙": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "红": [
+          7.0,
+          8.3,
+          9.7,
+          11.0
+        ],
+        "暗金": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ]
+      }
+    },
+    "huti": {
+      "name": "护体",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        "蓝": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "紫": [
+          5.0,
+          5.7,
+          6.3,
+          7.0
+        ],
+        "橙": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "红": [
+          6.0,
+          7.0,
+          8.0,
+          9.0
+        ],
+        "暗金": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ]
+      }
+    },
+    "mingcha": {
+      "name": "明察",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "budong": {
+      "name": "不动",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "zhanshou": {
+      "name": "斩首",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "蓝": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ],
+        "紫": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ],
+        "橙": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "红": [
+          9.0,
+          10.3,
+          11.7,
+          13.0
+        ],
+        "暗金": [
+          10.0,
+          11.0,
+          12.0,
+          13.0
+        ]
+      }
+    },
+    "tulu": {
+      "name": "屠戮",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "蓝": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ],
+        "紫": [
+          8.0,
+          9.0,
+          10.0,
+          11.0
+        ],
+        "橙": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "红": [
+          9.0,
+          10.3,
+          11.7,
+          13.0
+        ],
+        "暗金": [
+          10.0,
+          11.0,
+          12.0,
+          13.0
+        ]
+      }
+    },
+    "fire_mastery": {
+      "name": "炎心",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "ice_mastery": {
+      "name": "寒魄",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "thunder_mastery": {
+      "name": "雷霆",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "poison_mastery": {
+      "name": "蚀骨",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    },
+    "dark_mastery": {
+      "name": "幽冥",
+      "scale": "quality_percent",
+      "values_by_quality": {
+        "绿": [
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "蓝": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "紫": [
+          6.0,
+          6.7,
+          7.3,
+          8.0
+        ],
+        "橙": [
+          7.0,
+          7.7,
+          8.3,
+          9.0
+        ],
+        "红": [
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "暗金": [
+          8.0,
+          8.7,
+          9.3,
+          10.0
+        ]
+      }
+    }
+  }
+}
